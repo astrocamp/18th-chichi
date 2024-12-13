@@ -1,0 +1,10 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>Projects</h1>
+<button><a href="{% url "projects:new" %}">Ｎew Project</a></button>
+
+<ul>
+    {% for project in projects%}
+        <li><a href="{% url "projects:show" project.id%}">{{project.title}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}
