@@ -1,9 +1,8 @@
 {% extends "shared/layout.html" %}
 {% block "content" %}
 
-<h1>{{ faq.project }}</h1>
-<h2>{{ faq.question }}</h2>
-<h3>{{ faq.answer }}</h3>
+<h1>{{ faq.question }}</h1>
+<h2>{{ faq.answer }}</h2>
 
 <footer>
     <a href="{% url 'faqs:edit' faq.id %}">編輯</a>
