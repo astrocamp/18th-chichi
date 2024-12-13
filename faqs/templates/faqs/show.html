@@ -1,0 +1,14 @@
+{% extends "shared/layout.html" %}
+{% block "content" %}
+
+<h1>{{ faq.project }}</h1>
+<h2>{{ faq.question }}</h2>
+<h3>{{ faq.answer }}</h3>
+
+<footer>
+    <a href="{% url 'faqs:edit' faq.id %}">編輯</a>
+    |
+    <a href="{% url 'faqs:delete' faq.id %}">刪除</a>
+</footer>
+
+{% endblock %}

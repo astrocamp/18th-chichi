@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "accounts",
     "homepages",
     "projects",
+    "faqs",
 ]
 
 MIDDLEWARE = [

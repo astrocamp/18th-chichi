@@ -1,0 +1,14 @@
+{% extends "shared/layout.html" %}
+{% block "content" %}
+<h1>FAQs</h1>
+<a href="{% url 'faqs:new' %}">New Question</a>
+
+<ul>
+{% for faq in faqs %}
+    <li>
+        <a href="{% url 'faqs:show' faq.id %}">{{ faq.project }}</a>
+    </li>
+{% endfor %}    
+</ul>
+
+{% endblock %}
