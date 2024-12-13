@@ -6,7 +6,7 @@
 <ul>
 {% for faq in faqs %}
     <li>
-        <a href="{% url 'faqs:show' faq.id %}">{{ faq.project }}</a>
+        <a href="{% url 'faqs:show' faq.id %}">{{ faq.question }}</a>
     </li>
 {% endfor %}    
 </ul>
