@@ -1,0 +1,28 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>NewProjects</h1>
+
+<form action="{% url "projects:show" project.id %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  title:<br />
+  <input type="text" name="title" value="{{project.title}}" /><br />
+  subtitle:<br />
+  <input type="text" name="subtitle" value="{{project.subtitle}}" /><br />
+  start_at:<br />
+  <input type="datetime-local" name="start_at" value="{{format_time_start}}" /> <br />
+  end_at:<br />
+  <input type="datetime-local" name="end_at" value="{{format_time_end}}" /> <br />
+  goal_amount:<br />
+  <input type="text" name="goal_amount" value="{{project.goal_amount}}"/><br />
+  story:<br />
+  <input type="text" name="story" value="{{project.story}}" /><br />
+  location:<br />
+  <input type="text" name="location" value="{{project.location}}" /><br />
+  cover_image:<br />
+  <img src="" alt="">
+  <input type="file" name="cover_image"/><br />
+
+  <button>更新
+
+  </button>
+</form>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>NewProjects</h1>
+
+<form action="{% url "projects:index" %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  title:<br />
+  <input type="text" name="title" /><br />
+  subtitle:<br />
+  <input type="text" name="subtitle" /><br />
+  start_at:<br />
+  <input type="datetime-local" name="start_at" /> <br />
+  end_at:<br />
+  <input type="datetime-local" name="end_at" /> <br />
+  goal_amount:<br />
+  <input type="text" name="goal_amount" /><br />
+  story:<br />
+  <input type="text" name="story" /><br />
+  location:<br />
+  <input type="text" name="location" /><br />
+  cover_image:<br />
+  <input type="file" name="cover_image" /><br />
+
+  <button>上傳
+
+  </button>
+</form>
+{% endblock %}
