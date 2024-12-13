@@ -9,7 +9,6 @@ from django.views.decorators.http import require_POST
 
 def login(request):
     if request.POST:
-        # 驗證
         user = authenticate(
             username=request.POST.get("username"),
             password=request.POST.get("password"),
@@ -28,7 +27,6 @@ def login(request):
 
 def register(request):
     if request.POST:
-        # 註冊
         form = UserCreationForm(request.POST)
 
         if form.is_valid():

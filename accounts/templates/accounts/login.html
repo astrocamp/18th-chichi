@@ -1,5 +1,5 @@
 {% extends "shared/layout.html" %} {% block "content" %} 
-<h1 class="text-3xl">登入</h1>
+<h1>登入</h1>
 <form method="POST">
   {% csrf_token %}
   <div >
@@ -7,6 +7,7 @@
     <input
       type="text"
       name="username"
+      placeholder="請輸入電子郵件信箱"
     />
   </div>
   <div>
@@ -14,6 +15,7 @@
     <input
       type="password"
       name="password"
+      placeholder="最少需要8個字元"
     />
   </div>
   <div>
