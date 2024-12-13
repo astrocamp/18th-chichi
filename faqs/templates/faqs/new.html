@@ -1,0 +1,12 @@
+{% extends "shared/layout.html" %}
+{% block "content" %}
+
+<h1>New FAQs</h1>
+
+<form method="POST" action="{% url 'faqs:index' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>新增</button>
+</form>
+
+{% endblock %}
