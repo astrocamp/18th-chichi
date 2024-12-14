@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.utils import timezone
 
 from .forms import FaqForm
 from .models import Faq
@@ -23,6 +24,8 @@ def show(request, id):
     if request.POST:
         form = FaqForm(request.POST, instance=faq)
         form.save()
+        faq.update_at = timezone.now()
+        faq.save()
         messages.success(request, "更新成功")
         return redirect("faqs:index")
     

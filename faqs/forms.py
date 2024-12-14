@@ -5,3 +5,4 @@ class FaqForm(ModelForm):
      class Meta:
           model = Faq
           fields = ["question", "answer"]
+
