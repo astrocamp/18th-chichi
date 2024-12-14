@@ -44,12 +44,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-<<<<<<< HEAD
     "accounts",
     "homepages",
-=======
     "projects",
->>>>>>> d9fc379 (feat: project CRUD completed)
 ]
 
 MIDDLEWARE = [
