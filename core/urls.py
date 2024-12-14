@@ -19,7 +19,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-<<<<<<< HEAD
     path("admin/", admin.site.urls),
     path(
         "",
@@ -29,9 +28,6 @@ urlpatterns = [
         "accounts/",
         include("accounts.urls"),
     ),
-=======
-    path('admin/', admin.site.urls),
     path('projects/', include("projects.urls")),
->>>>>>> d9fc379 (feat: project CRUD completed)
 ]
 
