@@ -1,0 +1,13 @@
+{%extends "shared/layout.html"%}{%block "content"%}
+<h1>募款紀錄首頁</h1>
+<a href="{%url 'pledges:new'%}">新增募款項目</a>
+
+<ul>
+  {%for pledge in pledges%}
+  <li>
+    <a href="{%url 'pledges:show' id=pledge.id%}">{{pledge.pledges_amount}}</a>
+  </li>
+  {%endfor%}
+</ul>
+
+{%endblock%}
