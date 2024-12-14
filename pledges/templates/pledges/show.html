@@ -1,0 +1,6 @@
+{%extends "shared/layout.html"%}{%block "content"%}
+<h1>{{pledge.pledges_amount}}</h1>
+<h1>{{pledge.payment_status}}</h1>
+
+<a href="{%url 'pledges:delete'  id=pledge.id%}">刪除</a>
+{%endblock%}
