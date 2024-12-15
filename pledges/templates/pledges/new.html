@@ -1,5 +1,5 @@
 {%extends "shared/layout.html"%}{%block "content"%}
-<h1>新增募款紀錄</h1>
+<h1>查詢募款紀錄</h1>
 
 <form action="{% url 'pledges:index' %}" method="POST">
   {%csrf_token%} {{form.as_p}}
