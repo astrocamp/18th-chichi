@@ -2,7 +2,8 @@
   "scripts": {
     "dev": "esbuild frontends/scripts/app.js --bundle --outfile=static/scripts/app.js --watch",
     "build": "esbuild frontends/scripts/app.js --bundle --outfile=static/scripts/app.js",
-    "css": "tailwindcss -i ./frontends/styles/app.css -o ./static/styles/app.css --watch"
+    "css": "tailwindcss -i ./frontends/styles/app.css -o ./static/styles/app.css --watch",
+    "commit": "cz"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
