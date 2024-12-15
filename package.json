@@ -6,6 +6,8 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.20",
+    "commitizen": "^4.3.1",
+    "cz-conventional-changelog": "^3.3.0",
     "daisyui": "^4.12.22",
     "esbuild": "^0.24.0",
     "postcss": "^8.4.49",
@@ -14,5 +16,10 @@
   "dependencies": {
     "alpinejs": "^3.14.7",
     "htmx.org": "^1.9.12"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
