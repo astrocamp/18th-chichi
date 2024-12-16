@@ -164,21 +164,19 @@ AUTHENTICATION_BACKENDS = (
 
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
-        "APPS": [
-            {
-                "client_id": env("GMAIL_CLIENT_ID"),
-                "secret": env("GMAIL_API_SECRET"),
-                "settings": {
-                    "scope": [
-                        "profile",
-                        "email",
-                    ],
-                    "auth_params": {
-                        "access_type": "online",
-                    },
+        {
+            "client_id": env("GMAIL_CLIENT_ID"),
+            "secret": env("GMAIL_API_SECRET"),
+            "settings": {
+                "scope": [
+                    "profile",
+                    "email",
+                ],
+                "auth_params": {
+                    "access_type": "online",
                 },
             },
-        ],
+        },
     }
 }
 
