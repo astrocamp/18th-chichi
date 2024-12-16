@@ -1,0 +1,10 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>Comment</h1>
+<p>{{comment.content}}</p>
+
+
+
+<a href="{% url "comments:edit" comment.id %}"><button>編輯</button></a> 
+<a href="{% url "comments:delete" comment.id %}"><button>刪除</button></a> 
+<a href="{% url "comments:index" %}">回主頁</a>
+{% endblock %}
