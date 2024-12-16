@@ -1,0 +1,11 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>EditComment</h1>
+
+<form action="{% url "comments:show" comment.id %}" method="POST" >
+  {% csrf_token %}
+  content:<br />
+  <input type="text" name="content" value="{{comment.content}}" /><br />
+
+  <button>更新</button>
+</form>
+{% endblock %}

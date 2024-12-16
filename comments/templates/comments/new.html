@@ -1,0 +1,13 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>NewProjects</h1>
+
+<form action="{% url "comments:index" %}" method="POST" >
+  {% csrf_token %}
+  content:<br />
+  <input type="text" name="content" /><br />
+
+  <button>上傳
+
+  </button>
+</form>
+{% endblock %}
