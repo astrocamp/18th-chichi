@@ -47,12 +47,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts",
     "homepages",
-<<<<<<< HEAD
     "projects",
+<<<<<<< HEAD
     "faqs",
 =======
+=======
+>>>>>>> 91d25ef (fix:setting/url/)
     "users",
->>>>>>> 1b3fc01 (feat: issue/5 Users CRUD)
 ]
 
 MIDDLEWARE = [
@@ -148,5 +149,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
