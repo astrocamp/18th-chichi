@@ -1,0 +1,15 @@
+{% extends "shared/layout.html" %}
+{% block "content" %}
+<h1>Rewards</h1>
+<a href="{% url 'rewards:new' %}">New Rewards</a>
+
+<ul>
+{% for reward in rewards %}    
+    <li>
+        <a href="{% url 'rewards:show' reward.id %}">{{ reward.title }}</a>
+        <span>{{ reward.create_at|date:"Y-m-d H:i:s" }}</span>    
+    </li>
+{% endfor %}    
+</ul>
+
+{% endblock %}

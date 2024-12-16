@@ -11,4 +11,5 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("comments/", include("comments.urls")),
     path("categories/", include("categories.urls")),
+    path("rewards/", include("rewards.urls")),
 ]

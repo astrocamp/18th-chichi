@@ -1,0 +1,20 @@
+{% extends "shared/layout.html" %}
+{% block "content" %}
+
+<h1>{{ reward.title }}</h1>
+
+<article>
+  <p>
+    {{ reward.description }}
+  </p>
+</article>
+
+<footer>
+  <a href="{% url 'rewards:edit' reward.id %}">編輯</a>
+  |
+  <a href="{% url 'rewards:delete' reward.id %}" >刪除</a>
+  |
+  <a href="{% url 'rewards:index' %}" >回首頁</a>
+</footer>
+
+{% endblock %}

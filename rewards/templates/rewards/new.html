@@ -1,0 +1,12 @@
+{% extends "shared/layout.html" %}
+{% block "content" %}
+
+<h1>New Rewards</h1>
+
+<form method="POST" action="{% url 'rewards:index' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button>新增</button>
+</form>
+
+{% endblock %}
