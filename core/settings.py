@@ -48,11 +48,7 @@ INSTALLED_APPS = [
     "accounts",
     "homepages",
     "projects",
-<<<<<<< HEAD
     "faqs",
-=======
-=======
->>>>>>> 91d25ef (fix:setting/url/)
     "users",
 ]
 
