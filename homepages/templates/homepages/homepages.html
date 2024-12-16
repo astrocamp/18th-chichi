@@ -1,24 +1,20 @@
-{% extends "shared/layout.html" %} {% block "content" %}
+{% extends "shared/layout.html" %}{% load socialaccount %} {% block "content" %}
 {% if messages %}
-  <ul>
-    {% for message in messages %}
-      <li class="alert {{ message.tags }}">{{ message }}</li>
-    {% endfor %}
-  </ul>
-{% endif %}
-
-{% if user.is_authenticated %}
-	<li><a>{{ user.username }}</a></li>
-    <form method="POST" action="{% url 'accounts:logout' %}">
-      {% csrf_token %}
-      <button>登出</button>
-    </form>
+<ul>
+  {% for message in messages %}
+  <li class="alert {{ message.tags }}">{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %} {% if user.is_authenticated %}
+<li><a>{{ user.username }}</a></li>
+<form method="POST" action="{% url 'accounts:logout' %}">
+  {% csrf_token %}
+  <button>登出</button>
+</form>
 {% else %}
-  <li><a href="{% url 'accounts:login' %}">登入</a></li>
-  <li><a href="{% url 'accounts:register' %}">註冊</a></li>
-{% endif %}
-
-{% endblock  %}
-
-
-
+<li><a href="{% url 'accounts:login' %}">登入</a></li>
+<li><a href="{% url 'accounts:register' %}">註冊</a></li>
+<li>
+  <a href="{% provider_login_url 'google' method='oauth2' %}">Google登入</a>
+</li>
+{% endif %} {% endblock %}
