@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import environ
 
+
 # 初始化環境變數
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
@@ -46,8 +47,12 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "accounts",
     "homepages",
+<<<<<<< HEAD
     "projects",
     "faqs",
+=======
+    "users",
+>>>>>>> 1b3fc01 (feat: issue/5 Users CRUD)
 ]
 
 MIDDLEWARE = [
