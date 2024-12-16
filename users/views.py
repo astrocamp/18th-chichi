@@ -43,12 +43,11 @@ def show(request, id):
 def edit(request, id):
     user = get_object_or_404(User, id=id)
     format_time = user.birthday.strftime("%Y-%m-%d")
-    if request.method == "POST":
-        user.website = request.POST.get("website", "").strip()
+    form = UserForm(instance=user)
     return render(
         request,
         "users/edit.html",
-        {"user": user, "format_time": format_time},
+        {"user": user, "format_time": format_time, "form": form},
     )
 
 
