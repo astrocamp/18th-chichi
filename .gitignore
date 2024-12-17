@@ -4,6 +4,6 @@ db.sqlite3
 __pycache__
 node_modules
 .DS_Store
-__pycache__
 .pyc
 static
+

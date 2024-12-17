@@ -7,6 +7,7 @@ def index(request):
     if request.POST:
         form = UserForm(
             request.POST,
+            request.FILES,
         )
         form.save()
         return redirect("users:index")
@@ -20,6 +21,10 @@ def index(request):
 
 
 def new(request):
+    if request.POST:
+        form = UserForm(request.POST, request.FILES)
+        form.save()
+        return redirect("users:index")
     return render(
         request,
         "users/new.html",
@@ -29,7 +34,7 @@ def new(request):
 def show(request, id):
     user = get_object_or_404(User, id=id)
     if request.POST:
-        form = UserForm(request.POST, instance=user)
+        form = UserForm(request.POST, request.FILES, instance=user)
         form.save()
         return redirect("users:index")
 
@@ -43,7 +48,7 @@ def show(request, id):
 def edit(request, id):
     user = get_object_or_404(User, id=id)
     format_time = user.birthday.strftime("%Y-%m-%d")
-    form = UserForm(instance=user)
+    form = UserForm(request.FILES, instance=user)
     return render(
         request,
         "users/edit.html",
