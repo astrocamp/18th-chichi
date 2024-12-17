@@ -12,7 +12,6 @@ class Reward(models.Model):
     shipping_detail = models.TextField(blank=True)  
     estimated_delivery = models.DateField(default=default_delivery_date) 
     quantity = models.IntegerField(default=1)  
-    pledge_amount = models.DecimalField(default=10, max_digits=10, decimal_places=0) 
     optional_adds_on = models.TextField(blank=True)  
     create_at = models.DateTimeField(auto_now_add=True)  
     update_at = models.DateTimeField(null=True)

@@ -9,7 +9,6 @@ class RewardForm(forms.ModelForm):
             "description",
             "quantity",
             "price", 
-            "pledge_amount", 
             "ship_to", 
             "shipping_detail", 
             "estimated_delivery", 
