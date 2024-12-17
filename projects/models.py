@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Project(models.Model):
     title = models.CharField(max_length=100)
@@ -12,3 +13,23 @@ class Project(models.Model):
     location = models.CharField(null=True,max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
+    
+
+    collect_account = models.ManyToManyField(
+        User,
+        related_name="collect_projects",
+        through="CollectProject",
+        through_fields=("project","account"),
+    )
+
+
+class CollectProject(models.Model):
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    create_at = models.DateTimeField(auto_now_add=True)
+
+
+    
+
+    
+   
