@@ -1,6 +1,10 @@
 {% extends "shared/layout.html" %} {% block "content" %}
 <h1>個人資料</h1>
-<form method="POST" action="{% url 'users:show' user.id %}">
+<form
+  method="POST"
+  action="{% url 'users:show' user.id %}"
+  enctype="multipart/form-data"
+>
   {% csrf_token %} name:<br /><input
     type="text"
     name="name"
@@ -24,6 +28,8 @@
     value="{{ user.website}}"
   /><br />
   bio:<br /><textarea name="bio">{{ user.bio }}</textarea><br />
+  profile_picture:<input type="file" name="profile_picture" /><br />
+
   <button>更新</button>
 </form>
 

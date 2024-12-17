@@ -12,6 +12,9 @@ class User(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
     account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    profile_picture = models.ImageField(
+        upload_to="profile_pictures/", null=True, blank=True
+    )
 
     def __str__(self):
         return self.name
