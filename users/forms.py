@@ -12,4 +12,5 @@ class UserForm(ModelForm):
             "location",
             "website",
             "bio",
+            "profile_picture",
         ]

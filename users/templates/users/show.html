@@ -5,9 +5,13 @@
 <h2>{{ user.birthday }}</h2>
 <h2>{{ user.location }}</h2>
 <h2>{{ user.website }}</h2>
+<h2>
+  <img src="{{ user.profile_picture.url }}" />
+</h2>
 <article>
   <p>{{ user.bio }}</p>
 </article>
+
 <footer>
   <a href="{% url 'users:edit' user.id %}">編輯</a>
   <a href="{% url 'users:delete' user.id %}">刪除</a>
