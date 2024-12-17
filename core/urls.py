@@ -8,8 +8,6 @@ urlpatterns = [
     path("faqs/", include("faqs.urls")),
     path("users/", include("users.urls")),
     path("accounts/", include("allauth.urls")),
-<<<<<<< HEAD
-=======
+    path("accounts/", include("accounts.urls")),
     path('comments/', include("comments.urls")),
->>>>>>> 205bf46 (feat:comments CRD completed)
 ]
