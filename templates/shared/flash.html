@@ -1,12 +1,26 @@
 {% if messages %}
-  <ul>
+<div
+  x-data="{ show: true }"
+  x-show="show"
+  x-init="setTimeout(() => show = false, 1500)"
+  x-transition
+  class="fixed inset-0 flex items-start justify-center pt-16"
+>
+  <ul class="space-y-4">
     {% for message in messages %}
-      <li         
-        x-data="{ show: true }" 
-        x-init="setTimeout(() => show = false, 500)" 
-        x-show="show"
-        x-transition
-        class="bg-gray-200 p-2 rounded shadow">{{ message }}</li>
+    <li
+      class="relative w-auto max-w-sm bg-blue-500 text-white p-4 rounded-lg shadow-lg flex items-center justify-between"
+    >
+      <div class="text-center flex-1">{{ message }}</div>
+      <button
+        @click="show = false"
+        class="ml-4 text-white hover:text-gray-300 text-lg"
+        aria-label="Close"
+      >
+        &times;
+      </button>
+    </li>
     {% endfor %}
   </ul>
+</div>
 {% endif %}
