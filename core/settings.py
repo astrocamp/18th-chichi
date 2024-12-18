@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "comments",
+    "categories",
 ]
 
 SITE_ID = 1
