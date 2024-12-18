@@ -1,0 +1,10 @@
+{% extends "shared/layout.html" %}
+
+{% block "content" %}
+<h1>Category</h1>
+<ul>
+    {% for category in categories %}
+    <li><a href="">{{ category.title }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

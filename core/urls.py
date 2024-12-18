@@ -9,5 +9,7 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("allauth.urls")),
-    path('comments/', include("comments.urls")),
+    path("comments/", include("comments.urls")),
+    path("categories/", include("categories.urls")),
+    path("rewards/", include("rewards.urls")),
 ]
