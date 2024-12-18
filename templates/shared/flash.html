@@ -1,7 +1,12 @@
 {% if messages %}
   <ul>
     {% for message in messages %}
-      <li>{{ message }}</li>
+      <li         
+        x-data="{ show: true }" 
+        x-init="setTimeout(() => show = false, 500)" 
+        x-show="show"
+        x-transition
+        class="bg-gray-200 p-2 rounded shadow">{{ message }}</li>
     {% endfor %}
   </ul>
 {% endif %}

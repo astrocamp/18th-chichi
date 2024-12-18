@@ -1,25 +1,35 @@
-{% extends "shared/layout.html" %} {% block "content" %} 
-<h1>登入</h1>
-<form method="POST">
-  {% csrf_token %}
-  <div >
-    <label>Username</label>
-    <input
-      type="text"
-      name="username"
-      placeholder="請輸入電子郵件信箱"
-    />
+{% extends "shared/layout.html" %} {% block "content" %}
+<div class="flex items-center justify-center min-h-screen bg-gray-100">
+  <div class="max-w-md p-8 bg-white rounded-lg shadow-md">
+    <h1 class="text-center text-2xl font-bold mb-6">登入</h1>
+    <form method="POST">
+      {% csrf_token %}
+      <div class="mb-4">
+        <label class="input input-bordered flex items-center gap-2">
+          Username
+          <input
+            class="w-full"
+            type="text"
+            placeholder="請輸入電子郵件信箱"
+            name="username"
+          />
+        </label>
+      </div>
+      <div class="mb-6">
+        <label class="input input-bordered flex items-center gap-2">
+          Password
+          <input
+            class="w-full"
+            type="password"
+            placeholder="最少需要8個字元"
+            name="password"
+          />
+        </label>
+      </div>
+      <div class="flex justify-center">
+        <button class="btn btn-warning w-full">登入</button>
+      </div>
+    </form>
   </div>
-  <div>
-    <label>Password</label>
-    <input
-      type="password"
-      name="password"
-      placeholder="最少需要8個字元"
-    />
-  </div>
-  <div>
-    <button>登入</button>
-  </div>
-</form>
+</div>
 {% endblock %}
