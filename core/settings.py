@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "storages",
+    "comments",
     "categories",
     "rewards",
     "comments_replies",
