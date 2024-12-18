@@ -1,0 +1,31 @@
+<div class="navbar bg-neutral text-neutral-content" data-theme="lemonade">
+  <div class="flex-1">
+    <a href="{% url 'homepages:homepages' %}" class="text-xl btn btn-ghost"
+      >ChiChi</a
+    >
+  </div>
+  <div class="flex-none">
+    <ul class="px-1 menu menu-horizontal">
+      {% if user.is_authenticated %}
+      <li><a>{{ user.username }}</a></li>
+      <li>
+        <a
+          hx-post="{% url 'accounts:logout' %}"
+          hx-target="body"
+          hx-swap="outerHTML"
+          hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+          hx-on="click: this.disabled = true"
+          >登出</a
+        >
+      </li>
+      {% else %}
+      <li>
+        <a class="btn btn-ghost" href="{% url 'accounts:login' %}">登入</a>
+      </li>
+      <li>
+        <a class="btn btn-ghost" href="{% url 'accounts:register' %}">註冊</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
