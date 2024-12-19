@@ -1,7 +1,7 @@
 {% extends "shared/layout.html"%} {% block "content" %}
 <h1>NewProjects</h1>
 
-<form action="{% url "projects:index" %}" method="POST" enctype="multipart/form-data">
+<form action="{% url "accounts:projects" account.id %}" method="POST" enctype="multipart/form-data">
   {% csrf_token %}
   title:<br />
   <input type="text" name="title" /><br />
