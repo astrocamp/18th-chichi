@@ -1,0 +1,11 @@
+{%extends "shared/layout.html"%}{% block "content" %}
+<h1>留言</h1>
+<p>{{comments_reply.content}}</p><span>{{comments_reply.create_at}}</span>
+
+<br>
+<a href="{%url 'comments_replies:edit' id=comments_reply.id%}">編輯</a>
+<a href="{%url 'comments_replies:delete' id=comments_reply.id%}">刪除</a>
+<a href="{%url 'comments_replies:index' %}">回主頁</a>
+
+
+{% endblock %}
