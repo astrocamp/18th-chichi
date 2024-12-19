@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "comments",
     "categories",
     "rewards",
+    "comments_replies",
 ]
 
 SITE_ID = 1

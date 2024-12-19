@@ -1,0 +1,12 @@
+{%extends "shared/layout.html"%}{% block "content" %}
+<h1>回覆留言頁面</h1>
+<a href="{%url 'comments_replies:new'%}">新增回覆留言</a>
+
+<ul>
+  {%for comments_reply in comments_replies%}
+  <li>
+    <a href="{%url 'comments_replies:show' id=comments_reply.id%}">{{comments_reply.content}}</a>
+  </li>
+  {%endfor%}
+</ul>
+{% endblock %}
