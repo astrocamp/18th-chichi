@@ -5,7 +5,7 @@
 <ul>
   {%for comments_reply in comments_replies%}
   <li>
-    <a href="{%url 'comments_replies:show' id=comments_reply.id%}">{{comments_reply.content}}</a>
+    <a href="{%url 'comments_replies:show' comments_reply.id%}">{{comments_reply.content}}</a>
   </li>
   {%endfor%}
 </ul>
