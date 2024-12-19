@@ -1,0 +1,11 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>Update_records</h1>
+<p>{{update_record.title}}</p>
+<p>{{update_record.description}}</p>
+
+
+
+<a href="{% url "update_records:edit" update_record.id %}">編輯</a>
+<a href="{% url "update_records:delete" update_record.id %}">刪除</a>
+<a href="{% url "update_records:index" %}">回主頁</a>
+{% endblock %}

@@ -50,4 +50,4 @@ def delete(request, id):
 
         return redirect("projects:index")
 
-    return render(request, "projects/index.html",)
+    return render(request, "projects/delete.html",)

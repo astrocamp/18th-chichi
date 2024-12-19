@@ -1,0 +1,10 @@
+{% extends "shared/layout.html"%} {% block "content" %}
+<h1>Update_records</h1>
+<button><a href="{% url "update_records:new" %}">New Update_records</a></button>
+
+<ul>
+    {% for update_record in update_records%}
+        <li><a href="{% url "update_records:show" update_record.id%}">{{update_record.title}}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

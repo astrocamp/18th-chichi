@@ -13,4 +13,5 @@ urlpatterns = [
     path("categories/", include("categories.urls")),
     path("rewards/", include("rewards.urls")),
     path("comments_replies/",include("comments_replies.urls")),
+    path('update_records/', include("update_records.urls")),
 ]
