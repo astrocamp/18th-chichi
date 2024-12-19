@@ -1,7 +1,9 @@
 from django.shortcuts import render,redirect,get_object_or_404
+from django.contrib.auth.decorators import login_required
 from .forms import ProjectFrom
-from .models import Project
+from .models import Project, CollectProject
 from django.utils.timezone import localtime
+from django.views.decorators.http import require_POST
 from django.utils import timezone
 
 def index(request):
@@ -28,8 +30,9 @@ def show(request, id):
         project.save()
         return redirect("projects:show", id = project.id)
     
+    collected = CollectProject.objects.filter(account=request.user, project=project).first()
 
-    return render(request, "projects/show.html",{"project":project})
+    return render(request, "projects/show.html",{"project":project,"collected":collected})
 
 
 
@@ -51,3 +54,18 @@ def delete(request, id):
         return redirect("projects:index")
 
     return render(request, "projects/index.html",)
+
+
+@login_required
+@require_POST
+def collect_projects(request, id):
+    project = get_object_or_404(Project, id=id)
+    collect, created  = CollectProject.objects.get_or_create(
+        account = request.user,
+        project = project,
+    )
+
+    if not created:
+        collect.delete()
+
+    return redirect("projects:show", id=project.id)
