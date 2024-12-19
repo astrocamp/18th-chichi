@@ -30,8 +30,9 @@ def show(request, id):
         project.save()
         return redirect("projects:show", id = project.id)
     
+    collected = CollectProject.objects.filter(account=request.user, project=project).first()
 
-    return render(request, "projects/show.html",{"project":project})
+    return render(request, "projects/show.html",{"project":project,"collected":collected})
 
 
 
@@ -57,7 +58,7 @@ def delete(request, id):
 
 @login_required
 @require_POST
-def Collect_projects(request, id):
+def collect_projects(request, id):
     project = get_object_or_404(Project, id=id)
     collect, created  = CollectProject.objects.get_or_create(
         account = request.user,
