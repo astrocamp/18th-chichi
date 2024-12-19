@@ -15,6 +15,12 @@
 <a href="{% url "projects:index" %}">回主頁</a>
 <form method="POST" action="{% url "projects:collect" project.id %}">
     {% csrf_token %}
-    <button>收藏</button>
+    <button>
+      {% if collected %}
+        取消收藏
+      {% else %}
+        收藏
+      {% endif %}
+    </button>
 </form>
 {% endblock %}
