@@ -1,7 +1,7 @@
 {%extends "shared/layout.html"%}{% block "content" %}
 <h1>編輯留言</h1>
 
-<form action="{%url 'comments_replies:show' id=comments_reply.id%}" method="post">
+<form action="{%url 'comments_replies:show' comments_reply.id%}" method="post">
     {%csrf_token%}
     content: <br>
     <textarea name="content" id="content">{{comments_reply.content}}</textarea>
