@@ -3,7 +3,7 @@
 
 <h1>New FAQs</h1>
 
-<form method="POST" action="{% url 'faqs:index' %}">
+<form method="POST" action="{% url 'projects:faq_index' project.id %}">
     {% csrf_token %}
     {{ form.as_p }}
     <button>新增</button>
