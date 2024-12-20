@@ -1,18 +1,41 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Comment
+from projects.models import Project
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
+@login_required
 def index(request):
-    if request.POST:
-        comment = Comment()
-        comment.content = request.POST.get('content')
-        comment.save()
-
-        return redirect("comments:index")
+    comments = Comment.objects.filter(user=request.user)
     
-    comments = Comment.objects.all()
+    if request.method == "POST":
+        content = request.POST.get("content", "").strip()
+        
+        if not content:
+            return render(request, "comments/index.html", {
+                "error": "Content cannot be empty",
+                "comments": comments
+            })
+        
+        project = Project.objects.filter(id=1).first()
+        
+        if not project:
+            project = Project.objects.create(
+                id=1,
+                title="Default Project",
+                description="This is a default project",
+            )
+        
+        Comment.objects.create(
+            content=content,
+            user=request.user,
+            project=project
+        )
+        return redirect('comments:index')
+    
+    return render(request, "comments/index.html", {"comments": comments})
 
-    return render(request, "comments/index.html",{"comments":comments})
 
 
 def new(request):

@@ -3,8 +3,10 @@
 <button><a href="{% url "comments:new" %}">Ｎew Comment</a></button>
 
 <ul>
-    {% for comment in comments%}
-        <li><a href="{% url "comments:show" comment.id%}">{{comment.content}}</a></li>
-    {% endfor %}
+  {% for comment in comments %}
+  <li>
+    <a href="{% url 'comments:show' comment.id %}">{{comment.content}}</a>
+  </li>
+  {% endfor %}
 </ul>
 {% endblock %}
