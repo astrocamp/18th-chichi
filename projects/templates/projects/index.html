@@ -1,10 +1,16 @@
 {% extends "shared/layout.html"%} {% block "content" %}
 <h1>Projects</h1>
-<button><a href="{% url "projects:new" %}">Ｎew Project</a></button>
+
+
+ <button><a href="{% url "accounts:projects_new" account.id %}">New Project</a></button>
+
+
 
 <ul>
     {% for project in projects%}
         <li><a href="{% url "projects:show" project.id%}">{{project.title}}</a></li>
     {% endfor %}
 </ul>
+
+<button><a href="{% url "accounts:index" account.id%}">回個人頁面</a></button>
 {% endblock %}

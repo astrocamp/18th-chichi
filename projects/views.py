@@ -5,24 +5,36 @@ from .models import Project, CollectProject
 from django.utils.timezone import localtime
 from django.views.decorators.http import require_POST
 from django.utils import timezone
+from django.http import HttpResponse
+from django.contrib.auth.models import User
 
-def index(request):
+def index(request, id):
+    account = get_object_or_404(User, id=id)
     if request.POST:
-        form = ProjectFrom(request.POST)
-        form.save()
-        return redirect("projects:index")
-    
-    projects = Project.objects.all()
-    return render(request, "projects/index.html", {"projects":projects})
+        form = ProjectFrom(request.POST) 
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.account = account
+            project.save()
+            return redirect("accounts:projects" , id = account.id)
+        else:
+            return HttpResponse("輸入錯誤")
 
+    projects = Project.objects.filter(account=account)
+    return render(request, "projects/index.html", {"projects":projects,"account":account})
+        
 
-def new(request):
-    return render(request, "projects/new.html",)
+def new(request,id):
+    account = get_object_or_404(User, id=id)
+    return render(request, "projects/new.html",{"account":account})
+
 
 
 
 def show(request, id):
     project = get_object_or_404(Project,id=id)
+    account = get_object_or_404(User, id=request.user.id)
+
     if request.POST:
         form = ProjectFrom(request.POST, instance=project)
         form.save()
@@ -32,7 +44,7 @@ def show(request, id):
     
     collected = CollectProject.objects.filter(account=request.user, project=project).first()
 
-    return render(request, "projects/show.html",{"project":project,"collected":collected})
+    return render(request, "projects/show.html",{"project":project,"collected":collected,"account":account})
 
 
 
@@ -48,10 +60,11 @@ def edit(request, id):
 
 def delete(request, id):
     project = get_object_or_404(Project,id=id)
+    account = get_object_or_404(User, id=request.user.id)
     if request.POST:
         project.delete()
 
-        return redirect("projects:index")
+        return redirect("accounts:projects", id = account.id )
 
     return render(request, "projects/delete.html",)
 

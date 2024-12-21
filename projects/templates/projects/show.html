@@ -12,7 +12,7 @@
 
 <a href="{% url "projects:edit" project.id %}">編輯</a>
 <a href="{% url "projects:delete" project.id %}">刪除</a>
-<a href="{% url "projects:index" %}">回主頁</a>
+<a href="{% url "accounts:projects" account.id %}">回主頁</a>
 <form method="POST" action="{% url "projects:collect" project.id %}">
     {% csrf_token %}
     <button>
@@ -23,4 +23,5 @@
       {% endif %}
     </button>
 </form>
+<a href="{% url "accounts:projects" account.id %}">回主頁</a>
 {% endblock %}
