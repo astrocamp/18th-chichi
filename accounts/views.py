@@ -1,11 +1,19 @@
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login as login_user, logout as logout_user
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-from users.views import User
+from users.views import User as UserProfile
+from django.contrib.auth.models import User
+
+def index(request ,id):
+    account = get_object_or_404(User, id=id)
+    return render(request, "accounts/index.html",{"account":account})
+    
+
+
 
 
 def login(request):
@@ -31,7 +39,7 @@ def register(request):
         form = UserCreationForm(request.POST)        
         if form.is_valid():
             account = form.save()
-            User.objects.create(
+            UserProfile.objects.create(
                 name=account.username,
                 account=account
             )

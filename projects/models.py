@@ -13,6 +13,7 @@ class Project(models.Model):
     location = models.CharField(null=True,max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
     
 
     collect_account = models.ManyToManyField(
@@ -21,7 +22,6 @@ class Project(models.Model):
         through="CollectProject",
         through_fields=("project","account"),
     )
-
 
 class CollectProject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)

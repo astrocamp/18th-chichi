@@ -1,6 +1,11 @@
 {% extends "shared/layout.html" %}{% load socialaccount %} 
 {% block "content" %}
+{% if user.is_authenticated %}
+<li><a>{{ user.username }}</a></li>
+<a href="{% url "accounts:index" account.id%}">個人頁面</a>
+{% else %}
 <li>
   <a href="{% provider_login_url 'google' method='oauth2' %}">Google登入</a>
 </li>
+{% endif %}
 {% endblock %}
