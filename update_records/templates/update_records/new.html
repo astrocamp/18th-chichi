@@ -1,15 +1,13 @@
 {% extends "shared/layout.html"%} {% block "content" %}
 <h1>New update_records</h1>
 
-<form action="{% url "update_records:index" %}" method="POST" >
+<form action="{% url "update_records:index" id %}" method="POST" >
   {% csrf_token %}
   title:<br />
   <input type="text" name="title" /><br />
   description:<br />
   <input type="text" name="description" /><br />
 
-  <button>上傳
-
-  </button>
+  <button>上傳</button>
 </form>
 {% endblock %}
