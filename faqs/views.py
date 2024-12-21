@@ -14,6 +14,7 @@ def index(request, id):
             faq = form.save(commit=False)
             faq.project = project
             faq.save()
+            messages.success(request, "新增成功")
             return redirect("projects:faq_index", id=id)
     
     faqs = Faq.objects.filter(project=project)
@@ -26,13 +27,14 @@ def new(request, id):
 
 def show(request, id):
     faq = get_object_or_404(Faq, id=id)
+    project = get_object_or_404(Project, id=faq.project.id)
     if request.POST:
         form = FaqForm(request.POST, instance=faq)
         form.save()
         faq.update_at = timezone.now()
         faq.save()
         messages.success(request, "更新成功")
-        return redirect("faqs:show" ,id=faq.id)
+        return redirect("projects:faq_index" ,id=project.id)
     
     return render(request, "faqs/show.html", {"faq": faq,} )
 
