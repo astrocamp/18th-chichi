@@ -6,5 +6,5 @@
 
 <a href="{% url "comments:edit" comment.id %}"><button>編輯</button></a> 
 <a href="{% url "comments:delete" comment.id %}"><button>刪除</button></a> 
-<a href="{% url "comments:index" %}">回主頁</a>
+<a href="{% url "projects:comment_index" project.id %}">回主頁</a>
 {% endblock %}
