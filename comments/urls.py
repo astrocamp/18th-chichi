@@ -22,4 +22,6 @@ urlpatterns = [
         comments_replies_new,
         name="comments_replies_new",
     ),
+    path("", index, name="index"),
+    path("new/", new, name="new"),
 ]

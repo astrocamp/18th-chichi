@@ -201,3 +201,14 @@ def index(request, category_id):
     subcategories = SubCategory.objects.filter(category=category)
     context = {"category": category, "subcategories": subcategories}
     return render(request, "subcategories/index.html", context)
+
+
+def subcategory_projects(request, subcategory_id):
+    subcategory = get_object_or_404(SubCategory, pk=subcategory_id)
+    projects = subcategory.projects.all()
+
+    return render(
+        request,
+        "subcategories/subcategory_projects.html",
+        {"subcategory": subcategory, "projects": projects},
+    )
