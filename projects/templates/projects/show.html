@@ -8,8 +8,6 @@
 <p>{{project.story}}</p>
 <p>{{project.location}}</p>
 
-
-
 <a href="{% url "projects:edit" project.id %}">編輯</a>
 <a href="{% url "projects:delete" project.id %}">刪除</a>
 <form method="POST" action="{% url "projects:collect" project.id %}">
@@ -24,5 +22,5 @@
 </form>
 <a href="{% url "accounts:projects" account.id %}">回主頁</a>
 <a href="{% url "projects:comment_index" project.id%}">comment</a>
-
+<a href="{% url "projects:faq_index" project.id %}">查看FAQ</a>
 {% endblock %}

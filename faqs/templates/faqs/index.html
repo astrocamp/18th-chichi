@@ -1,13 +1,13 @@
 {% extends "shared/layout.html" %}
 {% block "content" %}
 <h1>FAQs</h1>
-<a href="{% url 'faqs:new' %}">New Question</a>
+<a href="{% url 'projects:faq_new' project.id %}">New Question</a>
 
 <ul>
 {% for faq in faqs %}
     <li>
-        <a href="{% url 'faqs:show' faq.id %}">{{ faq.question }}</a>
-        <span>{{ faq.create_at|date:"Y-m-d H:i:s"}}</span>
+        <a href="{% url 'faqs:show' faq.id %}">{{ faq.question|linebreaks }}</a>
+        <span>建立時間:{{ faq.create_at|date:"Y-m-d H:i:s"}}</span>
     </li>
 {% endfor %}    
 </ul>

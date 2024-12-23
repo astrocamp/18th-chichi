@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import index, new, show, edit, delete, collect_projects
+from .views import show, edit, delete, collect_projects
 from comments.views import index as comment_index, new as comment_new
-
+from faqs.views import index as faq_index, new as faq_new
 
 app_name = "projects"
 
@@ -13,4 +13,6 @@ urlpatterns = [
     path("<int:id>/collect", collect_projects, name="collect"),
     path("<int:id>/comments", comment_index, name="comment_index"),
     path("<int:id>/comments/new", comment_new, name="comment_new"),
+    path("<int:id>/faq", faq_index, name="faq_index"),
+    path("<int:id>/faq/new", faq_new, name="faq_new"),
 ]
