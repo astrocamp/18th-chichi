@@ -1,64 +1,55 @@
-from django.shortcuts import render,redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment
 from projects.models import Project
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
-
-@login_required
-def index(request):
-    comments = Comment.objects.filter(user=request.user)
-    
-    if request.method == "POST":
-        content = request.POST.get("content", "").strip()
-        
-        if not content:
-            return render(request, "comments/index.html", {
-                "error": "Content cannot be empty",
-                "comments": comments
-            })
-        
-        project = Project.objects.filter(id=1).first()
-        
-        if not project:
-            project = Project.objects.create(
-                id=1,
-                title="Default Project",
-                description="This is a default project",
-            )
-        
-        Comment.objects.create(
-            content=content,
-            user=request.user,
-            project=project
-        )
-        return redirect('comments:index')
-    
-    return render(request, "comments/index.html", {"comments": comments})
+from projects.models import Project
 
 
+def index(request, id):
+    project = get_object_or_404(Project, id=id)
+    if request.POST:
+        comment = Comment()
+        comment.content = request.POST.get("content")
+        comment.project = project
+        comment.save()
 
-def new(request):
-    return render(request, "comments/new.html")
+        return redirect("projects:comment_index", id=project.id)
 
+    comments = Comment.objects.filter(project=project)
+
+    return render(
+        request, "comments/index.html", {"comments": comments, "project": project}
+    )
+
+
+def new(request, id):
+    project = get_object_or_404(Project, id=id)
+
+    return render(request, "comments/new.html", {"project": project})
 
 
 def show(request, id):
     comment = get_object_or_404(Comment, id=id)
+    project = get_object_or_404(Project, id=comment.project.id)
     if request.POST:
-        comment.content = request.POST.get('content')
+        comment.content = request.POST.get("content")
         comment.update_at = timezone.now()
         comment.save()
         return redirect("comments:show", id=comment.id)
-    return render(request, "comments/show.html", {"comment":comment})
+    return render(
+        request, "comments/show.html", {"comment": comment, "project": project}
+    )
+
 
 def edit(request, id):
     comment = get_object_or_404(Comment, id=id)
-    return render(request, "comments/edit.html", {"comment":comment})
+    return render(request, "comments/edit.html", {"comment": comment})
+
 
 def delete(request, id):
     comment = get_object_or_404(Comment, id=id)
+    project = get_object_or_404(Project, id=comment.project.id)
     if request.POST:
         comment.delete()
-        return redirect("comments:index")
-    return render(request, "comments/delete.html", {"comment":comment})
+        return redirect("projects:comment_index" , id=project.id)
+    return render(request, "comments/delete.html", {"comment": comment})
