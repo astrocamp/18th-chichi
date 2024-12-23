@@ -24,4 +24,19 @@
 <a href="{% url "projects:comment_index" project.id%}">comment</a>
 <a href="{% url "projects:faq_index" project.id %}">查看FAQ</a>
 <a href="{% url "projects:update_records_index" project.id %}">更新狀態</a>
+
+<form method="POST" action="">
+  {% csrf_token %}
+  {% if project.status == 'pending' %}
+      <button name="publish" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+          上架專案
+      </button>
+  {% elif project.status == 'live' %}
+      <button name="unpublish" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+           下架專案
+      </button>
+
+  {% endif %}
+</form>
+
 {% endblock %}
