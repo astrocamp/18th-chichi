@@ -1,6 +1,6 @@
 {% extends "shared/layout.html"%} {% block "content" %}
 <h1>Comments</h1>
-<button><a href="{% url "projects:comment_new" project.id %}">Ｎew Comment</a></button>
+<button><a href="{% url "comments:new" %}">Ｎew Comment</a></button>
 
 <ul>
     {% for comment in comments%}
