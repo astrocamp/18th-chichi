@@ -1,16 +1,22 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment
 from django.utils import timezone
-from projects.models import Project
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def index(request, id):
     project = get_object_or_404(Project, id=id)
     if request.POST:
-        comment = Comment()
-        comment.content = request.POST.get("content")
-        comment.project = project
-        comment.save()
+        content = request.POST.get("content", "").strip()
+
+        if content:
+
+            Comment.objects.create(
+                content=content,
+                account=request.user,
+                project=project,
+            )
 
         return redirect("projects:comment_index", id=project.id)
 
@@ -50,5 +56,5 @@ def delete(request, id):
     project = get_object_or_404(Project, id=comment.project.id)
     if request.POST:
         comment.delete()
-        return redirect("projects:comment_index" , id=project.id)
+        return redirect("projects:comment_index", id=project.id)
     return render(request, "comments/delete.html", {"comment": comment})
