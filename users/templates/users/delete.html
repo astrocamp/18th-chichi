@@ -1,7 +1,0 @@
-{% extends "shared/layout.html" %} {% block "content" %}
-<h1>確認刪除?</h1>
-<form method="POST">
-  {% csrf_token %}
-  <button>確認</button>
-</form>
-{% endblock %}

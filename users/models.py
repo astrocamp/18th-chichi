@@ -1,8 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User as Account
+from django.contrib.auth.models import User
 
 
-class User(models.Model):
+class Profile(models.Model):
     name = models.CharField(max_length=50)
     birthday = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
@@ -11,7 +11,7 @@ class User(models.Model):
     phone = models.CharField(max_length=50)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
-    account = models.OneToOneField(Account, on_delete=models.CASCADE)
+    account = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField(
         upload_to="profile_pictures/", null=True, blank=True
     )
