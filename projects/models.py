@@ -1,35 +1,36 @@
 from django.db import models
 from django.contrib.auth.models import User
+from categories.models import Category
+from subcategories.models import SubCategory
+
 
 class Project(models.Model):
     title = models.CharField(max_length=100)
-    subtitle = models.CharField(max_length=100,null=True)
-    cover_image = models.FileField(upload_to="uploads/" ,null=True)
-    raised_amount = models.DecimalField(null=True ,decimal_places= 0 , max_digits=10)
-    goal_amount = models.DecimalField(decimal_places= 0 , max_digits=10)
+    subtitle = models.CharField(max_length=100, null=True)
+    cover_image = models.FileField(upload_to="uploads/", null=True)
+    raised_amount = models.DecimalField(null=True, decimal_places=0, max_digits=10)
+    goal_amount = models.DecimalField(decimal_places=0, max_digits=10)
     start_at = models.DateTimeField(null=True)
     end_at = models.DateTimeField()
     story = models.TextField()
-    location = models.CharField(null=True,max_length=100)
+    location = models.CharField(null=True, max_length=100)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
     account = models.ForeignKey(User, on_delete=models.CASCADE)
-    
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="projects"
+    )
+    subcategories = models.ManyToManyField(SubCategory, related_name="projects")
 
     collect_account = models.ManyToManyField(
         User,
         related_name="collect_projects",
         through="CollectProject",
-        through_fields=("project","account"),
+        through_fields=("project", "account"),
     )
+
 
 class CollectProject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
-
-
-    
-
-    
-   

@@ -1,0 +1,13 @@
+{% extends "shared/layout.html" %}
+
+{% block "content" %}
+<h1>{{ subcategory.title }}</h1>
+<ul>
+    {% for project in projects %}
+    <li>{{ project.title }}</li>
+    {% empty %}
+    <li>這個類別目前沒有任何專案。</li>
+    {% endfor %}
+</ul>
+<a href="/">返回首頁</a>
+{% endblock %}
