@@ -3,7 +3,7 @@
 <p>{{update_record.title}}</p>
 <p>{{update_record.description}}</p>
 
-<a href="{% url 'update_records:edit' id update_record.id %}">編輯</a>
-<a href="{% url 'update_records:delete' id update_record.id %}">刪除</a>
-<a href="{% url 'update_records:index' id %}">回主頁</a>
+<a href="{% url 'update_records:edit'  update_record.id %}">編輯</a>
+<a href="{% url 'update_records:delete'  update_record.id %}">刪除</a>
+<a href="{% url 'projects:update_records_index' id %}">回主頁</a>
 {% endblock %}

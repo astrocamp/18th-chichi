@@ -1,12 +1,12 @@
 {% extends "shared/layout.html"%} {% block "content" %}
 <h1>Update Records</h1>
 <button>
-  <a href="{% url 'update_records:new' id %}">New Update Record</a>
+  <a href="{% url 'projects:update_records_new' id %}">New Update Record</a>
 </button>
 
 {% if update_records %} {% for record in update_records %}
 <div>
-  <a href="{% url 'update_records:show' id record.id %}">{{ record.title }}</a
+  <a href="{% url 'update_records:show' record.id %}">{{ record.title }}</a
   ><br />
   <small>{{ record.create_at }}</small>
 </div>
