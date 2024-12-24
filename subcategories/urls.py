@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import subindex
+from .views import index
 
 app_name = "subcategories"
 
 urlpatterns = [
-    path("", subindex, name="subindex"),
+    path("", index, name="index"),
+    path("<int:category_id>/", index, name="index"),
 ]
