@@ -3,14 +3,67 @@
 
 
  <button><a href="{% url "accounts:projects_new" account.id %}">New Project</a></button>
+ <div class="container mx-auto py-8 px-4">
+    <!-- 未上架 -->
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">未上架</h2>
+    <div class="grid grid-cols-3 gap-6">
+        {% for project in projects %}
+            {% if project.status == 'pending' %}
+                <a href="{% url 'projects:show' project.id %}" class="block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">{{ project.title }}</h3>
+                    <p class="text-sm text-gray-500 mb-1">開始時間：{{ project.start_at }}</p>
+                    <p class="text-sm text-gray-500">結束時間：{{ project.end_at }}</p>
+                </a>
+            {% endif %}
+        {% empty %}
+        <!-- 當沒有未上架專案時的佔位區域 -->
+        <div class="col-span-3 text-center text-gray-400">
+            <p>目前沒有未上架的專案。</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
+<div class="container mx-auto py-8 px-4">
+    <!-- 已上架 -->
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">已上架</h2>
+    <div class="grid grid-cols-3 gap-6">
+        {% for project in projects %}
+            {% if project.status == 'live' %}
+                <a href="{% url 'projects:show' project.id %}" class="block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">{{ project.title }}</h3>
+                    <p class="text-sm text-gray-500 mb-1">開始時間：{{ project.start_at }}</p>
+                    <p class="text-sm text-gray-500">結束時間：{{ project.end_at }}</p>
+                </a>
+            {% endif %}
+        {% empty %}
+        <!-- 當沒有已上架專案時的佔位區域 -->
+        <div class="col-span-3 text-center text-gray-400">
+            <p>目前沒有已上架的專案。</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-
-<ul>
-    {% for project in projects%}
-        <li><a href="{% url "projects:show" project.id%}">{{project.title}}</a></li>
-    {% endfor %}
-</ul>
-
+<div class="container mx-auto py-8 px-4">
+    <!-- 已結束 -->
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">已結束</h2>
+    <div class="grid grid-cols-3 gap-6">
+        {% for project in projects %}
+            {% if project.status == 'ended' %}
+                <a href="{% url 'projects:show' project.id %}" class="block bg-gray-200 border border-gray-300 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-semibold mb-2 text-gray-800">{{ project.title }}</h3>
+                    <p class="text-sm text-gray-500 mb-1">開始時間：{{ project.start_at }}</p>
+                    <p class="text-sm text-gray-500">結束時間：{{ project.end_at }}</p>
+                </a>
+            {% endif %}
+        {% empty %}
+        <!-- 當沒有已結束專案時的佔位區域 -->
+        <div class="col-span-3 text-center text-gray-400">
+            <p>目前沒有已結束的專案。</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 <button><a href="{% url "accounts:index" account.id%}">回個人頁面</a></button>
 {% endblock %}
