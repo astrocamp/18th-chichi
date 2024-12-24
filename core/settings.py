@@ -197,7 +197,7 @@ ACCOUNT_AUTHENTICATION_METHOD = "email"
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
-MEDIA_URL = "https://18thchichi.s3.ap-southeast-2.amazonaws.com/"
+MEDIA_URL = os.getenv("MEDIA_URL")
 
 STORAGES = {
     "default": {

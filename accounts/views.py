@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login as login_user, logout as log
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-from users.views import User as UserProfile
+from users.views import Profile
 from django.contrib.auth.models import User
 
 def index(request ,id):
@@ -39,9 +39,14 @@ def register(request):
         form = UserCreationForm(request.POST)        
         if form.is_valid():
             account = form.save()
-            UserProfile.objects.create(
+            Profile.objects.create(
                 name=account.username,
-                account=account
+                account=account,
+                location= "",
+                bio= "",
+                birthday=None,
+                website="",
+
             )
             messages.success(request, "註冊成功")
             return redirect("homepages:homepages")

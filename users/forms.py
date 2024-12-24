@@ -1,10 +1,10 @@
 from django.forms import ModelForm
-from .models import User
+from .models import Profile
 
 
-class UserForm(ModelForm):
+class ProfileForm(ModelForm):
     class Meta:
-        model = User
+        model = Profile
         fields = [
             "name",
             "phone",

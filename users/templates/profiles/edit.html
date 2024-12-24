@@ -1,0 +1,131 @@
+{% extends "shared/layout.html" %} {% block "content" %}
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+  <h1 class="text-3xl font-bold text-gray-800 mb-4">更新個人資料</h1>
+
+  <form
+    method="POST"
+    action="{% url 'accounts:profiles_index' account.id %}"
+    enctype="multipart/form-data"
+    class="space-y-6"
+  >
+    {% csrf_token %}
+
+    <!-- 名稱 -->
+    <div>
+      <label for="name" class="block text-lg font-semibold text-gray-600"
+        >名稱</label
+      >
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="{{ profile.name }}"
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+      />
+    </div>
+
+    <!-- 電話 -->
+    <div>
+      <label for="phone" class="block text-lg font-semibold text-gray-600"
+        >電話</label
+      >
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        value="{{ profile.phone }}"
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+      />
+    </div>
+
+    <!-- 生日 -->
+    <div>
+      <label for="birthday" class="block text-lg font-semibold text-gray-600"
+        >生日</label
+      >
+      <input
+        type="date"
+        id="birthday"
+        name="birthday"
+        value="{{ format_time }}"
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+      />
+    </div>
+
+    <!-- 地點 -->
+    <div>
+      <label for="location" class="block text-lg font-semibold text-gray-600"
+        >地點</label
+      >
+      <input
+        type="text"
+        id="location"
+        name="location"
+        value="{{ profile.location }}"
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+      />
+    </div>
+
+    <!-- 網站 -->
+    <div>
+      <label for="website" class="block text-lg font-semibold text-gray-600"
+        >網站</label
+      >
+      <input
+        type="url"
+        id="website"
+        name="website"
+        value="{{ profile.website }}"
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+      />
+    </div>
+
+    <!-- 自我介紹 -->
+    <div>
+      <label for="bio" class="block text-lg font-semibold text-gray-600"
+        >自我介紹</label
+      >
+      <textarea
+        id="bio"
+        name="bio"
+        rows="4"
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+      >
+{{ profile.bio }}</textarea
+      >
+    </div>
+
+    <!-- 個人圖片 -->
+    <div>
+      <label
+        for="profile_picture"
+        class="block text-lg font-semibold text-gray-600"
+        >個人圖片</label
+      >
+      <input
+        type="file"
+        id="profile_picture"
+        name="profile_picture"
+        class="mt-1"
+      />
+      {% if profile.profile_picture %}
+      <img
+        src="{{ profile.profile_picture.url }}"
+        alt="Profile Picture"
+        class="mt-4 w-40 h-40 rounded-full object-cover"
+      />
+      {% endif %}
+    </div>
+
+    <!-- 提交按鈕 -->
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+      >
+        更新
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

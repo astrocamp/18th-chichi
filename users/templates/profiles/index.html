@@ -1,0 +1,83 @@
+{% extends "shared/layout.html" %} {% block "content" %}
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
+  <h1 class="text-3xl font-bold text-gray-800 mb-4">個人資料</h1>
+
+  <div class="space-y-4">
+    <!-- 名稱 -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">名稱</h2>
+      <p class="text-gray-800">{{ profile.name }}</p>
+    </div>
+    <!-- Phone -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">電話</h2>
+      <p class="text-gray-800">{{ profile.phone }}</p>
+    </div>
+
+    <!-- Birthday -->
+    {% if profile.birthday %}
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">生日</h2>
+      <p class="text-gray-800">{{ profile.birthday }}</p>
+    </div>
+    {% endif %}
+
+    <!-- Location -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">地點</h2>
+      <p class="text-gray-800">{{ profile.location }}</p>
+    </div>
+
+    <!-- Website -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">網站</h2>
+      <p class="text-blue-600 underline">
+        <a href="{{ profile.website }}" target="_blank"
+          >{{ profile.website }}</a
+        >
+      </p>
+    </div>
+
+    <!-- Profile Picture -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">個人圖片</h2>
+      {% if profile.profile_picture %}
+      <img
+        src="{{ profile.profile_picture.url }}"
+        alt="Profile Picture"
+        class="w-40 h-40 rounded-full object-cover"
+      />
+      {% else %}
+      <p class="text-gray-500 italic">尚未上傳個人圖片</p>
+      {% endif %}
+    </div>
+
+    <!-- Bio -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">自我介紹</h2>
+      <article class="text-gray-800">
+        <p>{{ profile.bio }}</p>
+      </article>
+    </div>
+
+    <!-- 操作按鈕 -->
+    <div class="mt-6">
+      {% if profile.phone %}
+      <a
+        href="{% url 'accounts:profiles_edit' account.id %}"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
+      >
+        更新個人資料
+      </a>
+      {% else %}
+      <a
+        href="{% url 'accounts:profiles_new' account.id %}"
+        class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+      >
+        新增新個人資料
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
