@@ -1,6 +1,6 @@
 {%extends "shared/layout.html"%}{% block "content" %}
 <h1>新增回覆留言</h1>
-<form action="{%url 'comments_replies:index'%}" method="post">
+<form action="{%url 'comments:comments_replies_index' comment.id %}" method="post">
   {% csrf_token %} content: <br />
   <textarea name="content" id="content" placeholder="請輸入回覆留言"></textarea>
   <br />
