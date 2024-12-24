@@ -5,7 +5,7 @@
 <br>
 <a href="{%url 'comments_replies:edit' comments_reply.id%}">編輯</a>
 <a href="{%url 'comments_replies:delete' comments_reply.id%}">刪除</a>
-<a href="{%url 'comments_replies:index' %}">回主頁</a>
+<a href="{%url 'comments:comments_replies_index' comment.id %}">回主頁</a>
 
 
 {% endblock %}
