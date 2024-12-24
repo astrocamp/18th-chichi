@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment
+from projects.models import Project
 from django.utils import timezone
 from projects.models import Project
 

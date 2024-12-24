@@ -8,4 +8,5 @@ class Comment(models.Model):
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
     project=models.ForeignKey(Project,on_delete=models.CASCADE,related_name="comments")
+    user=models.ForeignKey(User,on_delete=models.CASCADE,related_name="comments")
 
