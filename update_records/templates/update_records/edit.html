@@ -1,7 +1,7 @@
 {% extends "shared/layout.html"%} {% block "content" %}
 <h1>NewProjects</h1>
 
-<form action="{% url "update_records:show" id update_record.id %}" method="POST">
+<form action="{% url "update_records:show"  update_record.id %}" method="POST">
   {% csrf_token %}
   title:<br />
   <input type="text" name="title" value="{{update_record.title}}" /><br />
