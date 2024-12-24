@@ -1,17 +1,10 @@
 {% extends "shared/layout.html" %}
 
 {% block "content" %}
-<<<<<<< HEAD
-<h1>SubCategory</h1>
-<ul>
-    {% for subcategory in subcategories %}
-    <li><a href="">{{ subcategory.title }}</a></li>
-=======
 <h1>{{ category.title }}</h1>
 <ul>
     {% for subcategory in subcategories %}
     <li>{{ subcategory.title }}</li>
->>>>>>> 0e4551c (feat: categories and subcategories relationship completed)
     {% endfor %}
 </ul>
 {% endblock %}
