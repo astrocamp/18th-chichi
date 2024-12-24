@@ -12,5 +12,5 @@ class CommentsReplies(models.Model):
         Comment, on_delete=models.CASCADE, related_name="comments_replies"
     )
     account = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="comments_replies"
+        User, on_delete=models.CASCADE, related_name="replies"
     )
