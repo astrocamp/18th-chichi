@@ -9,15 +9,11 @@ from django.contrib.auth.decorators import login_required
 def index(request, id):
     project = get_object_or_404(Project, id=id)
     if request.POST:
-        content = request.POST.get("content", "").strip()
-
-        if content:
-
-            Comment.objects.create(
-                content=content,
-                account=request.user,
-                project=project,
-            )
+        comment = Comment()
+        comment.content = request.POST.get("content")
+        comment.project = project
+        comment.account = request.user
+        comment.save()
 
         return redirect("projects:comment_index", id=project.id)
 
