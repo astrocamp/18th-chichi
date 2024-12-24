@@ -1,0 +1,12 @@
+{% extends "shared/layout.html" %} {% block "content" %}
+<h1>個人資料</h1>
+<a href="{% url 'users:new' %}">新增</a>
+<ul>
+  {% for user in users %}
+  <li>
+    <a href="{% url 'users:show' user.id %}"> {{ user.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+{% endblock %}
