@@ -194,19 +194,51 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_AUTHENTICATION_METHOD = "email"
 
+<<<<<<< HEAD
 DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
 
 
 MEDIA_URL = os.getenv("MEDIA_URL")
+=======
+
+# AWS S3 設定
+AWS_ACCESS_KEY_ID = "env(AWS_ACCESS_KEY_ID)"  # 用您的 AWS 存取金鑰取代
+AWS_SECRET_ACCESS_KEY = "env(AWS_SECRET_ACCESS_KEY)"  # 用您的 AWS 密鑰取代
+AWS_STORAGE_BUCKET_NAME = "18thchichi"  # 用您的 S3 存儲桶名稱取代
+AWS_S3_REGION_NAME = "ap-southeast-2"  # 比如 'us-east-1'
+AWS_S3_CUSTOM_DOMAIN = "18thchichi.s3.ap-southeast-2.amazonaws.com"
+AWS_S3_FILE_OVERWRITE = False  # 確保文件不會覆蓋
+AWS_DEFAULT_ACL = None  # 確保沒有默認的公共訪問
+AWS_QUERYSTRING_AUTH = False
+AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+
+
+# 設定 Django 媒體檔案儲存位置為 S3
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+# 設定媒體路徑
+MEDIA_URL = "https://18thchichi.s3.ap-southeast-2.amazonaws.com/"
+>>>>>>> 589bbb8 (feat:upload function)
 
 STORAGES = {
     "default": {
         "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
         "OPTIONS": {
+<<<<<<< HEAD
             "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
             "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
             "bucket_name": os.getenv("AWS_STORAGE_BUCKET_NAME"),
             "region_name": os.getenv("AWS_S3_REGION_NAME"),
+=======
+            "access_key": AWS_ACCESS_KEY_ID,
+            "secret_key": AWS_SECRET_ACCESS_KEY,
+            "bucket_name": AWS_STORAGE_BUCKET_NAME,
+            "region_name": AWS_S3_REGION_NAME,
+            "default_acl": AWS_DEFAULT_ACL,
+            "querystring_auth": AWS_QUERYSTRING_AUTH,
+            "object_parameters": AWS_S3_OBJECT_PARAMETERS,
+            "custom_domain": AWS_S3_CUSTOM_DOMAIN,
+>>>>>>> 589bbb8 (feat:upload function)
         },
     },
     "staticfiles": {

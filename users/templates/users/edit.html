@@ -1,0 +1,36 @@
+{% extends "shared/layout.html" %} {% block "content" %}
+<h1>個人資料</h1>
+<form
+  method="POST"
+  action="{% url 'users:show' user.id %}"
+  enctype="multipart/form-data"
+>
+  {% csrf_token %} name:<br /><input
+    type="text"
+    name="name"
+    value="{{ user.name }}"
+  /><br />
+  email:<br /><input type="email" name="email" value="{{ user.email }}" /><br />
+  phone:<br /><input type="tel" name="phone" value="{{ user.phone }}" /><br />
+  birthday:<br /><input
+    type="date"
+    name="birthday"
+    value="{{ format_time }}"
+  /><br />
+  location:<br /><input
+    type="text"
+    name="location"
+    value="{{ user.location }}"
+  /><br />
+  website:<br /><input
+    type="url"
+    name="website"
+    value="{{ user.website}}"
+  /><br />
+  bio:<br /><textarea name="bio">{{ user.bio }}</textarea><br />
+  profile_picture:<input type="file" name="profile_picture" /><br />
+
+  <button>更新</button>
+</form>
+
+{% endblock %}
