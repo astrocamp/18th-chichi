@@ -8,4 +8,5 @@
   <a href="{% provider_login_url 'google' method='oauth2' %}">Google登入</a>
 </li>
 {% endif %}
+<a href="{% url 'payments:create_payment' %}">前往付款</a>
 {% endblock %}
