@@ -19,8 +19,8 @@ class ECPayPayment:
             'TotalAmount': str(amount),
             'TradeDesc': urllib.parse.quote(description),
             'ItemName': description,
-            'ReturnURL': 'https://c33e-61-220-182-115.ngrok-free.app/notify/',
-            'ClientBackURL': 'https://c33e-61-220-182-115.ngrok-free.app/payments/complete/',
+            'ReturnURL': 'https://df2b-61-220-182-115.ngrok-free.app/notify/',
+            'ClientBackURL': 'https://df2b-61-220-182-115.ngrok-free.app/payments/complete/',
             'ChoosePayment': 'ALL',
             'EncryptType': '1',
         }
