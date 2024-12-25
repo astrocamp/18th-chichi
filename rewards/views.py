@@ -123,3 +123,8 @@ def reward_sponsor(request, slug):
 
     rewards = project.rewards.all()
     return render(request, "reward_sponsor_form.html", {"project": project, "rewards": rewards})
+
+
+def free_confirm(request,slug):
+    project = get_object_or_404(Project, slug=slug)
+    return render(request, "rewards/free_confirm.html", {"project": project})
