@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from projects.models import Project
 
 
 @login_required
