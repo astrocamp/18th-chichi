@@ -10,10 +10,10 @@ def generate_random_slug():
     letters_and_digits = string.ascii_lowercase + string.digits
     return "".join(random.choice(letters_and_digits) for i in range(8))
 
+from projects.views import Project
 
 def default_delivery_date():
     return datetime.date.today() + datetime.timedelta(days=7)
-
 
 class Reward(models.Model):
     description = models.TextField(blank=True)
@@ -26,6 +26,8 @@ class Reward(models.Model):
     optional_adds_on = models.TextField(blank=True)
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
+    project = models.ForeignKey(Project,on_delete=models.CASCADE)
+
     slug = AutoSlugField(
         populate_from=generate_random_slug,
         unique=True,

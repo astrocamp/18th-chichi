@@ -1,6 +1,6 @@
 {% extends "shared/layout.html" %} {% block "content" %}
 <h1>Rewards</h1>
-<a href="{% url 'rewards:new' %}">New Rewards</a>
+<a href="{% url 'projects:rewards_new' project.id %}">New Rewards</a>
 
 <ul>
   {% for reward in rewards %}
@@ -10,5 +10,6 @@
   </li>
   {% endfor %}
 </ul>
+<a href="{% url "projects:show" project.id %}">回募資專案</a>
 
 {% endblock %}
