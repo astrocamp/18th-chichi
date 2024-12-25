@@ -1,10 +1,4 @@
 from django.db import models
-
-
-class SubCategory(models.Model):
-    title = models.CharField(max_length=20, unique=True)
-
-
 from categories.models import Category
 
 
