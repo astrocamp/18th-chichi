@@ -1,15 +1,14 @@
-{% extends "shared/layout.html" %}
-{% block "content" %}
+{% extends "shared/layout.html" %} {% block "content" %}
 <h1>FAQs</h1>
-<a href="{% url 'projects:faq_new' project.id %}">New Question</a>
-
+<a href="{% url 'projects:faq_new' project.slug %}">New Question</a>
+<a href="{% url 'projects:show' project.slug %}">回專案頁面</a>
 <ul>
-{% for faq in faqs %}
-    <li>
-        <a href="{% url 'faqs:show' faq.id %}">{{ faq.question|linebreaks }}</a>
-        <span>建立時間:{{ faq.create_at|date:"Y-m-d H:i:s"}}</span>
-    </li>
-{% endfor %}    
+  {% for faq in faqs %}
+  <li>
+    <a href="{% url 'faqs:show' faq.slug %}">{{ faq.question|linebreaks }}</a>
+    <span>建立時間:{{ faq.create_at|date:"Y-m-d H:i:s"}}</span>
+  </li>
+  {% endfor %}
 </ul>
 
 {% endblock %}

@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
-
+from django.contrib.auth.decorators import login_required
 from .forms import FaqForm
 from .models import Faq
 from projects.models import Project
 
-def index(request, id):
-    project = get_object_or_404(Project, id=id)
+
+@login_required
+def index(request, slug):
+    project = get_object_or_404(Project, slug=slug)
     if request.POST:
         form = FaqForm(request.POST)
         if form.is_valid():
@@ -15,40 +17,71 @@ def index(request, id):
             faq.project = project
             faq.save()
             messages.success(request, "新增成功")
-            return redirect("projects:faq_index", id=id)
-    
-    faqs = Faq.objects.filter(project=project)
-    return render(request, "faqs/index.html", {"faqs": faqs, "project": project}) 
+            return redirect("projects:faq_index", slug=project.slug)
 
-def new(request, id):
-    project = get_object_or_404(Project, id=id)
+    faqs = Faq.objects.filter(project=project)
+    return render(request, "faqs/index.html", {"faqs": faqs, "project": project})
+
+
+@login_required
+def new(request, slug):
+    project = get_object_or_404(Project, slug=slug)
     form = FaqForm()
     return render(request, "faqs/new.html", {"form": form, "project": project})
 
-def show(request, id):
-    faq = get_object_or_404(Faq, id=id)
-    project = get_object_or_404(Project, id=faq.project.id)
+
+@login_required
+def show(request, slug):
+    faq = get_object_or_404(Faq, slug=slug)
+    project = faq.project
     if request.POST:
         form = FaqForm(request.POST, instance=faq)
         form.save()
         faq.update_at = timezone.now()
         faq.save()
         messages.success(request, "更新成功")
-        return redirect("projects:faq_index" ,id=project.id)
-    
-    return render(request, "faqs/show.html", {"faq": faq,} )
+        return redirect("projects:faq_index", slug=project.slug)
 
-def edit(request, id):
-    faq = get_object_or_404(Faq, id=id)
-    form = FaqForm(instance=faq)    
-    return render(request, "faqs/edit.html", {"faq": faq, "form": form, })
+    return render(
+        request,
+        "faqs/show.html",
+        {
+            "faq": faq,
+            "project": project,
+        },
+    )
 
-def delete(request, id):
-    faq = get_object_or_404(Faq, id=id)
-    project = get_object_or_404(Project, id=faq.project.id)
+
+@login_required
+def edit(request, slug):
+    faq = get_object_or_404(Faq, slug=slug)
+    project = faq.project
+    form = FaqForm(instance=faq)
+    return render(
+        request,
+        "faqs/edit.html",
+        {
+            "faq": faq,
+            "form": form,
+            "project": project,
+        },
+    )
+
+
+@login_required
+def delete(request, slug):
+    faq = get_object_or_404(Faq, slug=slug)
+    project = faq.project
     if request.POST:
         faq.delete()
         messages.success(request, "刪除成功")
-        return redirect("projects:faq_index", id = project.id)
+        return redirect("projects:faq_index", slug=project.slug)
 
-    return render(request, "faqs/delete.html", {"faq": faq,})
+    return render(
+        request,
+        "faqs/delete.html",
+        {
+            "faq": faq,
+            "project": project,
+        },
+    )

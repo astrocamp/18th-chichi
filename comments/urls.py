@@ -9,16 +9,16 @@ from comments_replies.views import (
 app_name = "comments"
 
 urlpatterns = [
-    path("<int:id>/", show, name="show"),
-    path("<int:id>/edit", edit, name="edit"),
-    path("<int:id>/delete", delete, name="delete"),
+    path("<slug:slug>/", show, name="show"),
+    path("<slug:slug>/edit", edit, name="edit"),
+    path("<slug:slug>/delete", delete, name="delete"),
     path(
-        "<int:id>/comments_replies",
+        "<slug:slug>/comments_replies",
         comments_replies_index,
         name="comments_replies_index",
     ),
     path(
-        "<int:id>/comments_replies/new",
+        "<slug:slug>/comments_replies/new",
         comments_replies_new,
         name="comments_replies_new",
     ),

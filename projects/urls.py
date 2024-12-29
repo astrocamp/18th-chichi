@@ -12,15 +12,19 @@ app_name = "projects"
 urlpatterns = [
     path("", index, name="index"),
     path("new/", new, name="new"),
-    path("<int:id>", show, name="show"),
-    path("<int:id>/edit", edit, name="edit"),
-    path("<int:id>/delete", delete, name="delete"),
-    path("<int:id>/collect", collect_projects, name="collect"),
-    path("<int:id>/comments", comment_index, name="comment_index"),
-    path("<int:id>/comments/new", comment_new, name="comment_new"),
-    path("<int:id>/faq", faq_index, name="faq_index"),
-    path("<int:id>/faq/new", faq_new, name="faq_new"),
-    path("<int:id>/update_records", update_records_index, name="update_records_index"),
-    path("<int:id>/update_records/new", update_records_new, name="update_records_new"),
-    path("<int:id>/like", like_projects, name="like"),
+    path("<slug:slug>", show, name="show"),
+    path("<slug:slug>/edit", edit, name="edit"),
+    path("<slug:slug>/delete", delete, name="delete"),
+    path("<slug:slug>/collect", collect_projects, name="collect"),
+    path("<slug:slug>/comments", comment_index, name="comment_index"),
+    path("<slug:slug>/comments/new", comment_new, name="comment_new"),
+    path("<slug:slug>/faq", faq_index, name="faq_index"),
+    path("<slug:slug>/faq/new", faq_new, name="faq_new"),
+    path(
+        "<slug:slug>/update_records", update_records_index, name="update_records_index"
+    ),
+    path(
+        "<slug:slug>/update_records/new", update_records_new, name="update_records_new"
+    ),
+    path("<slug:slug>/like", like_projects, name="like"),
 ]

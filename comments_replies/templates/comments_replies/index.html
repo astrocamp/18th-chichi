@@ -1,12 +1,16 @@
 {%extends "shared/layout.html"%}{% block "content" %}
 <h1>回覆留言頁面</h1>
-<a href="{%url 'comments:comments_replies_new' comment.id %}">新增回覆留言</a>
+<a href="{%url 'comments:comments_replies_new' comment.slug %}">新增回覆留言</a>
 
 <ul>
   {%for comments_reply in comments_replies%}
   <li>
-    <a href="{%url 'comments_replies:show' comments_reply.id%}">{{comments_reply.content}}</a>
+    <a href="{%url 'comments_replies:show' comments_reply.id%}"
+      >{{comments_reply.content}}</a
+    >
   </li>
   {%endfor%}
 </ul>
+
+<a href="{% url 'comments:show' comment.slug %}">回評論頁面</a>
 {% endblock %}

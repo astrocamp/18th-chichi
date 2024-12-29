@@ -1,13 +1,15 @@
 {% extends "shared/layout.html"%} {% block "content" %}
-<h1>New update_records</h1>
+<h1>New Update Record</h1>
 
-<form action="{% url "projects:update_records_index" id %}" method="POST" >
+<form action="{% url "projects:update_records_index" project.slug %}" method="POST" >
   {% csrf_token %}
   title:<br />
   <input type="text" name="title" /><br />
   description:<br />
   <input type="text" name="description" /><br />
 
-  <button>上傳</button>
+  <button>送出</button>
 </form>
+
+<a href="{% url 'projects:update_records_index' project.slug %}">回更新記錄列表</a>
 {% endblock %}

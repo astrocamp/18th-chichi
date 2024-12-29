@@ -8,9 +8,9 @@
 <p>{{project.story}}</p>
 <p>{{project.location}}</p>
 
-<a href="{% url "projects:edit" project.id %}">編輯</a>
-<a href="{% url "projects:delete" project.id %}">刪除</a>
-<form method="POST" action="{% url "projects:collect" project.id %}">
+<a href="{% url "projects:edit" project.slug %}">編輯</a>
+<a href="{% url "projects:delete" project.slug %}">刪除</a>
+<form method="POST" action="{% url "projects:collect" project.slug %}">
     {% csrf_token %}
     <button>
       {% if collected %}
@@ -21,7 +21,7 @@
     </button>
 </form>
 
-<form action="{%url "projects:like" project.id%}" method="post">
+<form action="{%url 'projects:like' project.slug%}" method="post">
   {% csrf_token %}
   <button>
     {%if favorited%}
@@ -32,9 +32,10 @@
   </button>
 </form>
 <a href="{% url "projects:index" %}">回主頁</a>
-<a href="{% url "projects:comment_index" project.id%}">comment</a>
-<a href="{% url "projects:faq_index" project.id %}">查看FAQ</a>
-<a href="{% url "projects:update_records_index" project.id %}">更新狀態</a>
+<a href="{% url "projects:comment_index" project.slug%}">comment</a>
+<a href="{% url "projects:faq_index" project.slug %}">查看FAQ</a>
+<a href="{% url "projects:update_records_index" project.slug %}">更新狀態</a>
+
 
 <form method="POST" action="">
   {% csrf_token %}

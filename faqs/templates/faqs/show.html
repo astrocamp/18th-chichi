@@ -1,13 +1,14 @@
-{% extends "shared/layout.html" %}
-{% block "content" %}
+{% extends "shared/layout.html" %} {% block "content" %}
 
 <h1>{{ faq.question }}</h1>
 <h2>{{ faq.answer }}</h2>
 
 <footer>
-    <a href="{% url 'faqs:edit' faq.id %}">編輯</a>
-    |
-    <a href="{% url 'faqs:delete' faq.id %}">刪除</a>
+  <a href="{% url 'faqs:edit' faq.slug %}">編輯</a>
+  |
+  <a href="{% url 'faqs:delete' faq.slug %}">刪除</a>
+  |
+  <a href="{% url 'projects:faq_index' project.slug %}">回 FAQ 列表</a>
 </footer>
 
 {% endblock %}

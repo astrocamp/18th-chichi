@@ -1,12 +1,12 @@
-{% extends "shared/layout.html" %}
-{% block "content" %}
+{% extends "shared/layout.html" %} {% block "content" %}
 
 <h1>確認刪除?</h1>
 
 <form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button>刪除</button>
+  {% csrf_token %}
+  <button>刪除</button>
 </form>
+
+<a href="{% url 'projects:faq_index' project.slug %}">回 FAQ 列表</a>
 
 {% endblock %}

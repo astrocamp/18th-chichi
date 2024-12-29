@@ -7,6 +7,8 @@ from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib import messages
+from django.contrib.auth.models import User
+
 
 @login_required
 def index(request):
@@ -17,26 +19,28 @@ def index(request):
             project = form.save(commit=False)
             project.account = account
             project.save()
-            return redirect("projects:index")
+            return redirect("projects:show", slug=project.slug)
         else:
             return HttpResponse("輸入錯誤")
 
     projects = Project.objects.filter(account=account)
     for project in projects:
         project.update_status()  # 更新專案的上下架狀態
-    return render(request, "projects/index.html", {"projects":projects,"account":account})
-        
+    return render(
+        request, "projects/index.html", {"projects": projects, "account": account}
+    )
+
+
 @login_required
 def new(request):
     account = request.user
-    return render(request, "projects/new.html",{"account":account})
-
+    return render(request, "projects/new.html", {"account": account})
 
 
 @login_required
-def show(request, id):
-    project = get_object_or_404(Project,id=id)
-    account = request.user
+def show(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    account = get_object_or_404(User, id=request.user.id)
 
     if request.POST:
         # 處理上架邏輯
@@ -47,7 +51,7 @@ def show(request, id):
                 project.save()
                 messages.success(request, "已上架")
 
-                return redirect("projects:show", id=project.id)
+                return redirect("projects:show", slug=project.slug)
         elif "unpublish" in request.POST:
             if project.status == "live":
                 project.status = "ended"  # 將狀態改為已上架
@@ -55,24 +59,24 @@ def show(request, id):
                 project.save()
                 messages.success(request, "已下架")
 
-                return redirect("projects:show", id=project.id)
+                return redirect("projects:show", slug=project.slug)
 
         else:
             form = ProjectFrom(request.POST, instance=project)
             form.save()
-            return redirect("projects:show", id = project.id)
+            project.update_at = timezone.now()
+            project.save()
+            return redirect("projects:show", slug=project.slug)
 
-        return redirect("projects:show", id=project.id)
-
-    collected = CollectProject.objects.filter(
-        account=request.user, project=project
-    ).first()
+        return redirect("projects:show", slug=project.slug)
 
     collected = CollectProject.objects.filter(
         account=request.user, project=project
     ).first()
 
-    favorited = project.favorite_users.filter(id=request.user.id).first()
+    favorited = FavoritePrject.objects.filter(
+        account=request.user, project=project
+    ).first()
 
     return render(
         request,
@@ -85,31 +89,41 @@ def show(request, id):
         },
     )
 
-@login_required
-def edit(request, id):
-    project = get_object_or_404(Project,id=id)
-    format_time_start =localtime(project.start_at).strftime('%Y-%m-%dT%H:%M')
-    format_time_end =localtime(project.end_at).strftime('%Y-%m-%dT%H:%M')
-    return render(request, "projects/edit.html",{"project":project,
-"format_time_start":format_time_start,"format_time_end":format_time_end})
 
 @login_required
-def delete(request, id):
-    project = get_object_or_404(Project,id=id)
-    if request.POST:
-        project.delete()
-        return redirect("projects:index")
+def edit(request, slug):
+    project = get_object_or_404(Project, slug=slug)
 
+    format_time_start = localtime(project.start_at).strftime("%Y-%m-%dT%H:%M")
+    format_time_end = localtime(project.end_at).strftime("%Y-%m-%dT%H:%M")
     return render(
         request,
-        "projects/delete.html",
+        "projects/edit.html",
+        {
+            "project": project,
+            "format_time_start": format_time_start,
+            "format_time_end": format_time_end,
+        },
     )
 
 
 @login_required
+def delete(request, slug):
+    # 獲取專案並確保是當前用戶的專案
+    project = get_object_or_404(Project, slug=slug, account=request.user)
+
+    if request.POST:
+        project.delete()
+        messages.success(request, "專案已成功刪除")
+        return redirect("projects:index")
+
+    return render(request, "projects/delete.html", {"project": project})
+
+
+@login_required
 @require_POST
-def collect_projects(request, id):
-    project = get_object_or_404(Project, id=id)
+def collect_projects(request, slug):
+    project = get_object_or_404(Project, slug=slug)
     collect, created = CollectProject.objects.get_or_create(
         account=request.user,
         project=project,
@@ -118,18 +132,19 @@ def collect_projects(request, id):
     if not created:
         collect.delete()
 
-    return redirect("projects:show", id=project.id)
+    return redirect("projects:show", slug=project.slug)
 
 
 @login_required
 @require_POST
-def like_projects(request, id):
-    project = get_object_or_404(Project, id=id)
-    favorite = project.favorite_users.filter(id=request.user.id).first()
+def like_projects(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    favorite, created = FavoritePrject.objects.get_or_create(
+        account=request.user,
+        project=project,
+    )
 
-    if favorite:
-        FavoritePrject.objects.get(account=request.user, project=project).delete()
-    else:
-        FavoritePrject(account=request.user, project=project).save()
+    if not created:
+        favorite.delete()
 
-    return redirect("projects:show", id=project.id)
+    return redirect("projects:show", slug=project.slug)

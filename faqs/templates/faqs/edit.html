@@ -1,12 +1,12 @@
-{% extends "shared/layout.html" %}
-{% block "content" %}
+{% extends "shared/layout.html" %} {% block "content" %}
 
-<h1>Edit FAQs</h1>
+<h1>Edit FAQ</h1>
 
-<form method="POST" action="{% url 'faqs:show' faq.id %}">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button>更新</button>
+<form method="POST" action="{% url 'faqs:show' faq.slug %}">
+  {% csrf_token %} {{ form.as_p }}
+  <button>更新</button>
 </form>
+
+<a href="{% url 'projects:faq_index' project.slug %}">回 FAQ 列表</a>
 
 {% endblock %}

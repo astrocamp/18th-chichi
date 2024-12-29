@@ -9,7 +9,7 @@
     <div class="grid grid-cols-3 gap-6">
         {% for project in projects %}
             {% if project.status == 'pending' %}
-                <a href="{% url 'projects:show' project.id %}" class="block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
+                <a href="{% url 'projects:show' project.slug %}" class="block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
                     <h3 class="text-lg font-semibold mb-2 text-gray-800">{{ project.title }}</h3>
                     <p class="text-sm text-gray-500 mb-1">開始時間：{{ project.start_at }}</p>
                     <p class="text-sm text-gray-500">結束時間：{{ project.end_at }}</p>
@@ -30,7 +30,7 @@
     <div class="grid grid-cols-3 gap-6">
         {% for project in projects %}
             {% if project.status == 'live' %}
-                <a href="{% url 'projects:show' project.id %}" class="block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
+                <a href="{% url 'projects:show' project.slug %}" class="block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
                     <h3 class="text-lg font-semibold mb-2 text-gray-800">{{ project.title }}</h3>
                     <p class="text-sm text-gray-500 mb-1">開始時間：{{ project.start_at }}</p>
                     <p class="text-sm text-gray-500">結束時間：{{ project.end_at }}</p>
@@ -51,7 +51,7 @@
     <div class="grid grid-cols-3 gap-6">
         {% for project in projects %}
             {% if project.status == 'ended' %}
-                <a href="{% url 'projects:show' project.id %}" class="block bg-gray-200 border border-gray-300 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
+                <a href="{% url 'projects:show' project.slug %}" class="block bg-gray-200 border border-gray-300 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow">
                     <h3 class="text-lg font-semibold mb-2 text-gray-800">{{ project.title }}</h3>
                     <p class="text-sm text-gray-500 mb-1">開始時間：{{ project.start_at }}</p>
                     <p class="text-sm text-gray-500">結束時間：{{ project.end_at }}</p>

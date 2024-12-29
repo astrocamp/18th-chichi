@@ -7,16 +7,16 @@ from django.contrib.auth.decorators import login_required
 
 
 @login_required
-def index(request, id):
-    comment = get_object_or_404(Comment, id=id)
+def index(request, slug):
+    comment = get_object_or_404(Comment, slug=slug)
     if request.POST:
         comments_reply = CommentsReplies()
         comments_reply.content = request.POST.get("content")
-        comments_reply.comment = comment  # 告訴程式這條回覆留言是屬於這條評論   #就是把你從資料庫中找到的「評論」（comment）這個物件，和「回覆」（comments_reply）連起來。
-        comments_reply.account = request.user  # 設置關聯的用戶
+        comments_reply.comment = comment
+        comments_reply.account = request.user
 
         comments_reply.save()
-        return redirect("comments:comments_replies_index", id=comment.id)
+        return redirect("comments:comments_replies_index", slug=comment.slug)
 
     comments_replies = CommentsReplies.objects.filter(comment=comment)
     return render(
@@ -27,15 +27,15 @@ def index(request, id):
 
 
 @login_required
-def new(request, id):
-    comment = get_object_or_404(Comment, id=id)
+def new(request, slug):
+    comment = get_object_or_404(Comment, slug=slug)
     return render(request, "comments_replies/new.html", {"comment": comment})
 
 
 @login_required
 def show(request, id):
     comments_reply = get_object_or_404(CommentsReplies, id=id)
-    comment = get_object_or_404(Comment, id=comments_reply.comment.id)
+    comment = comments_reply.comment
 
     if request.POST:
         comments_reply.content = request.POST.get("content")
@@ -53,22 +53,25 @@ def show(request, id):
     )
 
 
+@login_required
 def edit(request, id):
     comments_reply = get_object_or_404(CommentsReplies, id=id)
+    comment = comments_reply.comment
     return render(
         request,
         "comments_replies/edit.html",
-        {"comments_reply": comments_reply},
+        {"comments_reply": comments_reply, "comment": comment},
     )
 
 
+@login_required
 def delete(request, id):
     comments_reply = get_object_or_404(CommentsReplies, id=id)
-    comment = get_object_or_404(Comment, id=comments_reply.comment.id)
+    comment = comments_reply.comment
 
     if request.POST:
         comments_reply.delete()
-        return redirect("comments:comments_replies_index", id=comment.id)
+        return redirect("comments:comments_replies_index", slug=comment.slug)
 
     return render(
         request,

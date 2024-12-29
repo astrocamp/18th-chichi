@@ -5,4 +5,8 @@
   {% csrf_token%}
   <button>刪除</button>
 </form>
+
+<a href="{% url 'projects:update_records_index' project.slug %}"
+  >回更新記錄列表</a
+>
 {% endblock %}

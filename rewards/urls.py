@@ -6,7 +6,7 @@ app_name = "rewards"
 urlpatterns = [
     path("", views.index, name="index"),
     path("new/", views.new, name="new"),
-    path("<int:id>", views.show, name="show"),
-    path("<int:id>/edit", views.edit, name="edit"),
-    path("<int:id>/delete", views.delete, name="delete"),
+    path("<slug:slug>", views.show, name="show"),
+    path("<slug:slug>/edit", views.edit, name="edit"),
+    path("<slug:slug>/delete", views.delete, name="delete"),
 ]

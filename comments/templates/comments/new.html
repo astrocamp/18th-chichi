@@ -1,13 +1,10 @@
 {% extends "shared/layout.html"%} {% block "content" %}
-<h1>NewProjects</h1>
+<h1>New Comment</h1>
 
-<form action="{% url "projects:comment_index" project.id %}" method="POST" >
-  {% csrf_token %}
-  content:<br />
+<form method="POST" action="{% url 'projects:comment_index' project.slug %}">
+  {% csrf_token %} content:<br />
   <input type="text" name="content" /><br />
-
-  <button>上傳
-
-  </button>
+  <button>送出</button>
 </form>
+
 {% endblock %}
