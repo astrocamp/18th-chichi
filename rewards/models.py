@@ -39,6 +39,8 @@ class Reward(models.Model):
 class RewardProduct(models.Model):
     name = models.CharField(max_length=300)
     rewards = models.ManyToManyField(Reward ,blank=True)
+    project = models.ForeignKey(Project,on_delete=models.CASCADE)
+
 
     def __str__(self):
         return f"{self.name} (x{self.quantity})"
@@ -47,6 +49,8 @@ class OptionalAdd(models.Model):
     name = models.CharField(max_length=300)
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     rewards = models.ManyToManyField(Reward, blank=True)
+    project = models.ForeignKey(Project,on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.name

@@ -1,17 +1,87 @@
-{% extends "shared/layout.html" %} {% block "content" %}
-<h1>Rewards</h1>
-<a href="{% url 'projects:rewards_new' project.id %}">新增reward</a>
+{% extends "shared/layout.html" %}
 
-<ul>
-  {% for reward in rewards %}
-  <li>
-    <a href="{% url 'rewards:show' reward.slug %}">{{ reward.title }}</a>
-    <span>{{ reward.create_at|date:"Y-m-d H:i:s" }}</span>
-  </li>
-  {% endfor %}
-</ul>
-<a href="{% url "projects:show" project.id %}">回募資專案</a>
-<a href="{% url "projects:reward_items" project.id %}">新增商品及附加商品</a>
+{% block "content" %}
+<div class="max-w-5xl mx-auto py-8">
+  <!-- Header -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">回饋 & 商品/附加商品</h1>
+    <a
+      href="{% url 'projects:rewards_new' project.slug %}"
+      class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+    >
+      新增 Reward
+    </a>
+  </div>
 
+  <!-- Grid Layout -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- 左側：Rewards -->
+    <div>
+      <h2 class="text-xl font-semibold mb-4">回饋</h2>
+      <ul class="space-y-4">
+        {% for reward in rewards %}
+        <li class="p-4 bg-white shadow-md rounded-md border border-gray-200">
+          <div class="flex justify-between items-center">
+            <a
+              href="{% url 'rewards:show' reward.id %}"
+              class="text-lg font-semibold text-indigo-600 hover:underline"
+            >
+              {{ reward.title }}
+            </a>
+            <span class="text-sm text-gray-500">{{ reward.created_at|date:"Y-m-d H:i:s" }}</span>
+          </div>
+        </li>
+        {% empty %}
+        <li class="p-4 bg-gray-50 rounded-md border border-gray-200 text-gray-500">
+          尚無 Reward
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
 
+    <!-- 右側：商品 & 附加選項 -->
+    <div>
+      <!-- 商品列表 -->
+      <h2 class="text-xl font-semibold mb-4">可選擇的商品</h2>
+      <ul class="space-y-2">
+        {% for product in products %}
+        <li class="p-4 border rounded-md bg-gray-50 flex justify-between items-center">
+          <span class="text-gray-700 font-medium">{{ product.name }}</span>
+        </li>
+        {% empty %}
+        <p class="text-gray-500">目前沒有商品</p>
+        {% endfor %}
+      </ul>
+
+      <!-- 附加選項列表 -->
+      <h2 class="text-xl font-semibold mt-6 mb-4">可選擇的附加選項</h2>
+      <ul class="space-y-2">
+        {% for option in options %}
+        <li class="p-4 border rounded-md bg-gray-50 flex justify-between items-center">
+          <span class="text-gray-700 font-medium">{{ option.name }}</span>
+          <span class="text-gray-500">NTD {{ option.price }}</span>
+        </li>
+        {% empty %}
+        <p class="text-gray-500">目前沒有附加選項</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <!-- Links -->
+  <div class="mt-8 flex justify-between">
+    <a
+      href="{% url "projects:show" project.id %}"
+      class="px-4 py-2 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400"
+    >
+      回募資專案
+    </a>
+    <a
+      href="{% url "projects:reward_items" project.id %}"
+      class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+    >
+      新增商品及附加商品
+    </a>
+  </div>
+</div>
 {% endblock %}

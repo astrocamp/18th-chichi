@@ -25,31 +25,48 @@
   </div>
 </div>
 
-<body class="bg-neutral-50">
-  <div class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-title font-bold text-center mb-12">贊助選擇</h1>
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-4xl font-title font-bold text-center mb-12">{{ project.title }}</h1>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      {% for reward in rewards %}
-      <div class="bg-white shadow-md rounded-lg overflow-hidden">
-        <div class="p-6">
-          <h2 class="text-xl font-semibold mb-4">{{ reward.title }}</h2>
-          <p class="text-neutral-500 text-lg mb-3">金額：{{ reward.price }} 元</p>
-          {% if reward.quantity > 0 %}
-          <p class="text-blue-700 text-xs font-bold">剩餘：{{ reward.quantity }}</p>
-          {% else %}
-          <p class="text-red-600 text-xs font-bold">已售罄</p>
-          {% endif %}
-          <form method="POST" action="{% url 'projects:reward_sponsor' project.id %}">
-            {% csrf_token %}
-            <input type="hidden" name="reward" value="{{ reward.id }}" />
-            <button type="submit" class="mt-4 w-full bg-primary text-white py-3 px-4 rounded-md hover:bg-blue-600 transition duration-300">贊助此方案</button>
-          </form>
-        </div>
+  <div class="grid grid-cols-1 gap-6">
+    {% for detail in reward_details %}
+    <div class="bg-white shadow-md rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-3">
+      <div class="p-6 border-b md:border-b-0 md:border-r border-neutral-200 md:col-span-1">
+        <form method="POST" action="{% url 'projects:reward_sponsor' project.id %}">
+          {% csrf_token %}
+          <h2 class="text-xl font-semibold mb-4">{{ detail.reward.title }}</h2>
+          <p class="text-neutral-500 mb-3">{{ detail.reward.description }}</p>
+          <p class="text-lg font-bold mb-3">金額：NT${{ detail.reward.price }}</p>
+          <p class="text-sm text-gray-500">預計交貨：{{ detail.reward.estimated_delivery|date:"F Y" }}</p>
+          <p class="text-neutral-600">剩餘數量：{{ detail.reward.quantity }}</p>
+          <input type="hidden" name="reward" value="{{ detail.reward.id }}" />
+          <button type="submit" class="mt-4 w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-600">贊助此方案</button>
+        </form>
       </div>
-      {% endfor %}
-    </div>
-  </div>
-</body>
 
+      <div class="p-6 md:col-span-2">
+        {% if detail.products %}
+        <div class="mb-6">
+          <h3 class="text-lg font-bold mb-2">包含的商品：</h3>
+          <ul class="list-disc pl-6">
+            {% for product in detail.products %}
+            <li>{{ product.name }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %} {% if detail.options %}
+        <div>
+          <h3 class="text-lg font-bold mb-2">可加購選項：</h3>
+          <ul class="list-disc pl-6">
+            {% for option in detail.options %}
+            <li class="mb-3">{{ option.name }} - NT${{ option.price }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}

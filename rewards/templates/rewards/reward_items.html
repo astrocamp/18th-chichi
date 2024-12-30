@@ -3,6 +3,38 @@
 <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6">
   <h1 class="text-2xl font-bold mb-4">新增及附加商品</h1>
 
+  <!-- 已存在的商品與選項 -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <!-- 左側：已存在的商品 -->
+    <div>
+      <h2 class="text-xl font-semibold mb-4">已存在的商品</h2>
+      <ul class="space-y-2">
+        {% for product in products %}
+        <li class="p-4 border rounded-md bg-gray-50 flex justify-between items-center">
+          <span class="text-gray-700 font-medium">{{ product.name }}</span>
+        </li>
+        {% empty %}
+        <p class="text-gray-500">目前沒有商品</p>
+        {% endfor %}
+      </ul>
+    </div>
+  
+    <!-- 右側：已存在的附加選項 -->
+    <div>
+      <h2 class="text-xl font-semibold mb-4">已存在的附加選項</h2>
+      <ul class="space-y-2">
+        {% for option in options %}
+        <li class="p-4 border rounded-md bg-gray-50 flex justify-between items-center">
+          <span class="text-gray-700 font-medium">{{ option.name }}</span>
+          <span class="text-gray-500">NTD {{ option.price }}</span>
+        </li>
+        {% empty %}
+        <p class="text-gray-500">目前沒有附加選項</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
   <div x-data="formHandler()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- 左側：Products Form -->
     <form method="POST" class="border p-4 rounded-md">

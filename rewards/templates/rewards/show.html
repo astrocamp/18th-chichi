@@ -8,7 +8,7 @@
       <p class="text-sm text-gray-500">預計交貨：{{ reward.estimated_delivery|date:"F Y" }}</p>
     </div>
     <div>
-      <span class="text-lg font-semibold text-green-600">€ {{ reward.price }}</span>
+      <span class="text-lg font-semibold text-green-600">NTD {{ reward.price }}</span>
       <p class="text-sm text-gray-400">約 {{ reward.price }} 台幣</p>
     </div>
   </div>
@@ -41,7 +41,7 @@
       {% for add_on in reward.optionaladd_set.all %}
       <li class="p-4 bg-gray-50 border rounded-md">
         <p class="font-medium">{{ add_on.name }}</p>
-        <p class="text-sm text-gray-500">+€ {{ add_on.price }}</p>
+        <p class="text-sm text-gray-500">+NTD {{ add_on.price }}</p>
       </li>
       {% empty %}
       <li class="text-gray-500">無附加選項</li>

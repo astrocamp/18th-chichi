@@ -6,7 +6,7 @@ window.htmx = htmx;
 
 export function formHandler() {
   return {
-    products: [],
+    products: [{ name: "" }],
     options: [{ name: "", price: 0 }],
     addProduct() {
       this.products.push({ name: "" });
@@ -22,6 +22,23 @@ export function formHandler() {
     },
   };
 }
+
+function rewardForm(basePrice) {
+  return {
+    basePrice: parseFloat(basePrice),
+    totalPrice: parseFloat(basePrice),
+    updateTotal(event) {
+      const price = parseFloat(event.target.dataset.price);
+      if (event.target.checked) {
+        this.totalPrice += price;
+      } else {
+        this.totalPrice -= price;
+      }
+    },
+  };
+}
+
+window.rewardForm = rewardForm;
 window.formHandler = formHandler;
 
 Alpine.start();
