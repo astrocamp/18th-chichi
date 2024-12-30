@@ -64,14 +64,14 @@
     <div class="mt-6">
       {% if profile.phone %}
       <a
-        href="{% url 'accounts:profiles_edit' account.id %}"
+        href="{% url 'profile:edit' %}"
         class="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700"
       >
         更新個人資料
       </a>
       {% else %}
       <a
-        href="{% url 'accounts:profiles_new' account.id %}"
+        href="{% url 'profile:new' %}"
         class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
       >
         新增新個人資料
