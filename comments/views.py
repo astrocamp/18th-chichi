@@ -77,14 +77,20 @@ def show(request, slug):
     )
 
 
+@login_required
 def delete(request, id):
     comment = get_object_or_404(Comment, id=id)
     project = get_object_or_404(Project, id=comment.project.id)
-    comment.delete()
-    if request.headers.get("HX-Request") == "true":
-        return HttpResponse()
-    else:  # 如果不是 HTMX 請求，則根據評論是否有父評論進行重定向：
-        if comment.parent:
-            return redirect("comments:show", id=comment.parent.id)
-        else:
-            return redirect("projects:comment_index", id=project.id)
+
+    if request.method == "POST":
+        comment.delete()
+        if request.headers.get("HX-Request") == "true":
+            return HttpResponse()
+        else:  # 如果不是 HTMX 請求，則根據評論是否有父評論進行重定向：
+
+            if comment.parent:
+                return redirect("comments:show", id=comment.parent.id)
+            else:
+                return redirect("projects:comment_index", id=project.id)
+
+    return render(request, "comments/delete.html", {"comment": comment})
