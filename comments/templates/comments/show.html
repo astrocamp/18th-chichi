@@ -1,11 +1,33 @@
 {% extends "shared/layout.html"%} {% block "content" %}
-<h1>Comment</h1>
+<h1>留言區</h1>
 <p>{{comment.content}}</p>
 
 
 
 <a href="{% url "comments:edit" comment.slug %}"><button>編輯</button></a> 
 <a href="{% url "comments:delete" comment.slug %}"><button>刪除</button></a> 
-<a href="{%url "comments:comments_replies_index" comment.slug %}">新增回覆留言</a>
 <a href="{% url "projects:comment_index" project.slug %}">回主頁</a>
+
+<div class="comment">
+        <h2>新增回覆：</h2>
+        <form method="post" 
+              hx-post="{% url 'comments:show' id=comment.id %}" 
+              hx-target="#replies" 
+              hx-swap="beforeend"
+              hx-on::after-request="this.reset()">
+            {% csrf_token %}
+            <textarea name="content" placeholder="輸入回覆..." rows="3" cols="50" required></textarea><br>
+            <button type="submit">提交回覆</button>
+        </form>
+        <br>
+        <br>
+        <h2>回覆列表</h2>
+        <div id="replies">
+            {% for reply in replies %}
+                {% include 'comments/reply.html' with reply=reply %}
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
 {% endblock %}

@@ -14,8 +14,8 @@ def generate_random_slug():
 
 class Comment(models.Model):
     content = models.TextField()
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name="comments"
     )
@@ -27,4 +27,8 @@ class Comment(models.Model):
         default=generate_random_slug,
         null=True,
         always_update=False,
+    )
+
+    parent = models.ForeignKey(
+        "self", null=True, related_name="replies", on_delete=models.CASCADE
     )

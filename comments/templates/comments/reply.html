@@ -1,0 +1,13 @@
+<div class="reply" id="reply-{{ reply.id }}">
+    <p><strong>{{ reply.account.username }}</strong>: {{ reply.content }}</p>
+    <p><em>{{ reply.created_at }}</em></p>
+
+     <form method="post"
+           hx-post="{%url 'comments:delete' reply.id%}"
+           hx-target="#reply-{{ reply.id }}" 
+           hx-swap="outerHTML"
+           hx-confirm="確定要刪除此回覆嗎？">
+           {% csrf_token %}
+           <button type="submit">刪除</button>
+     </form>
+</div>

@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     "comments",
     "categories",
     "rewards",
-    "comments_replies",
     "update_records",
     "subcategories",
 ]
