@@ -10,7 +10,6 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 
-
 def index(request, id):
     account = get_object_or_404(User, id=id)
     if request.POST:
@@ -26,8 +25,9 @@ def index(request, id):
     projects = Project.objects.filter(account=account)
     for project in projects:
         project.update_status()  # 更新專案的上下架狀態
-    return render(request, "projects/index.html", {"projects":projects,"account":account})
-        
+    return render(
+        request, "projects/index.html", {"projects": projects, "account": account}
+    )
 
 
 def new(request, id):
@@ -39,46 +39,37 @@ def show(request, id):
     project = get_object_or_404(Project, id=id)
     account = get_object_or_404(User, id=request.user.id)
 
-
     if request.POST:
-<<<<<<< HEAD
         # 處理上架邏輯
         if "publish" in request.POST:  # 檢查是否點擊了上架按鈕
-            if project.status == 'pending':
-                project.status = 'live'  # 將狀態改為已上架
+            if project.status == "pending":
+                project.status = "live"  # 將狀態改為已上架
                 project.start_at = timezone.now()  # 更新 start_at 為當前時間
                 project.save()
                 messages.success(request, "已上架")
 
                 return redirect("projects:show", id=project.id)
         elif "unpublish" in request.POST:
-            if project.status == 'live':
-                project.status = 'ended'  # 將狀態改為已上架
+            if project.status == "live":
+                project.status = "ended"  # 將狀態改為已上架
                 project.end_at = timezone.now()  # 更新 start_at 為當前時間
                 project.save()
                 messages.success(request, "已下架")
 
                 return redirect("projects:show", id=project.id)
 
-
         else:
             form = ProjectFrom(request.POST, instance=project)
             form.save()
             project.update_at = timezone.now()
             project.save()
-            return redirect("projects:show", id = project.id)
+            return redirect("projects:show", id=project.id)
 
         return redirect("projects:show", id=project.id)
 
-    
-    collected = CollectProject.objects.filter(account=request.user, project=project).first()
-=======
-        form = ProjectFrom(request.POST, instance=project)
-        form.save()
-        project.update_at = timezone.now()
-        project.save()
-        return redirect("projects:show", id=project.id)
->>>>>>> d2f40ab (refactor: resolve projects conflicts)
+    collected = CollectProject.objects.filter(
+        account=request.user, project=project
+    ).first()
 
     collected = CollectProject.objects.filter(
         account=request.user, project=project
