@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     "categories",
     "rewards",
     "update_records",
-    "subcategories",
 ]
 
 SITE_ID = 1

@@ -1,10 +1,31 @@
 {% extends "shared/layout.html" %}
 
 {% block "content" %}
-<h1>Category</h1>
+<style>
+    ul {
+        list-style-type: none;
+        padding-left: 20px;
+    }
+</style>
+<h1>Categories</h1>
 <ul>
     {% for category in categories %}
-    <li><a href="{% url 'subcategories:index' category.id %}">{{ category.title }}</a></li>
+    <li>{{ category.title }}
+        {% if category.children.all %}
+        <ul>
+            {% for child in category.children.all %}
+            <li>{{ child.title }}</li>
+            {% if child.children.all %}
+            <ul>
+                {% for sub_child in child.children.all %}
+                <li>{{ sub_child.title }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </li>
     {% endfor %}
 </ul>
 {% endblock %}
