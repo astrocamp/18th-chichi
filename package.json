@@ -1,11 +1,14 @@
 {
   "scripts": {
-    "dev": "esbuild frontends/scripts/app.js --bundle --outfile=static/scripts/app.js --watch",
+    "dev": "esbuild frontends/scripts/app.js --bundle --outfile=static/scripts/app.js --watch --platform=browser",
     "build": "esbuild frontends/scripts/app.js --bundle --outfile=static/scripts/app.js",
     "css": "tailwindcss -i ./frontends/styles/app.css -o ./static/styles/app.css --watch",
     "commit": "cz"
   },
   "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@fortawesome/fontawesome-svg-core": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "autoprefixer": "^10.4.20",
     "commitizen": "^4.3.1",
     "cz-conventional-changelog": "^3.3.0",
