@@ -16,16 +16,13 @@ def default_delivery_date():
     return datetime.date.today() + datetime.timedelta(days=7)
 
 class Reward(models.Model):
-    description = models.TextField(blank=True)
-    title = models.CharField(max_length=300)
-    price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
-    ship_to = models.TextField()
-    shipping_detail = models.TextField(blank=True)
-    estimated_delivery = models.DateField(default=default_delivery_date)
-    quantity = models.IntegerField(default=1)
-    optional_adds_on = models.TextField(blank=True)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(null=True)
+    title = models.CharField(max_length=300)  
+    description = models.TextField(blank=True)  
+    price = models.DecimalField(default=0, max_digits=10, decimal_places=0)  
+    estimated_delivery = models.DateField(default=default_delivery_date) 
+    quantity = models.PositiveIntegerField(default=1)  
+    created_at = models.DateTimeField(auto_now_add=True)  
+    updated_at = models.DateTimeField(null=True)
     project = models.ForeignKey(Project,on_delete=models.CASCADE)
 
     slug = AutoSlugField(
@@ -36,3 +33,20 @@ class Reward(models.Model):
         null=True,
         always_update=False,
     )
+    def __str__(self):
+        return self.title
+    
+class RewardProduct(models.Model):
+    name = models.CharField(max_length=300)
+    rewards = models.ManyToManyField(Reward ,blank=True)
+
+    def __str__(self):
+        return f"{self.name} (x{self.quantity})"
+
+class OptionalAdd(models.Model):
+    name = models.CharField(max_length=300)
+    price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
+    rewards = models.ManyToManyField(Reward, blank=True)
+
+    def __str__(self):
+        return self.name

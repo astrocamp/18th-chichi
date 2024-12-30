@@ -4,6 +4,26 @@ import htmx from "htmx.org";
 window.Alpine = Alpine;
 window.htmx = htmx;
 
+export function formHandler() {
+  return {
+    products: [],
+    options: [{ name: "", price: 0 }],
+    addProduct() {
+      this.products.push({ name: "" });
+    },
+    removeProduct(index) {
+      this.products.splice(index, 1);
+    },
+    addOption() {
+      this.options.push({ name: "", price: 0 });
+    },
+    removeOption(index) {
+      this.options.splice(index, 1);
+    },
+  };
+}
+window.formHandler = formHandler;
+
 Alpine.start();
 
 // Font Awesome 引入

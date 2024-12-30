@@ -1,5 +1,5 @@
 from django import forms
-from .models import Reward
+from .models import Reward , RewardProduct, OptionalAdd
 
 class RewardForm(forms.ModelForm):
     class Meta:
@@ -9,8 +9,15 @@ class RewardForm(forms.ModelForm):
             "description",
             "quantity",
             "price", 
-            "ship_to", 
-            "shipping_detail", 
             "estimated_delivery", 
-            "optional_adds_on",
         ]
+
+class ProductForm(forms.ModelForm):
+    class Meta:
+        model = RewardProduct
+        fields = ['name']
+
+class AddOnForm(forms.ModelForm):
+    class Meta:
+        model = OptionalAdd
+        fields = ['name', 'price']

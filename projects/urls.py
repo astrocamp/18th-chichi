@@ -3,7 +3,7 @@ from .views import index, new, show, edit, delete, collect_projects, like_projec
 from comments.views import index as comment_index, new as comment_new
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import index as update_records_index, new as update_records_new
-from rewards.views import index as rewards_index, new as rewards_new,sponsor,reward_sponsor, free_sponsor,free_confirm
+from rewards.views import index as rewards_index, new as rewards_new,sponsor,reward_sponsor, free_sponsor,free_confirm,reward_items
 
 
 app_name = "projects"

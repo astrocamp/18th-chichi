@@ -1,17 +1,60 @@
 {% extends "shared/layout.html" %} {% block "content" %}
 
-<h1>{{ reward.title }}</h1>
+<div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+  <!-- Reward Header -->
+  <div class="flex justify-between items-center border-b pb-4 mb-6">
+    <div>
+      <h1 class="text-2xl font-bold">{{ reward.title }}</h1>
+      <p class="text-sm text-gray-500">預計交貨：{{ reward.estimated_delivery|date:"F Y" }}</p>
+    </div>
+    <div>
+      <span class="text-lg font-semibold text-green-600">€ {{ reward.price }}</span>
+      <p class="text-sm text-gray-400">約 {{ reward.price }} 台幣</p>
+    </div>
+  </div>
 
-<article>
-  <p>{{ reward.description }}</p>
-</article>
+  <!-- Reward Details -->
+  <div class="mb-6">
+    <h2 class="text-lg font-semibold mb-2">內容說明</h2>
+    <p class="text-gray-700">{{ reward.description }}</p>
+  </div>
 
-<footer>
-  <a href="{% url 'rewards:edit' reward.slug %}">編輯</a>
-  |
-  <a href="{% url 'rewards:delete' reward.slug %}">刪除</a>
-  |
-  <a href="{% url 'rewards:index' %}">回首頁</a>
-</footer>
+  <!-- Included Items -->
+  <div class="mb-6">
+    <h2 class="text-lg font-semibold mb-2">包含項目</h2>
+    <ul class="space-y-2">
+      {% for product in reward.rewardproduct_set.all %}
+      <li class="p-4 bg-gray-50 border rounded-md">
+        <p class="font-medium">{{ product.name }}</p>
+        <p class="text-sm text-gray-500">數量：{{ product.quantity }}</p>
+      </li>
+      {% empty %}
+      <li class="text-gray-500">無商品</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Optional Add-Ons -->
+  <div class="mb-6">
+    <h2 class="text-lg font-semibold mb-2">選用附加回報</h2>
+    <ul class="space-y-2">
+      {% for add_on in reward.optionaladd_set.all %}
+      <li class="p-4 bg-gray-50 border rounded-md">
+        <p class="font-medium">{{ add_on.name }}</p>
+        <p class="text-sm text-gray-500">+€ {{ add_on.price }}</p>
+      </li>
+      {% empty %}
+      <li class="text-gray-500">無附加選項</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <!-- Footer Actions -->
+  <footer class="flex justify-end space-x-4">
+    <a href="{% url 'rewards:edit' reward.slug %}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">編輯</a>
+    <a href="{% url 'rewards:delete' reward.slug %}" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">刪除</a>
+    <a href="{% url 'projects:rewards_index' project.slug %}" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400">回首頁</a>
+  </footer>
+</div>
 
 {% endblock %}
