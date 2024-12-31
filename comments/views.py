@@ -3,7 +3,6 @@ from .models import Comment
 from projects.models import Project
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from projects.models import Project
 
 
 @login_required
