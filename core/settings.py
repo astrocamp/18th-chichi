@@ -3,11 +3,6 @@ import environ
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  
-
-import os
-from dotenv import load_dotenv
-
 load_dotenv()
 
 
@@ -30,7 +25,7 @@ SECRET_KEY = env("SECRET_KEY", default="your-default-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=True)
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 
 # Application definition
@@ -59,7 +54,7 @@ INSTALLED_APPS = [
     "comments_replies",
     "update_records",
     "subcategories",
-    'payments'
+    "payments",
 ]
 
 SITE_ID = 1
@@ -218,8 +213,4 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-ECPAY_MERCHANT_ID = env('ECPAY_MERCHANT_ID')
-ECPAY_HASH_KEY = env('ECPAY_HASH_KEY')
-ECPAY_HASH_IV = env('ECPAY_HASH_IV')
-ECPAY_PAYMENT_URL = env('ECPAY_PAYMENT_URL')
-CSRF_TRUSTED_ORIGINS = os.getenv('CSRF_TRUSTED_ORIGINS').split(',')
+CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",")
