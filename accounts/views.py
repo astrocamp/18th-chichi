@@ -34,7 +34,7 @@ def register(request):
         form = UserCreationForm(request.POST)        
         if form.is_valid():
             account = form.save()
-            Profile.objects.create(
+            Profile.objects.get_or_create(
                 name=account.username,
                 account=account,
                 location= "",
