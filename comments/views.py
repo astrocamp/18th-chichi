@@ -78,9 +78,9 @@ def show(request, slug):
 
 
 @login_required
-def delete(request, id):
-    comment = get_object_or_404(Comment, id=id)
-    project = get_object_or_404(Project, id=comment.project.id)
+def delete(request, slug):
+    comment = get_object_or_404(Comment, slug=slug)
+    project = get_object_or_404(Project, slug=comment.project.slug)
 
     if request.method == "POST":
         comment.delete()
@@ -89,8 +89,8 @@ def delete(request, id):
         else:  # 如果不是 HTMX 請求，則根據評論是否有父評論進行重定向：
 
             if comment.parent:
-                return redirect("comments:show", id=comment.parent.id)
+                return redirect("comments:show", slug=comment.slug)
             else:
-                return redirect("projects:comment_index", id=project.id)
+                return redirect("projects:comment_index", slug=project.slug)
 
     return render(request, "comments/delete.html", {"comment": comment})

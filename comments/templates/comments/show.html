@@ -3,15 +3,13 @@
 <p>{{comment.content}}</p>
 
 
-
-<a href="{% url "comments:edit" comment.slug %}"><button>編輯</button></a> 
 <a href="{% url "comments:delete" comment.slug %}"><button>刪除</button></a> 
 <a href="{% url "projects:comment_index" project.slug %}">回主頁</a>
 
 <div class="comment">
         <h2>新增回覆：</h2>
         <form method="post" 
-              hx-post="{% url 'comments:show' id=comment.id %}" 
+              hx-post="{% url 'comments:show' comment.slug%}" 
               hx-target="#replies" 
               hx-swap="beforeend"
               hx-on::after-request="this.reset()">
