@@ -6,7 +6,7 @@
 <div class="container mx-auto py-8 px-4">
     <div class="grid grid-cols-1 gap-6" id = "faq-list">
         {% for faq in faqs %}
-            <a href="{% url 'faqs:show' faq.id %}" class="faq-item block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow" data-id="{{ faq.id }}">
+            <a href="{% url 'faqs:show' faq.slug %}" class="faq-item block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow" data-id="{{ faq.id }}">
                 <div class="text-lg font-semibold mb-2 text-gray-800">{{ faq.question|linebreaks }}</div>
                 <span class="text-sm text-gray-500">建立時間: {{ faq.created_at|date:"Y-m-d H:i:s" }}</span>
             </a>

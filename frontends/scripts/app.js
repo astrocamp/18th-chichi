@@ -54,6 +54,7 @@ library.add(faSpinner, faHouse, faHeart, faMagnifyingGlass);
 
 // 自動掃描 DOM 並渲染圖標
 dom.watch();
+
 document.addEventListener("DOMContentLoaded", function () {
   var element = document.getElementById("faq-list");
   if (element) {
