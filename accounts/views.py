@@ -7,10 +7,12 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 from users.views import Profile
 
+
 @login_required
 def index(request):
     account = request.user
-    return render(request, "accounts/index.html",{"account":account})
+    return render(request, "accounts/index.html", {"account": account})
+
 
 def login(request):
     if request.POST:
@@ -29,19 +31,19 @@ def login(request):
 
     return render(request, "accounts/login.html")
 
+
 def register(request):
     if request.POST:
-        form = UserCreationForm(request.POST)        
+        form = UserCreationForm(request.POST)
         if form.is_valid():
             account = form.save()
             Profile.objects.create(
                 name=account.username,
                 account=account,
-                location= "",
-                bio= "",
+                location="",
+                bio="",
                 birthday=None,
                 website="",
-
             )
             messages.success(request, "註冊成功")
             return redirect("homepages:homepages")
@@ -49,6 +51,7 @@ def register(request):
             return HttpResponse(form.error_messages)
 
     return render(request, "accounts/register.html")
+
 
 @require_POST
 @login_required

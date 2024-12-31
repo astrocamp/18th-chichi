@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Profile
 from .forms import ProfileForm
-from accounts.views import User
 from django.utils import timezone
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 @login_required
@@ -17,7 +17,7 @@ def index(request):
             messages.success(request, "個人資料更新成功。")
             profile.updated_at = timezone.now()
             profile.save()
-            return redirect("accounts:profiles_index", id=account.id)
+            return redirect("profile:index")
         else:
             messages.error(request, "個人資料新增失敗。")
             return render(
@@ -52,7 +52,7 @@ def edit(request):
     else:
         format_time = ""
 
-        form = ProfileForm(request.FILES, instance=profile)
+    form = ProfileForm(request.FILES, instance=profile)
 
     return render(
         request,
