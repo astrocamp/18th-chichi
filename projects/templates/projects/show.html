@@ -17,18 +17,16 @@
 募資地點：
 <p>{{project.location}}</p>
 
-<a href="{% url "projects:edit" project.slug %}">編輯</a>
-<a href="{% url "projects:delete" project.slug %}">刪除</a>
-<form method="POST" action="{% url "projects:collect" project.slug %}">
-    {% csrf_token %}
-    <button>
-      {% if collected %}
-        取消收藏
-      {% else %}
-        收藏
-      {% endif %}
-    </button>
-</form>
+        <!-- 專案標題 -->
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">
+          {{ project.title }}
+        </h1>
+        {% if project.subtitle %}
+        <p class="text-xl text-gray-600 mb-8">{{ project.subtitle }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
 
 <form action="{%url 'projects:like' project.slug%}" method="post">
   {% csrf_token %}
@@ -46,19 +44,13 @@
 <a href="{% url "projects:update_records_index" project.slug %}">更新狀態</a>
 <a href="{% url "projects:rewards_index" project.slug%}">贊助方案</a>
 
-<form method="POST" action="">
-  {% csrf_token %}
-  {% if project.status == 'pending' %}
-      <button name="publish" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-          上架專案
-      </button>
-  {% elif project.status == 'live' %}
-      <button name="unpublish" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-           下架專案
-      </button>
-
-  {% endif %}
-</form>
+        <!-- 專案內容 -->
+        <div class="space-y-12">
+          <!-- 專案說明 -->
+          <div>
+            <h2 class="text-2xl font-semibold mb-6">專案說明</h2>
+            <div class="prose max-w-none">{{ project.story|linebreaks }}</div>
+          </div>
 
 <a href="{% url "projects:sponsor" project.slug%}">前往方案</a>
 
