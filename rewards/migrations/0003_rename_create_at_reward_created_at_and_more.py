@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0005_sponsor_project_sponsor_account'),
+        ('projects', '0008_sponsor_project_sponsor_account'),
         ('rewards', '0002_reward_project'),
     ]
 

@@ -51,8 +51,8 @@
 
   <!-- Footer Actions -->
   <footer class="flex justify-end space-x-4">
-    <a href="{% url 'rewards:edit' reward.slug %}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">編輯</a>
-    <a href="{% url 'rewards:delete' reward.slug %}" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">刪除</a>
+    <a href="{% url 'rewards:edit' reward.id %}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">編輯</a>
+    <a href="{% url 'rewards:delete' reward.id %}" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">刪除</a>
     <a href="{% url 'projects:rewards_index' project.slug %}" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400">回首頁</a>
   </footer>
 </div>

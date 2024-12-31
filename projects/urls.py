@@ -30,6 +30,7 @@ urlpatterns = [
     path('<slug:slug>/rewards/new', rewards_new , name = "rewards_new" ),
     path('<slug:slug>/rewards/sponsor', sponsor , name = "sponsor" ),
     path('<slug:slug>/rewards/free_sponsor', free_sponsor , name = "free_sponsor" ),
+    path('<slug:slug>/rewards/reward_items', reward_items , name = "reward_items" ),
     path('<slug:slug>/rewards/reward_sponsor', reward_sponsor , name = "reward_sponsor" ),
     path('<slug:slug>/rewards/sponsor/free_sponsor_confirm', free_sponsor_confirm , name = "free_sponsor_confirm" ),
     path('<slug:slug>/rewards/sponsor/reward_sponsor_confirm', reward_sponsor_confirm , name = "reward_sponsor_confirm" ),

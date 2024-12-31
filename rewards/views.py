@@ -48,9 +48,9 @@ def index(request, slug):
 
 
     
-    rewards = Reward.objects.filter(project=project)
-    products = RewardProduct.objects.filter(project=project)
-    options = OptionalAdd.objects.filter(project=project)
+    rewards = Reward.objects.filter(project_id=project.id)
+    products = RewardProduct.objects.filter(project_id=project.id)
+    options = OptionalAdd.objects.filter(project_id=project.id)
 
     return render(request, "rewards/index.html", {"rewards": rewards, "project":project,"products":products,"options":options})
 
@@ -58,8 +58,8 @@ def index(request, slug):
 @login_required
 def new(request,slug):
     project = get_object_or_404(Project ,slug=slug)
-    products = RewardProduct.objects.filter(project=project)
-    options = OptionalAdd.objects.filter(project=project)
+    products = RewardProduct.objects.filter(project_id=project.id)
+    options = OptionalAdd.objects.filter(project_id=project.id)
     if project.account != request.user:
         messages.error(request, "您無權新增該頁面")
         return redirect("homapages:homepages")
@@ -81,7 +81,7 @@ def reward_items(request,slug):
                 if key.startswith('products[') and name.strip()
             ]
             
-            RewardProduct.objects.bulk_create([RewardProduct(name=name,project=project) for name in products])          
+            RewardProduct.objects.bulk_create([RewardProduct(name=name,project_id=project.id) for name in products])          
             messages.success(request, f"成功新增 {len(products)} 個商品")
 
         if "save_options" in request.POST:
@@ -98,15 +98,15 @@ def reward_items(request,slug):
     # 批量新增選項
             if options:  # 確保有選項
                 OptionalAdd.objects.bulk_create([
-                    OptionalAdd(name=option["name"], price=option["price"],project=project) for option in options
+                    OptionalAdd(name=option["name"], price=option["price"],project_id=project.id) for option in options
                 ])
                 messages.success(request, f"成功新增 {len(options)} 個選項")
             else:
                 messages.error(request, "沒有有效的選項提交")
         
 
-    products = RewardProduct.objects.filter(project=project)
-    options = OptionalAdd.objects.filter(project=project)
+    products = RewardProduct.objects.filter(project_id=project.id)
+    options = OptionalAdd.objects.filter(project_id=project.id)
 
     return render(request, "rewards/reward_items.html", {"project":project,"products":products,"options":options})
 
@@ -114,8 +114,8 @@ def reward_items(request,slug):
 
 
 @login_required
-def show(request, slug):
-    reward = get_object_or_404(Reward, slug=slug)
+def show(request, id):
+    reward = get_object_or_404(Reward, id=id)
     project = reward.project
     if reward.project.account != request.user:
         messages.error(request, "您無權訪問該頁面")
@@ -143,7 +143,7 @@ def show(request, slug):
                 reward.optionaladd_set.add(*options)  # 使用 add 批量添加新關聯
 
             messages.success(request, "Reward 更新成功")
-            return redirect("rewards:show", id=reward.slug)
+            return redirect("rewards:show", id=reward.id)
         else:
             messages.error(request, "表單提交有誤，請檢查輸入內容")
 
@@ -152,8 +152,8 @@ def show(request, slug):
     return render(request, "rewards/show.html", {"reward": reward,"project":project})
 
 @login_required
-def edit(request, slug):
-    reward = get_object_or_404(Reward, slug=slug)
+def edit(request, id):
+    reward = get_object_or_404(Reward, id=id)
     project = reward.project
     if reward.project.account != request.user:
         messages.error(request, "您無權修改該頁面")
@@ -167,15 +167,15 @@ def edit(request, slug):
     return render(request, "rewards/edit.html", {"reward": reward, "form": form,"products":products,"options":options,"related_products":related_products,"related_options":related_options})
 
 
-def delete(request, slug):
-    reward = get_object_or_404(Reward, slug=slug)
-    project = get_object_or_404(Project, slug=reward.project.slug)
+def delete(request, id):
+    reward = get_object_or_404(Reward, id=id)
+    project = reward.project
     if request.POST:
         reward.delete()
         messages.success(request, "刪除成功")
         return redirect("projects:rewards_index", slug = project.slug)
     
-    return render(request, "rewards/delete.html", {"reward": reward})
+    return render(request, "rewards/delete.html", {"reward": reward,"project":project})
 
 
 
@@ -183,7 +183,7 @@ def delete(request, slug):
 @login_required
 def sponsor(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    rewards = Reward.objects.filter(project=project)
+    rewards = Reward.objects.filter(project_id=project.id)
 
     reward_details = []
     for reward in rewards:
@@ -211,7 +211,7 @@ def free_sponsor(request, slug):
         amount = request.POST.get("amount")
         Sponsor.objects.create(
             account=request.user,
-            project=project,
+            project_id=project.id,
             reward=None, 
             amount=amount,
             status='pending',
@@ -220,7 +220,7 @@ def free_sponsor(request, slug):
         # project.save()
 
         # messages.success(request, f"感謝您贊助了 {amount} 元！")
-        return redirect(f"{reverse('projects:free_sponsor_confirm', kwargs={'id': project.id})}?amount={amount}")
+        return redirect(f"{reverse('projects:free_sponsor_confirm', kwargs={'slug': project.slug})}?amount={amount}")
     return render(request, "rewards/sponsor", {"project": project})    
 
 
@@ -230,8 +230,8 @@ def reward_sponsor(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
     if request.POST:
-        reward_slug = request.POST.get("reward")
-        reward = get_object_or_404(Reward, slug=reward_slug)
+        reward_id = request.POST.get("reward")
+        reward = get_object_or_404(Reward, id=reward_id , project=project)
         # price = reward.price if reward.price is not None else 0
         amount = reward.price if reward.price is not None else 0
         Sponsor.objects.create(

@@ -12,6 +12,7 @@ def generate_random_slug():
     return "".join(random.choice(letters_and_digits) for i in range(8))
 
 
+
 class Project(models.Model):
     STATUS_CHOICES = [
         ("pending", "待上架"),
@@ -81,6 +82,10 @@ class CollectProject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
+class FavoritePrject(models.Model):
+    account = models.ForeignKey(User, on_delete=models.CASCADE)
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    create_at = models.DateTimeField(auto_now_add=True)
 
 class Sponsor(models.Model):
     from rewards.models import Reward
@@ -101,7 +106,4 @@ class Sponsor(models.Model):
     )
 
 
-class FavoritePrject(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    account = models.ForeignKey(User, on_delete=models.CASCADE)
-    create_at = models.DateTimeField(auto_now_add=True)
+

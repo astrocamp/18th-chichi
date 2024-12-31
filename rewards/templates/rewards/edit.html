@@ -6,7 +6,7 @@
   </div>
 
   <div class="bg-white shadow-md rounded-lg p-6">
-    <form method="POST" action="{% url 'rewards:show' reward.slug %}">
+    <form method="POST" action="{% url 'rewards:show' reward.id %}">
       {% csrf_token %}
       <div class="grid grid-cols-1 md:grid-cols-10 gap-6">
         <!-- 左側：Reward Details -->

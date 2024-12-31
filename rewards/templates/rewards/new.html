@@ -8,7 +8,7 @@
 
   <!-- Form Container -->
   <div class="bg-white shadow-md rounded-lg p-6">
-    <form method="POST" x-data="formHandler()" action="{% url 'projects:rewards_index' project.id %}">
+    <form method="POST" x-data="formHandler()" action="{% url 'projects:rewards_index' project.slug %}">
       {% csrf_token %}
       <div class="grid grid-cols-1 md:grid-cols-10 gap-6">
         <!-- 左側：Reward Details -->
@@ -54,7 +54,6 @@
               {% endfor %}
             </div>
           </div>
-
           <!-- 附加選項選擇 -->
           <div>
             <h3 class="text-lg font-medium text-gray-700 mb-2">附加選項</h3>

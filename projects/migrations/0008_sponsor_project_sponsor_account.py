@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('projects', '0004_project_status'),
+        ('projects', '0007_project_slug'),
         ('rewards', '0002_reward_project'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]

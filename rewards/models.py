@@ -1,4 +1,5 @@
 from django.db import models
+from projects.views import Project
 import datetime
 from autoslug import AutoSlugField
 import random
@@ -10,7 +11,6 @@ def generate_random_slug():
     letters_and_digits = string.ascii_lowercase + string.digits
     return "".join(random.choice(letters_and_digits) for i in range(8))
 
-from projects.views import Project
 
 def default_delivery_date():
     return datetime.date.today() + datetime.timedelta(days=7)
@@ -25,14 +25,7 @@ class Reward(models.Model):
     updated_at = models.DateTimeField(null=True)
     project = models.ForeignKey(Project,on_delete=models.CASCADE)
 
-    slug = AutoSlugField(
-        populate_from=generate_random_slug,
-        unique=True,
-        editable=False,
-        default=generate_random_slug,
-        null=True,
-        always_update=False,
-    )
+
     def __str__(self):
         return self.title
     

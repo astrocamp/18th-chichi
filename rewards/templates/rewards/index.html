@@ -71,13 +71,13 @@
   <!-- Links -->
   <div class="mt-8 flex justify-between">
     <a
-      href="{% url "projects:show" project.id %}"
+      href="{% url "projects:show" project.slug %}"
       class="px-4 py-2 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400"
     >
       回募資專案
     </a>
     <a
-      href="{% url "projects:reward_items" project.id %}"
+      href="{% url "projects:reward_items" project.slug %}"
       class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
     >
       新增商品及附加商品
