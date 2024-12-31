@@ -1,13 +1,30 @@
 <div class="navbar bg-[#85CACC] text-white flex items-center justify-between">
   <div class="flex items-center space-x-4">
     <a href="{% url 'homepages:homepages' %}">
-      <img src="/static/media/CHICHI_LOGO__1.png" alt="Bird Logo" class="w-[85px] h-[85px] rounded-full" />
+      <img
+        src="/static/media/CHICHI_LOGO__1.png"
+        alt="Bird Logo"
+        class="w-[85px] h-[85px] rounded-full"
+      />
     </a>
   </div>
   <div class="flex justify-center items-center flex-1">
-    <form action="#" method="GET" class="flex items-center bg-white rounded-full shadow-md relative" style="width: 500px">
-      <input type="text" name="search" placeholder="請輸入搜尋內容..." class="bg-transparent text-gray-600 placeholder-gray-400 focus:outline-none flex-grow px-4 py-2 rounded-full" />
-      <button type="submit" class="bg-[#619B9B] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:shadow-lg">
+    <form
+      action="#"
+      method="GET"
+      class="flex items-center bg-white rounded-full shadow-md relative"
+      style="width: 500px"
+    >
+      <input
+        type="text"
+        name="search"
+        placeholder="請輸入搜尋內容..."
+        class="bg-transparent text-gray-600 placeholder-gray-400 focus:outline-none flex-grow px-4 py-2 rounded-full"
+      />
+      <button
+        type="submit"
+        class="bg-[#619B9B] text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md hover:shadow-lg"
+      >
         <i class="fa-solid fa-magnifying-glass text-lg"></i>
       </button>
     </form>
@@ -20,10 +37,13 @@
         <a>{{ user.username }}</a>
       </li>
       <li>
-        <a class="btn btn-outline text-white" href="{% url 'accounts:index' %}">個人頁面</a>
+        <a class="btn btn-outline text-white" href="{% url 'accounts:index' %}"
+          >個人頁面</a
+        >
       </li>
       <li>
         <a
+          class="text-white hover:text-gray-200"
           hx-post="{% url 'accounts:logout' %}"
           hx-target="body"
           hx-swap="outerHTML"
@@ -36,13 +56,23 @@
       </li>
       {% else %} {% load socialaccount %}
       <li>
-        <a class="btn btn-outline text-white" href="{% provider_login_url 'google' method='oauth2' %}">Google登入</a>
+        <a
+          class="btn btn-outline text-white"
+          href="{% provider_login_url 'google' method='oauth2' %}"
+          >Google登入</a
+        >
       </li>
       <li>
-        <a class="btn btn-outline text-white" href="{% url 'accounts:login' %}">登入</a>
+        <a class="btn btn-outline text-white" href="{% url 'accounts:login' %}"
+          >登入</a
+        >
       </li>
       <li>
-        <a class="btn btn-outline text-white" href="{% url 'accounts:register' %}">註冊</a>
+        <a
+          class="btn btn-outline text-white"
+          href="{% url 'accounts:register' %}"
+          >註冊</a
+        >
       </li>
       {% endif %}
     </ul>
