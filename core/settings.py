@@ -186,7 +186,9 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 
-LOGIN_REDIRECT_URL = "/accounts/login"
+LOGIN_REDIRECT_URL = "/"
+LOGIN_URL = "/accounts/login"
+
 
 
 SOCIALACCOUNT_LOGIN_ON_GET = True
