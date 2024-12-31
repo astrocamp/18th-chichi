@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
+
 from .forms import FaqForm
 from .models import Faq
 from projects.models import Project
@@ -37,8 +40,6 @@ def show(request, slug):
     if request.POST:
         form = FaqForm(request.POST, instance=faq)
         form.save()
-        faq.update_at = timezone.now()
-        faq.save()
         messages.success(request, "更新成功")
         return redirect("projects:faq_index", slug=project.slug)
 
@@ -85,3 +86,13 @@ def delete(request, slug):
             "project": project,
         },
     )
+
+@csrf_exempt
+@require_POST
+def updated_faq_position(request):
+    import json
+    data = json.loads(request.body)
+    position = data.get("position", [])
+    for index, faq_id in enumerate(position):
+        Faq.objects.filter(id=faq_id).update(position=index)
+    return JsonResponse({"status": "success"})
