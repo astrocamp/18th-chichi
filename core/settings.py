@@ -5,11 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-
 
 # 初始化環境變數
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -218,8 +213,4 @@ STORAGES = {
         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
-ECPAY_MERCHANT_ID = env("ECPAY_MERCHANT_ID")
-ECPAY_HASH_KEY = env("ECPAY_HASH_KEY")
-ECPAY_HASH_IV = env("ECPAY_HASH_IV")
-ECPAY_PAYMENT_URL = env("ECPAY_PAYMENT_URL")
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",")
