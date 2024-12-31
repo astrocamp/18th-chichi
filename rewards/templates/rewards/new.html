@@ -3,12 +3,20 @@
   <!-- Header -->
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-gray-800">新增回報</h1>
-    <a href="{% url 'projects:rewards_index' project.id %}" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">回首頁</a>
+    <a
+      href="{% url 'projects:rewards_index' project.id %}"
+      class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+      >回首頁</a
+    >
   </div>
 
   <!-- Form Container -->
   <div class="bg-white shadow-md rounded-lg p-6">
-    <form method="POST" x-data="formHandler()" action="{% url 'projects:rewards_index' project.slug %}">
+    <form
+      method="POST"
+      x-data="formHandler()"
+      action="{% url 'projects:rewards_index' project.slug %}"
+    >
       {% csrf_token %}
       <div class="grid grid-cols-1 md:grid-cols-10 gap-6">
         <!-- 左側：Reward Details -->
@@ -16,24 +24,65 @@
           <h2 class="text-xl font-semibold mb-4">回報內容</h2>
           <div class="grid grid-cols-1 gap-4 mb-6">
             <div>
-              <label for="title" class="block text-sm font-medium text-gray-700">標題</label>
-              <input type="text" id="title" name="title" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+              <label for="title" class="block text-sm font-medium text-gray-700"
+                >標題</label
+              >
+              <input
+                type="text"
+                id="title"
+                name="title"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
             </div>
             <div>
-              <label for="description" class="block text-sm font-medium text-gray-700">內容</label>
-              <textarea id="description" name="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+              <label
+                for="description"
+                class="block text-sm font-medium text-gray-700"
+                >內容</label
+              >
+              <textarea
+                id="description"
+                name="description"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              ></textarea>
             </div>
             <div>
-              <label for="quantity" class="block text-sm font-medium text-gray-700">數量</label>
-              <input type="number" id="quantity" name="quantity" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+              <label
+                for="quantity"
+                class="block text-sm font-medium text-gray-700"
+                >數量</label
+              >
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
             </div>
             <div>
-              <label for="price" class="block text-sm font-medium text-gray-700">價格</label>
-              <input type="number" id="price" name="price" step="0.01" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+              <label for="price" class="block text-sm font-medium text-gray-700"
+                >價格</label
+              >
+              <input
+                type="number"
+                id="price"
+                name="price"
+                step="0.01"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
             </div>
             <div>
-              <label for="estimated_delivery" class="block text-sm font-medium text-gray-700">預計交貨時間</label>
-              <input type="date" id="estimated_delivery" name="estimated_delivery" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
+              <label
+                for="estimated_delivery"
+                class="block text-sm font-medium text-gray-700"
+                >預計交貨時間</label
+              >
+              <input
+                type="date"
+                id="estimated_delivery"
+                name="estimated_delivery"
+                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              />
             </div>
           </div>
         </div>
@@ -48,7 +97,12 @@
             <div class="space-y-2">
               {% for product in products %}
               <label class="flex items-center space-x-3">
-                <input type="checkbox" name="products" value="{{ product.id }}" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+                <input
+                  type="checkbox"
+                  name="products"
+                  value="{{ product.id }}"
+                  class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
                 <span class="text-gray-700">{{ product.name }}</span>
               </label>
               {% endfor %}
@@ -60,8 +114,15 @@
             <div class="space-y-2">
               {% for option in options %}
               <label class="flex items-center space-x-3">
-                <input type="checkbox" name="options" value="{{ option.id }}" class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
-                <span class="text-gray-700">{{ option.name }} - NTD {{ option.price }}</span>
+                <input
+                  type="checkbox"
+                  name="options"
+                  value="{{ option.id }}"
+                  class="h-5 w-5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                />
+                <span class="text-gray-700"
+                  >{{ option.name }} - NTD {{ option.price }}</span
+                >
               </label>
               {% endfor %}
             </div>
@@ -71,8 +132,19 @@
 
       <!-- 提交與重設按鈕 -->
       <div class="flex justify-between mt-6">
-        <button type="reset" class="py-2 px-4 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400">Reset</button>
-        <button type="submit" name="reward" class="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600">Save</button>
+        <button
+          type="reset"
+          class="py-2 px-4 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400"
+        >
+          Reset
+        </button>
+        <button
+          type="submit"
+          name="reward"
+          class="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+        >
+          Save
+        </button>
       </div>
     </form>
   </div>

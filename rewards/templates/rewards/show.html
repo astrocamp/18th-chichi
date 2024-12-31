@@ -1,4 +1,19 @@
-{% extends "shared/layout.html" %} {% block "content" %}
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">回饋方案詳情</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          查看回饋方案的完整內容
+        </p>
+      </div>
+    </div>
+  </div>
 
 <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
   <!-- Reward Header -->
@@ -57,4 +72,53 @@
   </footer>
 </div>
 
+          <!-- 描述 -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">方案內容</h3>
+            <div class="prose max-w-none text-gray-600">
+              {{ reward.description|linebreaks }}
+            </div>
+          </div>
+
+          <!-- 運送資訊 -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">運送資訊</h3>
+            <div class="space-y-4">
+              <div class="bg-gray-50 rounded-lg p-4">
+                <p class="font-medium text-gray-700 mb-2">運送地區</p>
+                <p class="text-gray-600">{{ reward.ship_to|linebreaks }}</p>
+              </div>
+              {% if reward.shipping_detail %}
+              <div class="bg-gray-50 rounded-lg p-4">
+                <p class="font-medium text-gray-700 mb-2">運送說明</p>
+                <p class="text-gray-600">
+                  {{ reward.shipping_detail|linebreaks }}
+                </p>
+              </div>
+              {% endif %}
+              <div class="bg-gray-50 rounded-lg p-4">
+                <p class="font-medium text-gray-700 mb-2">預計出貨日期</p>
+                <p class="text-gray-600">
+                  {{ reward.estimated_delivery|date:"Y/m/d" }}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 加購項目 -->
+          {% if reward.optional_adds_on %}
+          <div>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">加購項目</h3>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <div class="prose max-w-none text-gray-600">
+                {{ reward.optional_adds_on|linebreaks }}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
