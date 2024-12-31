@@ -1,0 +1,36 @@
+{% extends "shared/layout.html" %} {% block "content" %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">確認付款</h1>
+    <p class="text-gray-600 mb-6">請確認以下項目並進行付款</p>
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-gray-700">項目名稱：</h2>
+      <p class="text-gray-800">{{ project.title }}</p>
+    </div>
+    <form method="POST" action="{% url 'projects:free_sponsor' project.id %}" class="space-y-4">
+      {% csrf_token %}
+      <div>
+        <label for="amount" class="block text-lg font-medium text-gray-700">贊助金額：</label>
+        <div class="flex items-center mt-1">
+          <span class="px-3 py-2 bg-gray-200 border border-gray-300 text-gray-700 rounded-l-lg">NTD</span>
+          <input
+            type="number"
+            name="amount"
+            id="amount"
+            min="1"
+            required
+            readonly
+            class="block w-full px-4 py-2 border-t border-b border-r border-gray-300 rounded-r-lg focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400"
+            value="{{ amount }}"
+          />
+        </div>
+      </div>
+      <button type="submit" class="w-full bg-purple-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500">確認付款</button>
+    </form>
+    <form method="POST" class="mt-4">
+      {% csrf_token %}
+      <button type="submit" name="delete_sponsor" class="w-full bg-gray-400 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-500 focus:ring-2 focus:ring-gray-300">返回上一步</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

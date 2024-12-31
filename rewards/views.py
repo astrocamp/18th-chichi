@@ -220,7 +220,7 @@ def free_sponsor(request, slug):
         # project.save()
 
         # messages.success(request, f"感謝您贊助了 {amount} 元！")
-        return redirect(f"{reverse('projects:free_confirm', kwargs={'id': project.id})}?amount={amount}")
+        return redirect(f"{reverse('projects:free_sponsor_confirm', kwargs={'id': project.id})}?amount={amount}")
     return render(request, "rewards/sponsor", {"project": project})    
 
 
@@ -244,12 +244,30 @@ def reward_sponsor(request, slug):
         # project.save()
 
         # messages.success(request, f"感謝您選擇了獎勵「{reward.title}」，贊助了 {amount} 元！")
-        return redirect(f"{reverse('projects:free_confirm', kwargs={'slug': project.slug})}?amount={amount}")
+        return redirect(f"{reverse('projects:reward_sponsor_confirm', kwargs={'slug': project.slug})}?amount={amount}")
 
     rewards = project.rewards.all()
     return render(request, "reward_sponsor_form.html", {"project": project, "rewards": rewards})
 
-def free_confirm(request,slug):
+
+
+def free_sponsor_confirm(request,slug):
+    project = get_object_or_404(Project, slug=slug)
+    reward = get_object_or_404(Reward, project=project)
+    sponsors = Sponsor.objects.filter(account=request.user, project=project)
+    sponsor = sponsors.order_by('-id').first()
+    amount = request.GET.get('amount', sponsor.amount) 
+
+    if request.POST:
+        if "delete_sponsor" in request.POST:
+            sponsor.delete()   
+            return redirect("projects:sponsor", slug=project.slug)
+
+
+    return render(request, "rewards/free_sponsor_confirm.html", {"project": project,"sopnsor":sponsor,"amount":amount,"reward": reward})
+
+
+def reward_sponsor_confirm(request,slug):
     project = get_object_or_404(Project, slug=slug)
     reward = get_object_or_404(Reward, project=project)
     sponsors = Sponsor.objects.filter(account=request.user, project=project)
@@ -265,5 +283,7 @@ def free_confirm(request,slug):
             return redirect("projects:sponsor", slug=project.slug)
 
 
-    return render(request, "rewards/confirm.html", {"project": project,"sopnsor":sponsor,"amount":amount,"is_reward_sponsor": is_reward_sponsor,
+    return render(request, "rewards/reward_sponsor_confirm.html", {"project": project,"sopnsor":sponsor,"amount":amount,"is_reward_sponsor": is_reward_sponsor,
             "reward": sponsor.reward if is_reward_sponsor else None,"optional_adds":optional_adds,"reward_products":reward_products})
+
+

@@ -3,21 +3,12 @@
   <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
     <h1 class="text-2xl font-bold text-gray-800 mb-4">確認付款</h1>
     <p class="text-gray-600 mb-6">請確認以下項目並進行付款</p>
-
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold text-gray-700">項目名稱：</h2>
-      <p class="text-gray-800">{{ project.title }}</p>
-    </div>
-
-    {% if is_reward_sponsor %}
     <div class="mb-6">
       <h2 class="text-lg font-semibold text-gray-700">您選擇的獎勵：</h2>
       <p class="text-gray-800">{{ reward.title }}</p>
       <p class="text-gray-800">贊助金額：NT${{ reward.price }} 元</p>
     </div>
 
-    <!-- 顯示包含的獎勵商品 -->
-    {% if reward_products %}
     <div class="mb-6">
       <h3 class="text-lg font-semibold text-gray-700">包含的商品：</h3>
       <ul class="list-disc pl-6">
@@ -26,35 +17,26 @@
         {% endfor %}
       </ul>
     </div>
-    {% endif %}
 
-    <!-- 動態附加商品選擇 -->
     <div x-data="rewardForm({{ reward.price }})" class="mb-6">
       <h3 class="text-lg font-semibold text-gray-700">可加購商品：</h3>
       <form id="reward-form" method="POST" action="{% url 'projects:reward_sponsor' project.id %}" class="space-y-4">
         {% csrf_token %}
         <input type="hidden" name="reward" value="{{ reward.id }}" />
-
-        <!-- 動態生成附加商品選項 -->
         {% for option in optional_adds %}
         <div class="flex items-center mb-2">
           <input type="checkbox" id="option-{{ option.id }}" name="additional_products" value="{{ option.id }}" data-price="{{ option.price }}" class="mr-3" @click="updateTotal($event)" />
           <label for="option-{{ option.id }}">{{ option.name }} - NT${{ option.price }}</label>
         </div>
         {% endfor %}
-
-        <!-- 動態顯示總金額 -->
         <p class="text-gray-800 font-bold">
           總金額：NT$
           <span x-text="totalPrice"></span>
           元
         </p>
-
-        <!-- 提交按鈕 -->
         <button type="submit" class="w-full bg-purple-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500">確認付款</button>
       </form>
     </div>
-    {% endif %}
 
     <form method="POST" class="mt-4">
       {% csrf_token %}

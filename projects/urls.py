@@ -3,7 +3,7 @@ from .views import index, new, show, edit, delete, collect_projects, like_projec
 from comments.views import index as comment_index, new as comment_new
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import index as update_records_index, new as update_records_new
-from rewards.views import index as rewards_index, new as rewards_new,sponsor,reward_sponsor, free_sponsor,free_confirm,reward_items
+from rewards.views import index as rewards_index, new as rewards_new,sponsor,reward_sponsor, free_sponsor,free_sponsor_confirm,reward_items,reward_sponsor_confirm
 
 
 app_name = "projects"
@@ -31,5 +31,6 @@ urlpatterns = [
     path('<slug:slug>/rewards/sponsor', sponsor , name = "sponsor" ),
     path('<slug:slug>/rewards/free_sponsor', free_sponsor , name = "free_sponsor" ),
     path('<slug:slug>/rewards/reward_sponsor', reward_sponsor , name = "reward_sponsor" ),
-    path('<slug:slug>/rewards/sponsor/free_confirm', free_confirm , name = "free_confirm" ),
+    path('<slug:slug>/rewards/sponsor/free_sponsor_confirm', free_sponsor_confirm , name = "free_sponsor_confirm" ),
+    path('<slug:slug>/rewards/sponsor/reward_sponsor_confirm', reward_sponsor_confirm , name = "reward_sponsor_confirm" ),
 ]
