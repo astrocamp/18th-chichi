@@ -1,57 +1,159 @@
-{% extends "shared/layout.html" %} {% block "content" %}
-<div class="flex items-center justify-center min-h-screen bg-gray-100">
-  <div class="max-w-md p-8 bg-white rounded-lg shadow-md">
-    <h1 class="text-center text-2xl font-bold mb-6">註冊</h1>
-    <form method="POST">
-      {% csrf_token %}
-      <div class="mb-4">
-        <label class="input input-bordered flex items-center gap-2">
-          Username
-          <input
-            class="w-full"
-            type="text"
-            placeholder="請輸入電子郵件信箱"
-            name="username"
-          />
-        </label>
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">註冊帳號</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          加入我們，開始您的集資之旅
+        </p>
       </div>
-      <div class="mb-4">
-        <label class="input input-bordered flex items-center gap-2">
-          Email
-          <input
-            class="w-full"
-            type="text"
-            placeholder="請輸入電子郵件信箱"
-            name="email"
-          />
-        </label>
+    </div>
+  </div>
+
+  <!-- Form Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-md mx-auto">
+        <!-- Google 註冊按鈕 -->
+        <div class="mb-8 text-center">
+          <a
+            href="/accounts/google/login/"
+            class="btn w-full"
+            style="background-color: #4285f4; color: white"
+          >
+            <i class="fab fa-google mr-2"></i>
+            使用 Google 帳號註冊
+          </a>
+        </div>
+
+        <div class="relative mb-8">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">或使用電子郵件註冊</span>
+          </div>
+        </div>
+
+        <!-- 註冊表單 -->
+        <form method="POST" class="space-y-6 bg-white rounded-lg shadow-md p-8">
+          {% csrf_token %}
+
+          <div>
+            <label
+              for="username"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              帳號
+            </label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              required
+              class="input input-bordered w-full"
+              placeholder="請設定您的帳號"
+            />
+          </div>
+
+          <div>
+            <label
+              for="email"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              電子郵件
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              required
+              class="input input-bordered w-full"
+              placeholder="請輸入您的電子郵件"
+            />
+          </div>
+
+          <div>
+            <label
+              for="password"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              密碼
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              required
+              class="input input-bordered w-full"
+              placeholder="請設定您的密碼"
+            />
+          </div>
+
+          <div>
+            <label
+              for="password_confirmation"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              確認密碼
+            </label>
+            <input
+              type="password"
+              id="password_confirmation"
+              name="password_confirmation"
+              required
+              class="input input-bordered w-full"
+              placeholder="請再次輸入密碼"
+            />
+          </div>
+
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="agree"
+              name="agree"
+              required
+              class="checkbox"
+              style="border-color: #85cacc"
+            />
+            <label for="agree" class="ml-2 block text-sm text-gray-700">
+              我同意
+              <a href="#" class="hover:text-teal-600" style="color: #85cacc">
+                服務條款
+              </a>
+              和
+              <a href="#" class="hover:text-teal-600" style="color: #85cacc">
+                隱私政策
+              </a>
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            class="btn w-full text-white"
+            style="background-color: #85cacc; border: none"
+          >
+            註冊
+          </button>
+
+          <div class="text-center mt-4">
+            <span class="text-sm text-gray-600">已經有帳號了？</span>
+            <a
+              href="{% url 'accounts:login' %}"
+              class="text-sm hover:text-teal-600 ml-1"
+              style="color: #85cacc"
+            >
+              立即登入
+            </a>
+          </div>
+        </form>
       </div>
-      <div class="mb-4">
-        <label class="input input-bordered flex items-center gap-2">
-          Password
-          <input
-            class="w-full"
-            type="password"
-            placeholder="最少需要8個字元"
-            name="password1"
-          />
-        </label>
-      </div>
-      <div class="mb-4">
-        <label class="input input-bordered flex items-center gap-2">
-          再次確認Password
-          <input
-            class="w-full"
-            type="password"
-            placeholder="最少需要8個字元"
-            name="password2"
-          />
-        </label>
-      </div>
-      <div class="flex justify-center">
-        <button class="btn btn-warning w-full">註冊</button>
-      </div>
-    </form>
+    </div>
   </div>
 </div>
 {% endblock %}

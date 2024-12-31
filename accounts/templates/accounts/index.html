@@ -1,7 +1,98 @@
-{% extends "shared/layout.html" %} {% block "content" %}
-<h1>Account</h1>
-<p>{{account.username}}</p>
-<a href="{% url "projects:index" %}">募資專案管理</a> <br>
-<a href="{% url "profile:index" %}">前往個人資料</a>
-<a href="{% url "homepages:homepages" %}">回首頁</a>
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">我的帳戶</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          管理您的個人資料和設定
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-4xl mx-auto">
+        <!-- 個人資料卡片 -->
+        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+          <div class="flex items-center space-x-4 mb-6">
+            <div
+              class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center"
+            >
+              <i class="fas fa-user text-3xl text-gray-400"></i>
+            </div>
+            <div>
+              <h2 class="text-2xl font-semibold text-gray-800">
+                {{ user.username }}
+              </h2>
+              <p class="text-gray-600">{{ user.email }}</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <h3 class="text-lg font-medium text-gray-800 mb-4">帳戶資訊</h3>
+              <div class="space-y-3">
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">註冊時間：</span>
+                  {{ user.date_joined|date:"Y/m/d H:i" }}
+                </p>
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">上次登入：</span>
+                  {{ user.last_login|date:"Y/m/d H:i" }}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-lg font-medium text-gray-800 mb-4">快速連結</h3>
+              <div class="space-y-3">
+                <a
+                  href="{% url 'projects:index' %}"
+                  class="block text-sm hover:text-teal-600"
+                  style="color: #85cacc"
+                >
+                  <i class="fas fa-project-diagram mr-2"></i>
+                  我的專案
+                </a>
+                <a
+                  href="#"
+                  class="block text-sm hover:text-teal-600"
+                  style="color: #85cacc"
+                >
+                  <i class="fas fa-heart mr-2"></i>
+                  我的收藏
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 操作按鈕 -->
+        <div class="flex justify-end space-x-4">
+          <a
+            href="#"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            編輯個人資料
+          </a>
+          <a
+            href="#"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            變更密碼
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
