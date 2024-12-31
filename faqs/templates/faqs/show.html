@@ -1,14 +1,85 @@
-{% extends "shared/layout.html" %} {% block "content" %}
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">問題詳情</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          查看完整的問題與解答內容
+        </p>
+      </div>
+    </div>
+  </div>
 
-<h1>{{ faq.question }}</h1>
-<h2>{{ faq.answer }}</h2>
+  <!-- Content Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按鈕 -->
+        <div class="mb-8">
+          <a
+            href="{% url 'projects:faq_index' project.slug %}"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回問題列表
+          </a>
+        </div>
 
-<footer>
-  <a href="{% url 'faqs:edit' faq.slug %}">編輯</a>
-  |
-  <a href="{% url 'faqs:delete' faq.slug %}">刪除</a>
-  |
-  <a href="{% url 'projects:faq_index' project.slug %}">回 FAQ 列表</a>
-</footer>
+        <!-- FAQ 內容 -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <!-- 時間資訊 -->
+          <div class="flex justify-between items-center mb-6">
+            <div class="text-sm text-gray-500">
+              <p>建立時間：{{ faq.create_at|date:"Y/m/d H:i" }}</p>
+              {% if faq.update_at %}
+              <p>最後更新：{{ faq.update_at|date:"Y/m/d H:i" }}</p>
+              {% endif %}
+            </div>
+            <div class="space-x-2">
+              <a
+                href="{% url 'faqs:edit' faq.slug %}"
+                class="btn btn-sm"
+                style="background-color: #85cacc20; color: #85cacc"
+              >
+                編輯
+              </a>
+              <a
+                href="{% url 'faqs:delete' faq.slug %}"
+                class="btn btn-sm btn-error text-white"
+              >
+                刪除
+              </a>
+            </div>
+          </div>
 
+          <!-- 問題 -->
+          <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">問題</h2>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-gray-800">{{ faq.question }}</p>
+            </div>
+          </div>
+
+          <!-- 解答 -->
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">解答</h2>
+            <div class="bg-gray-50 rounded-lg p-4">
+              {% if faq.answer %}
+              <div class="prose max-w-none">{{ faq.answer|linebreaks }}</div>
+              {% else %}
+              <p class="text-gray-500 italic">尚未提供解答</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

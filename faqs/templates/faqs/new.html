@@ -1,12 +1,99 @@
-{% extends "shared/layout.html" %} {% block "content" %}
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">新增常見問題</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          添加專案相關的問題與解答
+        </p>
+      </div>
+    </div>
+  </div>
 
-<h1>New FAQs</h1>
+  <!-- Form Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按鈕 -->
+        <div class="mb-8">
+          <a
+            href="{% url 'projects:faq_index' project.slug %}"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回問題列表
+          </a>
+        </div>
 
-<form method="POST" action="{% url 'projects:faq_index' project.slug %}">
-  {% csrf_token %} {{ form.as_p }}
-  <button>新增</button>
-</form>
+        <!-- FAQ 表單 -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <form
+            method="POST"
+            action="{% url 'projects:faq_index' project.slug %}"
+            class="space-y-6"
+          >
+            {% csrf_token %} {% for field in form %}
+            <div>
+              <label
+                for="{{ field.id_for_label }}"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                {{ field.label }}
+              </label>
+              {% if field.name == "answer" %}
+              <textarea
+                id="{{ field.id_for_label }}"
+                name="{{ field.name }}"
+                rows="6"
+                class="textarea textarea-bordered w-full"
+                placeholder="請輸入解答..."
+              >
+{{ field.value|default:'' }}</textarea
+              >
+              {% else %}
+              <input
+                type="text"
+                id="{{ field.id_for_label }}"
+                name="{{ field.name }}"
+                value="{{ field.value|default:'' }}"
+                required
+                class="input input-bordered w-full"
+                placeholder="請輸入問題..."
+              />
+              {% endif %} {% if field.errors %}
+              <div class="text-red-500 text-sm mt-1">
+                {{ field.errors|join:", " }}
+              </div>
+              {% endif %}
+            </div>
+            {% endfor %}
 
-<a href="{% url 'projects:faq_index' project.slug %}">回 FAQ 列表</a>
-
+            <div class="flex justify-end space-x-4">
+              <a
+                href="{% url 'projects:faq_index' project.slug %}"
+                class="btn"
+                style="background-color: #85cacc20; color: #85cacc"
+              >
+                取消
+              </a>
+              <button
+                type="submit"
+                class="btn text-white"
+                style="background-color: #85cacc; border: none"
+              >
+                新增問題
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
