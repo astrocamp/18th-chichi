@@ -7,9 +7,9 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("homepages.urls")),
+    path('profile/', include('users.urls')),
     path("projects/", include("projects.urls")),
     path("faqs/", include("faqs.urls")),
-    path("profiles/", include("users.urls")),
     path("accounts/", include("accounts.urls")),
     path("accounts/", include("allauth.urls")),
     path("comments/", include("comments.urls")),

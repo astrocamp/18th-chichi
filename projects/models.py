@@ -17,9 +17,9 @@ class Project(models.Model):
     start_at = models.DateTimeField(null=True)
     end_at = models.DateTimeField()
     story = models.TextField()
-    location = models.CharField(null=True, max_length=100)
-    create_at = models.DateTimeField(auto_now_add=True)
-    update_at = models.DateTimeField(null=True)
+    location = models.CharField(null=True,max_length=100)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(
         max_length=10,

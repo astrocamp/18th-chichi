@@ -6,38 +6,37 @@ from django.utils.timezone import localtime
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.http import HttpResponse
-from django.contrib.auth.models import User
 from django.contrib import messages
 
-
-def index(request, id):
-    account = get_object_or_404(User, id=id)
+@login_required
+def index(request):
+    account = request.user
     if request.POST:
         form = ProjectFrom(request.POST)
         if form.is_valid():
             project = form.save(commit=False)
             project.account = account
             project.save()
-            return redirect("accounts:projects", id=account.id)
+            return redirect("projects:index")
         else:
             return HttpResponse("輸入錯誤")
 
     projects = Project.objects.filter(account=account)
     for project in projects:
         project.update_status()  # 更新專案的上下架狀態
-    return render(
-        request, "projects/index.html", {"projects": projects, "account": account}
-    )
+    return render(request, "projects/index.html", {"projects":projects,"account":account})
+        
+@login_required
+def new(request):
+    account = request.user
+    return render(request, "projects/new.html",{"account":account})
 
 
-def new(request, id):
-    account = get_object_or_404(User, id=id)
-    return render(request, "projects/new.html", {"account": account})
 
-
+@login_required
 def show(request, id):
-    project = get_object_or_404(Project, id=id)
-    account = get_object_or_404(User, id=request.user.id)
+    project = get_object_or_404(Project,id=id)
+    account = request.user
 
     if request.POST:
         # 處理上架邏輯
@@ -61,9 +60,7 @@ def show(request, id):
         else:
             form = ProjectFrom(request.POST, instance=project)
             form.save()
-            project.update_at = timezone.now()
-            project.save()
-            return redirect("projects:show", id=project.id)
+            return redirect("projects:show", id = project.id)
 
         return redirect("projects:show", id=project.id)
 
@@ -88,30 +85,20 @@ def show(request, id):
         },
     )
 
-
+@login_required
 def edit(request, id):
-    project = get_object_or_404(Project, id=id)
+    project = get_object_or_404(Project,id=id)
+    format_time_start =localtime(project.start_at).strftime('%Y-%m-%dT%H:%M')
+    format_time_end =localtime(project.end_at).strftime('%Y-%m-%dT%H:%M')
+    return render(request, "projects/edit.html",{"project":project,
+"format_time_start":format_time_start,"format_time_end":format_time_end})
 
-    format_time_start = localtime(project.start_at).strftime("%Y-%m-%dT%H:%M")
-    format_time_end = localtime(project.end_at).strftime("%Y-%m-%dT%H:%M")
-    return render(
-        request,
-        "projects/edit.html",
-        {
-            "project": project,
-            "format_time_start": format_time_start,
-            "format_time_end": format_time_end,
-        },
-    )
-
-
+@login_required
 def delete(request, id):
-    project = get_object_or_404(Project, id=id)
-    account = get_object_or_404(User, id=request.user.id)
+    project = get_object_or_404(Project,id=id)
     if request.POST:
         project.delete()
-
-        return redirect("accounts:projects", id=account.id)
+        return redirect("projects:index")
 
     return render(
         request,

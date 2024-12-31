@@ -2,7 +2,7 @@
 <h1>Projects</h1>
 
 
- <button><a href="{% url "accounts:projects_new" account.id %}">New Project</a></button>
+ <button><a href="{% url "projects:new" %}">New Project</a></button>
  <div class="container mx-auto py-8 px-4">
     <!-- 未上架 -->
     <h2 class="text-2xl font-bold mb-6 text-gray-700">未上架</h2>
@@ -65,5 +65,5 @@
         {% endfor %}
     </div>
 </div>
-<button><a href="{% url "accounts:index" account.id%}">回個人頁面</a></button>
+<button><a href="{% url "accounts:index" %}">回個人頁面</a></button>
 {% endblock %}
