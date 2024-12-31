@@ -226,14 +226,6 @@ STORAGES = {
             "bucket_name": os.getenv("AWS_STORAGE_BUCKET_NAME"),
             "region_name": os.getenv("AWS_S3_REGION_NAME"),
 
-            "access_key": AWS_ACCESS_KEY_ID,
-            "secret_key": AWS_SECRET_ACCESS_KEY,
-            "bucket_name": AWS_STORAGE_BUCKET_NAME,
-            "region_name": AWS_S3_REGION_NAME,
-            "default_acl": AWS_DEFAULT_ACL,
-            "querystring_auth": AWS_QUERYSTRING_AUTH,
-            "object_parameters": AWS_S3_OBJECT_PARAMETERS,
-            "custom_domain": AWS_S3_CUSTOM_DOMAIN,
         },
     },
     "staticfiles": {
