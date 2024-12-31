@@ -50,13 +50,21 @@ import {
   faSpinner,
   faHouse,
   faHeart,
-  faMagnifyingGlass,
   faHandshake,
   faShieldAlt,
   faUsers,
+  faMagnifyingGlass,
+  faUser,
+  faComments,
+  faQuestionCircle,
+  faNewspaper,
+  faGift,
+  faArrowLeft,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons"; // 引入 spinner 圖標
 import "@fortawesome/fontawesome-svg-core/styles.css"; // 引入基本樣式
 
+// 將圖標添加到庫中
 library.add(
   faSpinner,
   faHouse,
@@ -64,7 +72,14 @@ library.add(
   faHandshake,
   faShieldAlt,
   faUsers,
-  faMagnifyingGlass
+  faMagnifyingGlass,
+  faUser,
+  faComments,
+  faQuestionCircle,
+  faNewspaper,
+  faGift,
+  faArrowLeft,
+  faPlus
 );
 
 // 自動掃描 DOM 並渲染圖標

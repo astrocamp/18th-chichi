@@ -2,6 +2,21 @@
 <h1>留言區</h1>
 <p>{{comment.content}}</p>
 
+  <!-- Content Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按鈕 -->
+        <div class="mb-8">
+          <a
+            href="{% url 'projects:comment_index' project.slug %}"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回留言列表
+          </a>
+        </div>
 
 <a href="{% url "comments:delete" comment.slug %}"><button>刪除</button></a> 
 <a href="{% url "projects:comment_index" project.slug %}">回主頁</a>

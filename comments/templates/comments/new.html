@@ -1,10 +1,81 @@
-{% extends "shared/layout.html"%} {% block "content" %}
-<h1>New Comment</h1>
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">新增留言</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          分享你的想法和建議
+        </p>
+      </div>
+    </div>
+  </div>
 
-<form method="POST" action="{% url 'projects:comment_index' project.slug %}">
-  {% csrf_token %} content:<br />
-  <input type="text" name="content" /><br />
-  <button>送出</button>
-</form>
+  <!-- Form Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按鈕 -->
+        <div class="mb-8">
+          <a
+            href="{% url 'projects:comment_index' project.slug %}"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回留言列表
+          </a>
+        </div>
 
+        <!-- 留言表單 -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <form
+            action="{% url 'projects:comment_index' project.slug %}"
+            method="POST"
+            class="space-y-6"
+          >
+            {% csrf_token %}
+            <div>
+              <label
+                for="content"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                留言內容
+              </label>
+              <textarea
+                id="content"
+                name="content"
+                rows="6"
+                required
+                class="textarea textarea-bordered w-full"
+                placeholder="請輸入你的留言內容..."
+              ></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+              <a
+                href="{% url 'projects:comment_index' project.slug %}"
+                class="btn"
+                style="background-color: #85cacc20; color: #85cacc"
+              >
+                取消
+              </a>
+              <button
+                type="submit"
+                class="btn text-white"
+                style="background-color: #85cacc; border: none"
+              >
+                發布留言
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

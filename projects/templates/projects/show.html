@@ -46,6 +46,74 @@
 
         <!-- 專案內容 -->
         <div class="space-y-12">
+          <!-- 功能按鈕區 -->
+          <div class="flex justify-center space-x-4 mb-8">
+            <form
+              action="{% url 'projects:collect' project.slug %}"
+              method="post"
+              class="inline"
+            >
+              {% csrf_token %}
+              <button
+                class="btn"
+                style="background-color: #85cacc20; color: #85cacc"
+              >
+                {% if collected %} 取消收藏 {% else %} 收藏 {% endif %}
+              </button>
+            </form>
+
+            <form
+              action="{% url 'projects:like' project.slug %}"
+              method="post"
+              class="inline"
+            >
+              {% csrf_token %}
+              <button
+                class="btn"
+                style="background-color: #85cacc20; color: #85cacc"
+              >
+                <i
+                  class="fas fa-heart mr-2"
+                  style="color: {% if favorited %}#ff4444{% else %}#85cacc{% endif %}"
+                ></i>
+                {% if favorited %} 取消按讚 {% else %} 按讚 {% endif %}
+              </button>
+            </form>
+
+            <a
+              href="{% url 'projects:comment_index' project.slug %}"
+              class="btn"
+              style="background-color: #85cacc20; color: #85cacc"
+            >
+              <i class="fas fa-comments mr-2"></i>
+              留言討論
+            </a>
+            <a
+              href="{% url 'projects:faq_index' project.slug %}"
+              class="btn"
+              style="background-color: #85cacc20; color: #85cacc"
+            >
+              <i class="fas fa-question-circle mr-2"></i>
+              常見問題
+            </a>
+            <a
+              href="{% url 'projects:update_records_index' project.slug %}"
+              class="btn"
+              style="background-color: #85cacc20; color: #85cacc"
+            >
+              <i class="fas fa-newspaper mr-2"></i>
+              更新記錄
+            </a>
+            <a
+              href="{% url 'rewards:index' %}"
+              class="btn"
+              style="background-color: #85cacc20; color: #85cacc"
+            >
+              <i class="fas fa-gift mr-2"></i>
+              回饋方案
+            </a>
+          </div>
+
           <!-- 專案說明 -->
           <div>
             <h2 class="text-2xl font-semibold mb-6">專案說明</h2>
