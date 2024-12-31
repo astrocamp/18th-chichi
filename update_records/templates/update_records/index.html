@@ -1,16 +1,88 @@
-{% extends "shared/layout.html"%} {% block "content" %}
-<h1>Update Records</h1>
-<button>
-  <a href="{% url 'projects:update_records_new' project.slug %}"
-    >New Update Record</a
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
   >
-</button>
-<a href="{% url 'projects:show' project.slug %}">回專案頁面</a>
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">更新記錄</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          查看專案的最新進度與更新內容
+        </p>
+      </div>
+    </div>
+  </div>
 
-{% if update_records %} {% for record in update_records %}
-<div>
-  <a href="{% url 'update_records:show' record.slug %}">{{ record.title }}</a
-  ><br />
-  <small>{{ record.create_at }}</small>
+  <!-- Content Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-3xl mx-auto">
+        <!-- 操作按鈕 -->
+        <div class="flex justify-between items-center mb-8">
+          <a
+            href="{% url 'projects:show' project.slug %}"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            回到專案
+          </a>
+          <a
+            href="{% url 'projects:update_records_new' project.slug %}"
+            class="btn text-white"
+            style="background-color: #85cacc; border: none"
+          >
+            <i class="fas fa-plus mr-2"></i>
+            新增更新
+          </a>
+        </div>
+
+        <!-- 更新記錄列表 -->
+        <div class="space-y-6">
+          {% if update_records %} {% for record in update_records %}
+          <div class="bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-start">
+              <div class="flex-1">
+                <h3 class="text-lg font-medium text-gray-800 mb-2">
+                  {{ record.title }}
+                </h3>
+                {% if record.description %}
+                <p class="text-gray-600">
+                  {{ record.description|truncatewords:30 }}
+                </p>
+                {% endif %}
+              </div>
+              <div class="ml-4 flex flex-col items-end">
+                <a
+                  href="{% url 'update_records:show' record.slug %}"
+                  class="text-sm mb-2"
+                  style="color: #85cacc"
+                >
+                  查看詳情
+                </a>
+                <span class="text-sm text-gray-500">
+                  {{ record.create_at|date:"Y/m/d H:i" }}
+                </span>
+              </div>
+            </div>
+          </div>
+          {% endfor %} {% else %}
+          <div class="text-center py-12">
+            <p class="text-gray-500 mb-4">目前還沒有任何更新記錄</p>
+            <a
+              href="{% url 'projects:update_records_new' project.slug %}"
+              class="btn text-white"
+              style="background-color: #85cacc; border: none"
+            >
+              立即新增更新
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
-{% endfor %} {% endif %} {% endblock %}
+{% endblock %}

@@ -1,15 +1,97 @@
-{% extends "shared/layout.html"%} {% block "content" %}
-<h1>New Update Record</h1>
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">新增更新記錄</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          分享專案的最新進度與更新內容
+        </p>
+      </div>
+    </div>
+  </div>
 
-<form action="{% url "projects:update_records_index" project.slug %}" method="POST" >
-  {% csrf_token %}
-  title:<br />
-  <input type="text" name="title" /><br />
-  description:<br />
-  <input type="text" name="description" /><br />
+  <!-- Form Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按鈕 -->
+        <div class="mb-8">
+          <a
+            href="{% url 'projects:update_records_index' project.slug %}"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回更新列表
+          </a>
+        </div>
 
-  <button>送出</button>
-</form>
+        <!-- 更新記錄表單 -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <form
+            method="POST"
+            action="{% url 'projects:update_records_index' project.slug %}"
+            class="space-y-6"
+          >
+            {% csrf_token %}
+            <div>
+              <label
+                for="title"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                標題
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                required
+                class="input input-bordered w-full"
+                placeholder="請輸入更新標題..."
+              />
+            </div>
 
-<a href="{% url 'projects:update_records_index' project.slug %}">回更新記錄列表</a>
+            <div>
+              <label
+                for="description"
+                class="block text-sm font-medium text-gray-700 mb-2"
+              >
+                更新內容
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                rows="6"
+                class="textarea textarea-bordered w-full"
+                placeholder="請輸入更新內容..."
+              ></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+              <a
+                href="{% url 'projects:update_records_index' project.slug %}"
+                class="btn"
+                style="background-color: #85cacc20; color: #85cacc"
+              >
+                取消
+              </a>
+              <button
+                type="submit"
+                class="btn text-white"
+                style="background-color: #85cacc; border: none"
+              >
+                新增更新
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

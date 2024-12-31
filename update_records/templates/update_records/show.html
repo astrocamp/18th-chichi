@@ -1,11 +1,83 @@
-{% extends "shared/layout.html"%} {% block "content" %}
-<h1>Update Record</h1>
-<p>{{update_record.title}}</p>
-<p>{{update_record.description}}</p>
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div
+    class="relative py-16"
+    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
+  >
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-4xl font-bold mb-4 text-gray-800">更新記錄詳情</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          查看完整的更新內容
+        </p>
+      </div>
+    </div>
+  </div>
 
-<a href="{% url 'update_records:edit' update_record.slug %}">編輯</a>
-<a href="{% url 'update_records:delete' update_record.slug %}">刪除</a>
-<a href="{% url 'projects:update_records_index' project.slug %}"
-  >回更新記錄列表</a
->
+  <!-- Content Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按鈕 -->
+        <div class="mb-8">
+          <a
+            href="{% url 'projects:update_records_index' project.slug %}"
+            class="btn"
+            style="background-color: #85cacc20; color: #85cacc"
+          >
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回更新列表
+          </a>
+        </div>
+
+        <!-- 更新記錄內容 -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <!-- 時間資訊 -->
+          <div class="flex justify-between items-center mb-6">
+            <div class="text-sm text-gray-500">
+              <p>建立時間：{{ update_record.create_at|date:"Y/m/d H:i" }}</p>
+              {% if update_record.update_at %}
+              <p>最後更新：{{ update_record.update_at|date:"Y/m/d H:i" }}</p>
+              {% endif %}
+            </div>
+            <div class="space-x-2">
+              <a
+                href="{% url 'update_records:edit' update_record.slug %}"
+                class="btn btn-sm"
+                style="background-color: #85cacc20; color: #85cacc"
+              >
+                編輯
+              </a>
+              <a
+                href="{% url 'update_records:delete' update_record.slug %}"
+                class="btn btn-sm btn-error text-white"
+              >
+                刪除
+              </a>
+            </div>
+          </div>
+
+          <!-- 標題 -->
+          <div class="mb-8">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">標題</h2>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <p class="text-gray-800">{{ update_record.title }}</p>
+            </div>
+          </div>
+
+          <!-- 更新內容 -->
+          <div>
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">更新內容</h2>
+            <div class="bg-gray-50 rounded-lg p-4">
+              <div class="prose max-w-none">
+                {{ update_record.description|linebreaks }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
