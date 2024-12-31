@@ -77,7 +77,13 @@ import {
   faMagnifyingGlass,
   faSignInAlt,
   faSignOutAlt,
-  faPaperPlane
+  faPaperPlane,
+  faSpinner,
+  faHouse,
+  faHeart,
+  faArrowRight,
+  faCheck,
+  faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons'
 
 // 添加圖示到庫中
@@ -112,7 +118,13 @@ library.add(
   faMagnifyingGlass,
   faSignInAlt,
   faSignOutAlt,
-  faPaperPlane
+  faPaperPlane,
+  faSpinner,
+  faHouse,
+  faHeart,
+  faArrowRight,
+  faCheck,
+  faMagnifyingGlass
 )
 
 // 自動掃描 DOM 並渲染圖標
