@@ -1,125 +1,119 @@
-{% extends "shared/layout.html"%} {% block "content" %}
-<h1>Projects</h1>
-標題：
-<p>{{project.title}}</p>
-子標題: 
-<p>{{project.subtitle}}</p>
-目前累積金額： 
-<p>{{project.raised_amount}}</p>
-目標金額： 
-<p>{{project.goal_amount}}</p>
-募資開始時間：
-<p>{{project.start_at}}</p>
-募資結束時間：
-<p>{{project.end_at}}</p>
-募資內容描述：
-<p>{{project.story}}</p>
-募資地點：
-<p>{{project.location}}</p>
+{% extends "shared/layout.html" %}
+{% load static %}
+{% block "content" %}
+<div class="container mx-auto px-4 py-8">
+  <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-md p-8">
+    <!-- 標題 -->
+    <h1 class="text-3xl font-bold mb-2">{{ project.title }}</h1>
+    {% if project.subtitle %}
+    <p class="text-xl text-gray-600 mb-6">{{ project.subtitle }}</p>
+    {% endif %}
 
-        <!-- 專案標題 -->
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">
-          {{ project.title }}
-        </h1>
-        {% if project.subtitle %}
-        <p class="text-xl text-gray-600 mb-8">{{ project.subtitle }}</p>
-        {% endif %}
+    <!-- 金額資訊 -->
+    <div class="mb-8">
+      <div class="mb-6">
+        <p class="text-lg mb-1">目前累積金額</p>
+        <p class="text-3xl font-bold text-teal-600">NT$ {{ project.raised_amount|default:"0" }}</p>
+        <div class="mt-2 bg-gray-200 rounded-full h-2">
+          <div class="bg-teal-500 h-2 rounded-full" style="width: {% if project.start_at <= now and project.goal_amount > 0 %}{% widthratio project.raised_amount project.goal_amount 100 %}{% else %}0{% endif %}%"></div>
+        </div>
+        <div class="flex justify-between text-sm text-gray-600 mt-1">
+          <p>目標金額：NT$ {{ project.goal_amount|default:"0" }}</p>
+          <p>達成率：{% if project.start_at <= now and project.goal_amount > 0 %}{% widthratio project.raised_amount project.goal_amount 100 %}{% else %}0{% endif %}%</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <p class="text-lg mb-1">募資時間</p>
+          <p class="text-gray-600">開始：{{ project.start_at|date:"Y/m/d H:i" }}</p>
+          <p class="text-gray-600">結束：{{ project.end_at|date:"Y/m/d H:i" }}</p>
+          <div class="flex items-center gap-4 mt-2">
+            <p class="text-teal-600">
+              <i class="fas fa-clock mr-2"></i>倒數
+            </p>
+            <div class="flex gap-2">
+              <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded">{{ project.end_at|timeuntil|slice:":1" }} 天</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <p class="text-lg mb-1">募資地點</p>
+          <p class="text-gray-600">{{ project.location }}</p>
+        </div>
       </div>
     </div>
+
+    <!-- 功能按鈕 -->
+    <div class="flex flex-wrap gap-4 mb-8">
+      <form action="{% url 'projects:collect' project.slug %}" method="post">
+        {% csrf_token %}
+        <button class="btn" style="background-color: #85cacc20; color: #85cacc">
+          <i class="fas fa-bookmark mr-2"></i>
+          {% if collected %}取消收藏{% else %}收藏{% endif %}
+        </button>
+      </form>
+
+      <form action="{% url 'projects:like' project.slug %}" method="post">
+        {% csrf_token %}
+        <button class="btn" style="background-color: #85cacc20; color: #85cacc">
+          {% if favorited %}
+            <img src="{% static 'svg/like-on.svg' %}" alt="取消按讚" class="w-4 h-4 mr-2">
+          {% else %}
+            <img src="{% static 'svg/like-off.svg' %}" alt="按讚" class="w-4 h-4 mr-2">
+          {% endif %}
+          {% if favorited %}取消按讚{% else %}按讚{% endif %}
+        </button>
+      </form>
+
+      <a href="{% url 'projects:comment_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-comments mr-2"></i>留言討論
+      </a>
+      <a href="{% url 'projects:faq_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-question-circle mr-2"></i>常見問題
+      </a>
+      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-newspaper mr-2"></i>更新記錄
+      </a>
+      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-gift mr-2"></i>回饋方案
+      </a>
+    </div>
+
+    <!-- 專案說明 -->
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold mb-4">專案說明</h2>
+      <div class="prose max-w-none text-gray-600">{{ project.story|linebreaks }}</div>
+    </div>
+
+    <!-- 贊助按鈕 -->
+    <div class="text-center">
+      {% if user == project.account %}
+        {% if project.status == 'pending' %}
+          <form action="" method="post" class="inline-block">
+            {% csrf_token %}
+            <button type="submit" name="publish" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+              <i class="fas fa-rocket mr-2"></i>上架專案
+            </button>
+          </form>
+        {% elif project.status == 'live' %}
+          <form action="" method="post" class="inline-block">
+            {% csrf_token %}
+            <button type="submit" name="unpublish" class="btn" style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
+              <i class="fas fa-stop-circle mr-2"></i>下架專案
+            </button>
+          </form>
+        {% endif %}
+      {% else %}
+        <a href="{% url 'projects:sponsor' project.slug %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-hand-holding-heart mr-2"></i>立即贊助
+        </a>
+      {% endif %}
+      <a href="{% url 'projects:index' %}" class="btn ml-4" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-arrow-left mr-2"></i>返回列表
+      </a>
+    </div>
   </div>
-
-<form action="{%url 'projects:like' project.slug%}" method="post">
-  {% csrf_token %}
-  <button>
-    {%if favorited%}
-    <img src="/static/svg/like-on.svg" alt="">
-    {%else%}
-    <img src="/static/svg/like-off.svg" alt="">
-    {%endif%}
-  </button>
-</form>
-<a href="{% url "projects:index" %}">回主頁</a>
-<a href="{% url "projects:comment_index" project.slug%}">comment</a>
-<a href="{% url "projects:faq_index" project.slug %}">查看FAQ</a>
-<a href="{% url "projects:update_records_index" project.slug %}">更新狀態</a>
-<a href="{% url "projects:rewards_index" project.slug%}">贊助方案</a>
-
-        <!-- 專案內容 -->
-        <div class="space-y-12">
-          <!-- 功能按鈕區 -->
-          <div class="flex justify-center space-x-4 mb-8">
-            <form
-              action="{% url 'projects:collect' project.slug %}"
-              method="post"
-              class="inline"
-            >
-              {% csrf_token %}
-              <button
-                class="btn"
-                style="background-color: #85cacc20; color: #85cacc"
-              >
-                {% if collected %} 取消收藏 {% else %} 收藏 {% endif %}
-              </button>
-            </form>
-
-            <form
-              action="{% url 'projects:like' project.slug %}"
-              method="post"
-              class="inline"
-            >
-              {% csrf_token %}
-              <button
-                class="btn"
-                style="background-color: #85cacc20; color: #85cacc"
-              >
-                <i
-                  class="fas fa-heart mr-2"
-                  style="color: {% if favorited %}#ff4444{% else %}#85cacc{% endif %}"
-                ></i>
-                {% if favorited %} 取消按讚 {% else %} 按讚 {% endif %}
-              </button>
-            </form>
-
-            <a
-              href="{% url 'projects:comment_index' project.slug %}"
-              class="btn"
-              style="background-color: #85cacc20; color: #85cacc"
-            >
-              <i class="fas fa-comments mr-2"></i>
-              留言討論
-            </a>
-            <a
-              href="{% url 'projects:faq_index' project.slug %}"
-              class="btn"
-              style="background-color: #85cacc20; color: #85cacc"
-            >
-              <i class="fas fa-question-circle mr-2"></i>
-              常見問題
-            </a>
-            <a
-              href="{% url 'projects:update_records_index' project.slug %}"
-              class="btn"
-              style="background-color: #85cacc20; color: #85cacc"
-            >
-              <i class="fas fa-newspaper mr-2"></i>
-              更新記錄
-            </a>
-            <a
-              href="{% url 'rewards:index' %}?project_slug={{ project.slug }}"
-              class="btn"
-              style="background-color: #85cacc20; color: #85cacc"
-            >
-              <i class="fas fa-gift mr-2"></i>
-              回饋方案
-            </a>
-          </div>
-
-          <!-- 專案說明 -->
-          <div>
-            <h2 class="text-2xl font-semibold mb-6">專案說明</h2>
-            <div class="prose max-w-none">{{ project.story|linebreaks }}</div>
-          </div>
-
-<a href="{% url "projects:sponsor" project.slug%}">前往方案</a>
-
+</div>
 {% endblock %}

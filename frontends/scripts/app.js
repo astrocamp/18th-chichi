@@ -2,26 +2,26 @@ import Alpine from "alpinejs";
 import htmx from "htmx.org";
 import Sortable from "sortablejs";
 
-window.Alpine = Alpine;
-window.htmx = htmx;
+window.Alpine = Alpine
+window.htmx = htmx
 
 export function formHandler() {
   return {
-    products: [{ name: "" }],
-    options: [{ name: "", price: 0 }],
+    products: [{ name: '' }],
+    options: [{ name: '', price: 0 }],
     addProduct() {
-      this.products.push({ name: "" });
+      this.products.push({ name: '' })
     },
     removeProduct(index) {
-      this.products.splice(index, 1);
+      this.products.splice(index, 1)
     },
     addOption() {
-      this.options.push({ name: "", price: 0 });
+      this.options.push({ name: '', price: 0 })
     },
     removeOption(index) {
-      this.options.splice(index, 1);
+      this.options.splice(index, 1)
     },
-  };
+  }
 }
 
 function rewardForm(basePrice) {
@@ -29,23 +29,23 @@ function rewardForm(basePrice) {
     basePrice: parseFloat(basePrice),
     totalPrice: parseFloat(basePrice),
     updateTotal(event) {
-      const price = parseFloat(event.target.dataset.price);
+      const price = parseFloat(event.target.dataset.price)
       if (event.target.checked) {
-        this.totalPrice += price;
+        this.totalPrice += price
       } else {
-        this.totalPrice -= price;
+        this.totalPrice -= price
       }
     },
-  };
+  }
 }
 
-window.rewardForm = rewardForm;
-window.formHandler = formHandler;
+window.rewardForm = rewardForm
+window.formHandler = formHandler
 
-Alpine.start();
+Alpine.start()
 
 // Font Awesome 引入
-import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { library, dom } from '@fortawesome/fontawesome-svg-core'
 import {
   faSpinner,
   faHouse,
@@ -61,8 +61,16 @@ import {
   faGift,
   faArrowLeft,
   faPlus,
-} from "@fortawesome/free-solid-svg-icons"; // 引入 spinner 圖標
-import "@fortawesome/fontawesome-svg-core/styles.css"; // 引入基本樣式
+  faBookmark,
+  faHandHoldingHeart,
+  faPaperPlane,
+  faTrash,
+  faClock,
+  faProjectDiagram,
+  faRocket,
+  faStopCircle,
+} from '@fortawesome/free-solid-svg-icons' // 引入 spinner 圖標
+import '@fortawesome/fontawesome-svg-core/styles.css' // 引入基本樣式
 
 // 將圖標添加到庫中
 library.add(
@@ -79,8 +87,16 @@ library.add(
   faNewspaper,
   faGift,
   faArrowLeft,
-  faPlus
-);
+  faPlus,
+  faBookmark,
+  faHandHoldingHeart,
+  faPaperPlane,
+  faTrash,
+  faClock,
+  faProjectDiagram,
+  faRocket,
+  faStopCircle
+)
 
 // 自動掃描 DOM 並渲染圖標
 dom.watch();

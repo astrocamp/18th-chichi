@@ -6,6 +6,37 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from users.views import Profile
+from django.contrib.auth.models import User
+from django import forms
+
+
+class CustomUserCreationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+    username = forms.CharField(required=True)
+    password1 = forms.CharField(required=True, widget=forms.PasswordInput)
+    password2 = forms.CharField(required=True, widget=forms.PasswordInput)
+
+    class Meta:
+        model = User
+        fields = ("username", "email", "password1", "password2")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        password1 = cleaned_data.get("password1")
+        password2 = cleaned_data.get("password2")
+
+        if password1 and password2 and password1 != password2:
+            raise forms.ValidationError("密碼不匹配")
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if commit:
+            user.save()
+        return user
+
 
 
 @login_required
@@ -26,7 +57,7 @@ def login(request):
             messages.success(request, "登入成功")
             return redirect("homepages:homepages")
         else:
-            messages.success(request, "登入失敗")
+            messages.error(request, "登入失敗")
             return redirect("accounts:login")
 
     return render(request, "accounts/login.html")
@@ -48,7 +79,10 @@ def register(request):
             messages.success(request, "註冊成功")
             return redirect("homepages:homepages")
         else:
-            return HttpResponse(form.error_messages)
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+            return render(request, "accounts/register.html")
 
     return render(request, "accounts/register.html")
 

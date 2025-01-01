@@ -42,7 +42,17 @@
 
         <!-- 註冊表單 -->
         <form method="POST" class="space-y-6 bg-white rounded-lg shadow-md p-8">
-          {% csrf_token %}
+          {% csrf_token %} {% if messages %}
+          <div class="mb-4">
+            {% for message in messages %}
+            <div
+              class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}"
+            >
+              {{ message }}
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
 
           <div>
             <label
@@ -88,7 +98,7 @@
             <input
               type="password"
               id="password"
-              name="password"
+              name="password1"
               required
               class="input input-bordered w-full"
               placeholder="請設定您的密碼"
@@ -105,7 +115,7 @@
             <input
               type="password"
               id="password_confirmation"
-              name="password_confirmation"
+              name="password2"
               required
               class="input input-bordered w-full"
               placeholder="請再次輸入密碼"
