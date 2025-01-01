@@ -5,12 +5,20 @@
   <!-- Header -->
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-gray-800">回饋 & 商品/附加商品</h1>
-    <a
-      href="{% url 'projects:rewards_new' project.slug %}"
-      class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
-    >
-      新增 Reward
-    </a>
+    <div class="flex space-x-4">
+      <a
+        href="{% url 'projects:sponsor' project.slug %}"
+        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+      >
+        贊助專案
+      </a>
+      <a
+        href="{% url 'projects:rewards_new' project.slug %}"
+        class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
+      >
+        新增 Reward
+      </a>
+    </div>
   </div>
 
   <!-- Grid Layout -->
@@ -76,12 +84,14 @@
     >
       回募資專案
     </a>
-    <a
-      href="{% url "projects:reward_items" project.slug %}"
-      class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-    >
-      新增商品及附加商品
-    </a>
+    <div class="flex space-x-4">
+      <a
+        href="{% url "projects:reward_items" project.slug %}"
+        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+      >
+        新增商品及附加商品
+      </a>
+    </div>
   </div>
 </div>
 {% endblock %}
