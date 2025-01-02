@@ -15,6 +15,5 @@ urlpatterns = [
     path("comments/", include("comments.urls")),
     path("categories/", include("categories.urls")),
     path("rewards/", include("rewards.urls")),
-    path("comments_replies/", include("comments_replies.urls")),
     path("update_records/", include("update_records.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2775,7 +2775,6 @@ html {
 
 .mt-6 {
   margin-top: 1.5rem;
-  <<<<<<< HEAD
 }
 
 .mr-2 {
@@ -2784,7 +2783,6 @@ html {
 
 .mb-3 {
   margin-bottom: 0.75rem;
-  =======>>>>>>>bf322e8 (Hotfeat: categories update completed)
 }
 
 .block {
@@ -2799,15 +2797,15 @@ html {
   display: grid;
 }
 
-<<<<<<< HEAD .h-16 {
+.h-16 {
   height: 4rem;
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .h-40 {
+.h-40 {
   height: 10rem;
 }
 
-<<<<<<< HEAD .h-14 {
+.h-14 {
   height: 3.5rem;
 }
 
@@ -2855,7 +2853,7 @@ html {
   height: 100%;
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .min-h-screen {
+.min-h-screen {
   min-height: 100vh;
 }
 
@@ -2871,11 +2869,11 @@ html {
   width: 100%;
 }
 
-<<<<<<< HEAD .w-5 {
+.w-5 {
   width: 1.25rem;
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .max-w-4xl {
+.max-w-4xl {
   max-width: 56rem;
 }
 
@@ -2895,7 +2893,7 @@ html {
   flex: none;
 }
 
-<<<<<<< HEAD .-translate-y-1\/2 {
+.-translate-y-1\/2 {
   --tw-translate-y: -50%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
@@ -2904,15 +2902,15 @@ html {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .grid-cols-3 {
+.grid-cols-3 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-<<<<<<< HEAD .grid-cols-1 {
+.grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .items-start {
+.items-start {
   align-items: flex-start;
 }
 
@@ -2950,7 +2948,6 @@ html {
   --tw-space-y-reverse: 0;
   margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
-  <<<<<<< HEAD
 }
 
 .space-x-14> :not([hidden])~ :not([hidden]) {
@@ -2979,7 +2976,6 @@ html {
 
 .rounded-lg {
   border-radius: 0.5rem;
-  =======>>>>>>>bf322e8 (Hotfeat: categories update completed)
 }
 
 .rounded-md {
@@ -3063,7 +3059,7 @@ html {
 }
 
 .bg-gray-200 {
-  <<<<<<< HEAD=======--tw-bg-opacity: 1;
+  --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
 }
 
@@ -3073,7 +3069,7 @@ html {
 }
 
 .bg-neutral {
-  >>>>>>>bf322e8 (Hotfeat: categories update completed) --tw-bg-opacity: 1;
+  --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
 }
 
@@ -3087,7 +3083,7 @@ html {
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
-<<<<<<< HEAD .bg-green-500 {
+.bg-green-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(34 197 94 / var(--tw-bg-opacity, 1));
 }
@@ -3121,7 +3117,7 @@ html {
   --tw-gradient-to: #fff var(--tw-gradient-to-position);
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .object-cover {
+.object-cover {
   -o-object-fit: cover;
   object-fit: cover;
 }
@@ -3163,7 +3159,7 @@ html {
   padding-bottom: 2rem;
 }
 
-<<<<<<< HEAD .py-1 {
+.py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
@@ -3183,7 +3179,7 @@ html {
   padding-right: 0.75rem;
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .pt-16 {
+.pt-16 {
   padding-top: 4rem;
 }
 
@@ -3268,7 +3264,7 @@ html {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
-<<<<<<< HEAD .text-green-600 {
+.text-green-600 {
   --tw-text-opacity: 1;
   color: rgb(22 163 74 / var(--tw-text-opacity, 1));
 }
@@ -3278,7 +3274,7 @@ html {
   color: rgb(34 197 94 / var(--tw-text-opacity, 1));
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .underline {
+.underline {
   text-decoration-line: underline;
 }
 
@@ -3327,7 +3323,7 @@ html {
   background-color: rgb(21 128 61 / var(--tw-bg-opacity, 1));
 }
 
-<<<<<<< HEAD .hover\:bg-green-600:hover {
+.hover\:bg-green-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(22 163 74 / var(--tw-bg-opacity, 1));
 }
@@ -3337,17 +3333,17 @@ html {
   background-color: rgb(175 207 181 / var(--tw-bg-opacity, 1));
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .hover\:text-gray-300:hover {
+.hover\:text-gray-300:hover {
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity, 1));
 }
 
-<<<<<<< HEAD .hover\:text-white:hover {
+.hover\:text-white:hover {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
-=======>>>>>>>bf322e8 (Hotfeat: categories update completed) .hover\:shadow-md:hover {
+.hover\:shadow-md:hover {
   --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
@@ -3372,7 +3368,6 @@ html {
 .focus\:ring-blue-300:focus {
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(147 197 253 / var(--tw-ring-opacity, 1));
-  <<<<<<< HEAD
 }
 
 @media (min-width: 640px) {
@@ -3391,6 +3386,4 @@ html {
   .lg\:grid-cols-4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
-
-  =======>>>>>>>bf322e8 (Hotfeat: categories update completed)
 }
