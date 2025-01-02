@@ -6,17 +6,11 @@
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-gray-800">回饋 & 商品/附加商品</h1>
     <div class="flex space-x-4">
-      <a
-        href="{% url 'projects:sponsor' project.slug %}"
-        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-      >
-        贊助專案
+      <a href="{% url 'projects:sponsor' project.slug %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+        <i class="fas fa-hand-holding-heart mr-2"></i>贊助專案
       </a>
-      <a
-        href="{% url 'projects:rewards_new' project.slug %}"
-        class="px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
-      >
-        新增 Reward
+      <a href="{% url 'projects:rewards_new' project.slug %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+        <i class="fas fa-plus mr-2"></i>新增 Reward
       </a>
     </div>
   </div>
@@ -30,11 +24,8 @@
         {% for reward in rewards %}
         <li class="p-4 bg-white shadow-md rounded-md border border-gray-200">
           <div class="flex justify-between items-center">
-            <a
-              href="{% url 'rewards:show' reward.id %}"
-              class="text-lg font-semibold text-indigo-600 hover:underline"
-            >
-              {{ reward.title }}
+            <a href="{% url 'rewards:show' reward.id %}" class="text-lg font-semibold hover:text-teal-600" style="color: #85cacc">
+              <i class="fas fa-gift mr-2"></i>{{ reward.title }}
             </a>
             <span class="text-sm text-gray-500">{{ reward.created_at|date:"Y-m-d H:i:s" }}</span>
           </div>
@@ -78,18 +69,12 @@
 
   <!-- Links -->
   <div class="mt-8 flex justify-between">
-    <a
-      href="{% url "projects:show" project.slug %}"
-      class="px-4 py-2 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400"
-    >
-      回募資專案
+    <a href="{% url 'projects:show' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+      <i class="fas fa-arrow-left mr-2"></i>回募資專案
     </a>
     <div class="flex space-x-4">
-      <a
-        href="{% url "projects:reward_items" project.slug %}"
-        class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
-      >
-        新增商品及附加商品
+      <a href="{% url 'projects:reward_items' project.slug %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+        <i class="fas fa-plus-circle mr-2"></i>新增商品及附加商品
       </a>
     </div>
   </div>

@@ -44,58 +44,75 @@ window.formHandler = formHandler
 
 Alpine.start()
 
-// Font Awesome 引入
+// Font Awesome
 import { library, dom } from '@fortawesome/fontawesome-svg-core'
-import {
-  faSpinner,
-  faHouse,
-  faHeart,
-  faHandshake,
-  faShieldAlt,
-  faUsers,
-  faMagnifyingGlass,
-  faUser,
+import { 
+  faBookmark, 
+  faClock, 
   faComments,
   faQuestionCircle,
   faNewspaper,
   faGift,
-  faArrowLeft,
-  faPlus,
-  faBookmark,
-  faHandHoldingHeart,
-  faPaperPlane,
-  faTrash,
-  faClock,
-  faProjectDiagram,
   faRocket,
   faStopCircle,
-} from '@fortawesome/free-solid-svg-icons' // 引入 spinner 圖標
-import '@fortawesome/fontawesome-svg-core/styles.css' // 引入基本樣式
-
-// 將圖標添加到庫中
-library.add(
-  faSpinner,
-  faHouse,
-  faHeart,
-  faHandshake,
-  faShieldAlt,
-  faUsers,
-  faMagnifyingGlass,
+  faHandHoldingHeart,
+  faArrowLeft,
+  faSave,
+  faUserEdit,
+  faUserPlus,
+  faProjectDiagram,
   faUser,
+  faTrash,
+  faPlus,
+  faPlusCircle,
+  faUndo,
+  faBox,
+  faCheck,
+  faEdit,
+  faFileAlt,
+  faShippingFast,
+  faMapMarkerAlt,
+  faInfoCircle,
+  faCalendarAlt,
+  faMagnifyingGlass,
+  faSignInAlt,
+  faSignOutAlt,
+  faPaperPlane
+} from '@fortawesome/free-solid-svg-icons'
+
+// 添加圖示到庫中
+library.add(
+  faBookmark,
+  faClock,
   faComments,
   faQuestionCircle,
   faNewspaper,
   faGift,
-  faArrowLeft,
-  faPlus,
-  faBookmark,
-  faHandHoldingHeart,
-  faPaperPlane,
-  faTrash,
-  faClock,
-  faProjectDiagram,
   faRocket,
-  faStopCircle
+  faStopCircle,
+  faHandHoldingHeart,
+  faArrowLeft,
+  faSave,
+  faUserEdit,
+  faUserPlus,
+  faProjectDiagram,
+  faUser,
+  faTrash,
+  faPlus,
+  faPlusCircle,
+  faUndo,
+  faBox,
+  faCheck,
+  faEdit,
+  faFileAlt,
+  faShippingFast,
+  faMapMarkerAlt,
+  faInfoCircle,
+  faCalendarAlt,
+  faMagnifyingGlass,
+  faSignInAlt,
+  faSignOutAlt,
+  faPaperPlane
 )
 
 // 自動掃描 DOM 並渲染圖標

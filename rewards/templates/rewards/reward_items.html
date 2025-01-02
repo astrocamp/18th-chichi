@@ -52,18 +52,28 @@
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
-            <button type="button" @click="removeProduct(index)" class="self-end py-2 px-3 text-red-500 hover:text-red-700">刪除</button>
+            <button type="button" @click="removeProduct(index)" class="btn" style="background-color: #ff6b6b; color: white;">
+              <i class="fas fa-trash mr-2"></i>刪除
+            </button>
           </div>
         </template>
 
-        <button type="button" @click="addProduct" class="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">新增商品</button>
+        <button type="button" @click="addProduct" class="btn w-full" style="background-color: #85cacc; color: white;">
+          <i class="fas fa-plus mr-2"></i>新增商品
+        </button>
       </div>
 
       <div class="flex justify-between mt-6">
-        <button type="reset" @click="resetForm" class="py-2 px-4 bg-gray-300 rounded-md hover:bg-gray-400">Reset</button>
-        <button name="save_products" type="submit" class="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600">Save</button>
+        <button type="reset" @click="resetForm" class="btn" style="background-color: #85cacc20; color: #85cacc">
+          <i class="fas fa-undo mr-2"></i>重置
+        </button>
+        <button name="save_products" type="submit" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-save mr-2"></i>儲存
+        </button>
       </div>
     </form>
+
+    <!-- 右側：Options Form -->
     <form method="POST" class="border p-4 rounded-md">
       {% csrf_token %}
       <h2 class="text-xl font-semibold mb-4">選項</h2>
@@ -90,23 +100,33 @@
                 />
               </div>
             </div>
-            <button type="button" @click="removeOption(index)" class="self-end py-2 px-3 text-red-500 hover:text-red-700">刪除</button>
+            <button type="button" @click="removeOption(index)" class="btn" style="background-color: #ff6b6b; color: white;">
+              <i class="fas fa-trash mr-2"></i>刪除
+            </button>
           </div>
         </template>
 
-        <button type="button" @click="addOption" class="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">新增選項</button>
+        <button type="button" @click="addOption" class="btn w-full" style="background-color: #85cacc; color: white;">
+          <i class="fas fa-plus mr-2"></i>新增選項
+        </button>
       </div>
 
       <div class="flex justify-between mt-6">
-        <button type="reset" @click="resetOptions" class="py-2 px-4 bg-gray-300 rounded-md hover:bg-gray-400">Reset</button>
-        <button name="save_options" type="submit" class="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600">Save</button>
+        <button type="reset" @click="resetOptions" class="btn" style="background-color: #85cacc20; color: #85cacc">
+          <i class="fas fa-undo mr-2"></i>重置
+        </button>
+        <button name="save_options" type="submit" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-save mr-2"></i>儲存
+        </button>
       </div>
     </form>
   </div>
 </div>
-<div class="flex justify-between mt-6">
-  <a href="{% url 'projects:rewards_index' project.slug %}" class="py-2 px-4 bg-gray-300 rounded-md hover:bg-gray-400">回 reward</a>
-</div>
 
+<div class="max-w-5xl mx-auto mt-6">
+  <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+    <i class="fas fa-arrow-left mr-2"></i>回 reward
+  </a>
+</div>
 
 {% endblock %}

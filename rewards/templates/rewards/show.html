@@ -66,59 +66,88 @@
 
   <!-- Footer Actions -->
   <footer class="flex justify-end space-x-4">
-    <a href="{% url 'rewards:edit' reward.id %}" class="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">編輯</a>
-    <a href="{% url 'rewards:delete' reward.id %}" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">刪除</a>
-    <a href="{% url 'projects:rewards_index' project.slug %}" class="px-4 py-2 bg-gray-300 rounded-md hover:bg-gray-400">回首頁</a>
+    <a href="{% url 'rewards:edit' reward.id %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white;">
+      <i class="fas fa-edit mr-2"></i>
+      <span>編輯</span>
+    </a>
+    <a href="{% url 'rewards:delete' reward.id %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #ff6b6b; color: white;">
+      <i class="fas fa-trash mr-2"></i>
+      <span>刪除</span>
+    </a>
+    <a href="{% url 'projects:rewards_index' project.slug %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #85cacc">
+      <i class="fas fa-arrow-left mr-2"></i>
+      <span>回首頁</span>
+    </a>
   </footer>
 </div>
 
-          <!-- 描述 -->
-          <div class="mb-8">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">方案內容</h3>
-            <div class="prose max-w-none text-gray-600">
-              {{ reward.description|linebreaks }}
-            </div>
-          </div>
+<!-- 詳細內容區塊 -->
+<div class="max-w-4xl mx-auto mt-8 bg-white shadow-md rounded-lg overflow-hidden">
+  <!-- 描述 -->
+  <div class="border-b border-gray-200">
+    <div class="p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-file-alt mr-3 text-gray-600"></i>
+        方案內容
+      </h3>
+      <div class="prose max-w-none text-gray-600 bg-gray-50 rounded-lg p-6">
+        {{ reward.description|linebreaks }}
+      </div>
+    </div>
+  </div>
 
-          <!-- 運送資訊 -->
-          <div class="mb-8">
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">運送資訊</h3>
-            <div class="space-y-4">
-              <div class="bg-gray-50 rounded-lg p-4">
-                <p class="font-medium text-gray-700 mb-2">運送地區</p>
-                <p class="text-gray-600">{{ reward.ship_to|linebreaks }}</p>
-              </div>
-              {% if reward.shipping_detail %}
-              <div class="bg-gray-50 rounded-lg p-4">
-                <p class="font-medium text-gray-700 mb-2">運送說明</p>
-                <p class="text-gray-600">
-                  {{ reward.shipping_detail|linebreaks }}
-                </p>
-              </div>
-              {% endif %}
-              <div class="bg-gray-50 rounded-lg p-4">
-                <p class="font-medium text-gray-700 mb-2">預計出貨日期</p>
-                <p class="text-gray-600">
-                  {{ reward.estimated_delivery|date:"Y/m/d" }}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 加購項目 -->
-          {% if reward.optional_adds_on %}
-          <div>
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">加購項目</h3>
-            <div class="bg-gray-50 rounded-lg p-4">
-              <div class="prose max-w-none text-gray-600">
-                {{ reward.optional_adds_on|linebreaks }}
-              </div>
-            </div>
-          </div>
-          {% endif %}
+  <!-- 運送資訊 -->
+  <div class="border-b border-gray-200">
+    <div class="p-6">
+      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+        <i class="fas fa-shipping-fast mr-3 text-gray-600"></i>
+        運送資訊
+      </h3>
+      <div class="space-y-4">
+        <div class="bg-gray-50 rounded-lg p-6">
+          <p class="font-semibold text-gray-700 mb-3 flex items-center">
+            <i class="fas fa-map-marker-alt mr-2 text-gray-500"></i>
+            運送地區
+          </p>
+          <p class="text-gray-600 ml-6">{{ reward.ship_to|linebreaks }}</p>
+        </div>
+        {% if reward.shipping_detail %}
+        <div class="bg-gray-50 rounded-lg p-6">
+          <p class="font-semibold text-gray-700 mb-3 flex items-center">
+            <i class="fas fa-info-circle mr-2 text-gray-500"></i>
+            運送說明
+          </p>
+          <p class="text-gray-600 ml-6">
+            {{ reward.shipping_detail|linebreaks }}
+          </p>
+        </div>
+        {% endif %}
+        <div class="bg-gray-50 rounded-lg p-6">
+          <p class="font-semibold text-gray-700 mb-3 flex items-center">
+            <i class="fas fa-calendar-alt mr-2 text-gray-500"></i>
+            預計出貨日期
+          </p>
+          <p class="text-gray-600 ml-6">
+            {{ reward.estimated_delivery|date:"Y/m/d" }}
+          </p>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- 加購項目 -->
+  {% if reward.optional_adds_on %}
+  <div class="p-6">
+    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+      <i class="fas fa-plus-circle mr-3 text-gray-600"></i>
+      加購項目
+    </h3>
+    <div class="bg-gray-50 rounded-lg p-6">
+      <div class="prose max-w-none text-gray-600">
+        {{ reward.optional_adds_on|linebreaks }}
+      </div>
+    </div>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}

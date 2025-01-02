@@ -14,14 +14,18 @@
         <div class="space-x-4">
           <a
             href="{% url 'projects:new' %}"
-            class="btn text-white"
-            style="background-color: #85cacc; border: none"
+            class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
+            style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
+            onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
+            onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
             >提案募資</a
           >
           <a
             href="{% url 'projects:index' %}"
-            class="btn btn-outline border-2 hover:text-white"
-            style="border-color: #85cacc; color: #85cacc; hover:background-color: #85cacc"
+            class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
+            style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
+            onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
+            onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
             >瀏覽專案</a
           >
         </div>
@@ -311,15 +315,19 @@
       <div class="flex justify-center gap-6">
         <a
           href="{% url 'projects:new' %}"
-          class="btn text-white px-8"
-          style="background-color: #85cacc; border: none"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
+          style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
+          onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
         >
           立即提案
         </a>
         <a
           href="#"
-          class="btn btn-outline border-2 px-8"
-          style="border-color: #85cacc; color: #85cacc"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
+          style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
+          onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
         >
           了解更多
         </a>

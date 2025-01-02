@@ -116,12 +116,12 @@
     </div>
 
     <!-- 提交按鈕 -->
-    <div class="flex justify-end">
-      <button
-        type="submit"
-        class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
-      >
-        更新
+    <div class="flex justify-end space-x-4">
+      <a href="{% url 'profile:index' %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-arrow-left mr-2"></i>返回
+      </a>
+      <button type="submit" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+        <i class="fas fa-user-plus mr-2"></i>新增
       </button>
     </div>
   </form>

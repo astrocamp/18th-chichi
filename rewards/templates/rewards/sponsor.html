@@ -23,9 +23,13 @@
           </div>
         </div>
         <div class="flex space-x-4">
-          <button type="submit" class="flex-1 bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300">送出贊助</button>
-          <a href="{% url 'projects:rewards_index' project.slug %}" class="flex-1 text-center py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition duration-300">
-            回贊助頁面
+          <button type="submit" class="btn flex-1 inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white;">
+            <i class="fas fa-hand-holding-heart mr-2"></i>
+            <span>送出贊助</span>
+          </button>
+          <a href="{% url 'projects:rewards_index' project.slug %}" class="btn flex-1 inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #85cacc">
+            <i class="fas fa-arrow-left mr-2"></i>
+            <span>回贊助頁面</span>
           </a>
         </div>
       </form>
@@ -34,52 +38,88 @@
 </div>
 
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-4xl font-title font-bold text-center mb-12">{{ project.title }}</h1>
+  <div class="max-w-5xl mx-auto">
+    <h1 class="text-4xl font-title font-bold text-center mb-8">{{ project.title }}</h1>
+    <h2 class="text-2xl font-semibold text-center mb-12 text-gray-600">專案回饋方案</h2>
 
-  <div class="grid grid-cols-1 gap-6">
-    {% for detail in reward_details %}
-    <div class="bg-white shadow-md rounded-lg overflow-hidden grid grid-cols-1 md:grid-cols-3">
-      <div class="p-6 border-b md:border-b-0 md:border-r border-neutral-200 md:col-span-1">
-        <form method="POST" action="{% url 'projects:reward_sponsor' project.slug %}">
-          {% csrf_token %}
-          <h2 class="text-xl font-semibold mb-4">{{ detail.reward.title }}</h2>
-          <p class="text-neutral-500 mb-3">{{ detail.reward.description }}</p>
-          <p class="text-lg font-bold mb-3">金額：NT${{ detail.reward.price }}</p>
-          <p class="text-sm text-gray-500">預計交貨：{{ detail.reward.estimated_delivery|date:"F Y" }}</p>
-          <p class="text-neutral-600">剩餘數量：{{ detail.reward.quantity }}</p>
-          <input type="hidden" name="reward" value="{{ detail.reward.id }}" />
-          <div class="flex space-x-4 mt-4">
-            <button type="submit" class="flex-1 bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-600">贊助此方案</button>
-            <a href="{% url 'projects:rewards_index' project.slug %}" class="flex-1 text-center py-2 px-4 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300">
-              回贊助頁面
-            </a>
+    <div class="grid grid-cols-1 gap-8">
+      {% for detail in reward_details %}
+      <div class="bg-white shadow-lg rounded-xl overflow-hidden hover:shadow-xl transition-shadow duration-300">
+        <div class="grid grid-cols-1 md:grid-cols-3">
+          <!-- 左側：回饋方案資訊 -->
+          <div class="p-8 border-b md:border-b-0 md:border-r border-gray-200 md:col-span-1 bg-gray-50">
+            <form method="POST" action="{% url 'projects:reward_sponsor' project.slug %}">
+              {% csrf_token %}
+              <h3 class="text-2xl font-bold mb-4 text-gray-800">{{ detail.reward.title }}</h3>
+              <div class="space-y-4">
+                <p class="text-gray-600">{{ detail.reward.description }}</p>
+                <p class="text-2xl font-bold text-gray-800">NT$ {{ detail.reward.price }}</p>
+                <div class="space-y-2">
+                  <p class="text-sm text-gray-500 flex items-center">
+                    <i class="fas fa-clock mr-2"></i><span>預計交貨：{{ detail.reward.estimated_delivery|date:"F Y" }}</span>
+                  </p>
+                  <p class="text-sm text-gray-500 flex items-center">
+                    <i class="fas fa-box mr-2"></i><span>剩餘數量：{{ detail.reward.quantity }}</span>
+                  </p>
+                </div>
+              </div>
+              <input type="hidden" name="reward" value="{{ detail.reward.id }}" />
+              <div class="flex space-x-4 mt-6">
+                <button type="submit" class="btn flex-1 inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white;">
+                  <i class="fas fa-hand-holding-heart mr-2"></i>
+                  <span>贊助此方案</span>
+                </button>
+                <a href="{% url 'projects:rewards_index' project.slug %}" class="btn flex-1 inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #85cacc">
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  <span>回贊助頁面</span>
+                </a>
+              </div>
+            </form>
           </div>
-        </form>
-      </div>
 
-      <div class="p-6 md:col-span-2">
-        {% if detail.products %}
-        <div class="mb-6">
-          <h3 class="text-lg font-bold mb-2">包含的商品：</h3>
-          <ul class="list-disc pl-6">
-            {% for product in detail.products %}
-            <li>{{ product.name }}</li>
-            {% endfor %}
-          </ul>
+          <!-- 右側：商品和選項資訊 -->
+          <div class="p-8 md:col-span-2 bg-white">
+            <div class="space-y-8">
+              {% if detail.products %}
+              <div>
+                <h4 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                  <i class="fas fa-gift mr-3"></i>包含的商品
+                </h4>
+                <ul class="space-y-3 pl-6">
+                  {% for product in detail.products %}
+                  <li class="text-gray-600 flex items-center">
+                    <span class="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                    {{ product.name }}
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+
+              {% if detail.options %}
+              <div>
+                <h4 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+                  <i class="fas fa-plus-circle mr-3"></i>可加購選項
+                </h4>
+                <ul class="space-y-3 pl-6">
+                  {% for option in detail.options %}
+                  <li class="text-gray-600 flex items-center justify-between">
+                    <div class="flex items-center">
+                      <span class="w-2 h-2 bg-gray-400 rounded-full mr-3"></span>
+                      {{ option.name }}
+                    </div>
+                    <span class="font-semibold text-gray-700">NT$ {{ option.price }}</span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+              {% endif %}
+            </div>
+          </div>
         </div>
-        {% endif %} {% if detail.options %}
-        <div>
-          <h3 class="text-lg font-bold mb-2">可加購選項：</h3>
-          <ul class="list-disc pl-6">
-            {% for option in detail.options %}
-            <li class="mb-3">{{ option.name }} - NT${{ option.price }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-        {% endif %}
       </div>
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
 </div>
 {% endblock %}

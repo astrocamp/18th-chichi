@@ -1,5 +1,5 @@
-<div class="navbar bg-[#85CACC] text-white flex items-center justify-between">
-  <div class="flex items-center space-x-4">
+<div class="navbar bg-[#85CACC] text-white flex items-center justify-between px-4">
+  <div class="w-1/4 flex items-center">
     <a href="{% url 'homepages:homepages' %}">
       <img
         src="/static/media/CHICHI_LOGO__1.png"
@@ -8,12 +8,11 @@
       />
     </a>
   </div>
-  <div class="flex justify-center items-center flex-1">
+  <div class="w-2/4 flex justify-center items-center">
     <form
       action="#"
       method="GET"
-      class="flex items-center bg-white rounded-full shadow-md relative"
-      style="width: 500px"
+      class="flex items-center bg-white rounded-full shadow-md relative w-[500px]"
     >
       <input
         type="text"
@@ -30,49 +29,44 @@
     </form>
   </div>
 
-  <div class="flex items-center space-x-4">
-    <ul class="menu menu-horizontal px-1 flex items-center">
+  <div class="w-1/4 flex justify-end">
+    <ul class="menu menu-horizontal px-1 flex items-center gap-4">
       {% if user.is_authenticated %}
       <li class="flex items-center">
-        <a>{{ user.username }}</a>
+        <a class="text-white text-lg font-medium">{{ user.username }}</a>
       </li>
       <li>
-        <a class="btn btn-outline text-white" href="{% url 'accounts:index' %}"
-          >個人頁面</a
-        >
+        <a class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white" href="{% url 'accounts:index' %}">
+          <i class="fas fa-user mr-2"></i>
+          <span>個人頁面</span>
+        </a>
       </li>
       <li>
         <a
-          class="text-white hover:text-gray-200"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
+          style="background-color: #85cacc; color: white"
           hx-post="{% url 'accounts:logout' %}"
           hx-target="body"
           hx-swap="outerHTML"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
           hx-on="click: this.disabled = true"
-          class="btn btn-outline text-white"
         >
-          登出
+          <i class="fas fa-sign-out-alt mr-2"></i>
+          <span>登出</span>
         </a>
       </li>
-      {% else %} {% load socialaccount %}
+      {% else %}
       <li>
-        <a
-          class="btn btn-outline text-white"
-          href="{% provider_login_url 'google' method='oauth2' %}"
-          >Google登入</a
-        >
+        <a class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white" href="{% url 'accounts:login' %}">
+          <i class="fas fa-sign-in-alt mr-2"></i>
+          <span>登入</span>
+        </a>
       </li>
       <li>
-        <a class="btn btn-outline text-white" href="{% url 'accounts:login' %}"
-          >登入</a
-        >
-      </li>
-      <li>
-        <a
-          class="btn btn-outline text-white"
-          href="{% url 'accounts:register' %}"
-          >註冊</a
-        >
+        <a class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white" href="{% url 'accounts:register' %}">
+          <i class="fas fa-user-plus mr-2"></i>
+          <span>註冊</span>
+        </a>
       </li>
       {% endif %}
     </ul>
