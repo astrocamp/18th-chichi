@@ -5,12 +5,9 @@
     <h1 class="text-3xl font-bold text-gray-800">新增回報</h1>
     <a
       href="{% url 'projects:rewards_index' project.slug %}"
-      class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-      style="background-color: #85cacc20; color: #85cacc"
+      class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+      >回首頁</a
     >
-      <i class="fas fa-arrow-left mr-2"></i>
-      <span>回首頁</span>
-    </a>
   </div>
 
   <!-- Form Container -->
@@ -137,20 +134,16 @@
       <div class="flex justify-between mt-6">
         <button
           type="reset"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-          style="background-color: #85cacc20; color: #85cacc"
+          class="py-2 px-4 bg-gray-300 rounded-md text-gray-800 hover:bg-gray-400"
         >
-          <i class="fas fa-undo mr-2"></i>
-          <span>重置</span>
+          Reset
         </button>
         <button
           type="submit"
           name="reward"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-          style="background-color: #85cacc; color: white"
+          class="py-2 px-4 bg-indigo-500 text-white rounded-md hover:bg-indigo-600"
         >
-          <i class="fas fa-save mr-2"></i>
-          <span>儲存</span>
+          Save
         </button>
       </div>
     </form>
