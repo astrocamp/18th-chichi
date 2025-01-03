@@ -2,62 +2,66 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
-from .forms import RewardForm,ProductForm,OptionalAdd
-from .models import Reward ,RewardProduct,OptionalAdd
+from .forms import RewardForm, ProductForm, OptionalAdd
+from .models import Reward, RewardProduct, OptionalAdd
 from projects.models import Project
 from django.http import HttpResponse
 from projects.models import Sponsor
 from django.contrib.auth.models import User
 from django.urls import reverse
+from payments.ecpay_sdk import ECPayPayment
+from payments.models import Order
+from datetime import datetime
 
 
 @login_required
 def index(request, slug):
-    project = get_object_or_404(Project ,slug=slug)
+    project = get_object_or_404(Project, slug=slug)
     if project.account != request.user:
         messages.error(request, "您無權訪問該頁面")
         return redirect("homapages:homepages")
     if request.method == "POST" and "reward" in request.POST:
-        # 保存 Reward
         reward_form = RewardForm(request.POST)
         if reward_form.is_valid():
             reward = reward_form.save(commit=False)
             reward.project = project
             reward.save()
 
-            # 保存與 Reward 關聯的產品
-            product_ids = request.POST.getlist('products')  # 接收多選框選擇的產品 ID
+            product_ids = request.POST.getlist("products")
             if product_ids:
                 products = RewardProduct.objects.filter(id__in=product_ids)
                 for product in products:
-                    product.rewards.add(reward)  # 添加 Reward 與產品的多對多關聯
+                    product.rewards.add(reward)
 
-            # 保存與 Reward 關聯的附加選項
-            option_ids = request.POST.getlist('options')  # 接收多選框選擇的附加選項 ID
+            option_ids = request.POST.getlist("options")
             if option_ids:
                 options = OptionalAdd.objects.filter(id__in=option_ids)
                 for option in options:
-                    option.rewards.add(reward)  # 添加 Reward 與附加選項的多對多關聯
+                    option.rewards.add(reward)
 
-            # 返回成功訊息並重定向
             messages.success(request, "Reward 新增成功")
             return redirect("projects:rewards_index", slug=project.slug)
         else:
-            # 如果 Reward 表單驗證失敗
             messages.error(request, "Reward 表單有誤，請檢查後再提交")
-
-
-    
     rewards = Reward.objects.filter(project_id=project.id)
     products = RewardProduct.objects.filter(project_id=project.id)
     options = OptionalAdd.objects.filter(project_id=project.id)
 
-    return render(request, "rewards/index.html", {"rewards": rewards, "project":project,"products":products,"options":options})
+    return render(
+        request,
+        "rewards/index.html",
+        {
+            "rewards": rewards,
+            "project": project,
+            "products": products,
+            "options": options,
+        },
+    )
 
 
 @login_required
-def new(request,slug):
-    project = get_object_or_404(Project ,slug=slug)
+def new(request, slug):
+    project = get_object_or_404(Project, slug=slug)
     products = RewardProduct.objects.filter(project_id=project.id)
     options = OptionalAdd.objects.filter(project_id=project.id)
     if project.account != request.user:
@@ -65,52 +69,68 @@ def new(request,slug):
         return redirect("homapages:homepages")
 
     form = RewardForm()
-    return render(request, "rewards/new.html", {"form": form, "project":project,"products":products,"options":options})
+    return render(
+        request,
+        "rewards/new.html",
+        {"form": form, "project": project, "products": products, "options": options},
+    )
 
 
 @login_required
-def reward_items(request,slug):
-    project = get_object_or_404(Project ,slug=slug)
+def reward_items(request, slug):
+    project = get_object_or_404(Project, slug=slug)
     if project.account != request.user:
         messages.error(request, "您無權新增該頁面")
         return redirect("homapages:homepages")
-    if request.POST: 
+    if request.POST:
         if "save_products" in request.POST:
             products = [
-                name for key, name in request.POST.items()
-                if key.startswith('products[') and name.strip()
+                name
+                for key, name in request.POST.items()
+                if key.startswith("products[") and name.strip()
             ]
-            
-            RewardProduct.objects.bulk_create([RewardProduct(name=name,project_id=project.id) for name in products])          
+
+            RewardProduct.objects.bulk_create(
+                [RewardProduct(name=name, project_id=project.id) for name in products]
+            )
             messages.success(request, f"成功新增 {len(products)} 個商品")
 
         if "save_options" in request.POST:
             options = []
-    
-    # 獲取所有選項數據
+
             for key, name in request.POST.items():
-                if key.startswith('options[') and key.endswith('][name]') and name.strip():
-                    index = key.split('[')[1].split(']')[0]  # 提取索引值
+                if (
+                    key.startswith("options[")
+                    and key.endswith("][name]")
+                    and name.strip()
+                ):
+                    index = key.split("[")[1].split("]")[0]
                     price = request.POST.get(f"options[{index}][price]", "").strip()
-                    if price:  # 確保價格存在
+                    if price:
                         options.append({"name": name, "price": price})
-        
-    # 批量新增選項
-            if options:  # 確保有選項
-                OptionalAdd.objects.bulk_create([
-                    OptionalAdd(name=option["name"], price=option["price"],project_id=project.id) for option in options
-                ])
+
+            if options:
+                OptionalAdd.objects.bulk_create(
+                    [
+                        OptionalAdd(
+                            name=option["name"],
+                            price=option["price"],
+                            project_id=project.id,
+                        )
+                        for option in options
+                    ]
+                )
                 messages.success(request, f"成功新增 {len(options)} 個選項")
             else:
                 messages.error(request, "沒有有效的選項提交")
-        
-
     products = RewardProduct.objects.filter(project_id=project.id)
     options = OptionalAdd.objects.filter(project_id=project.id)
 
-    return render(request, "rewards/reward_items.html", {"project":project,"products":products,"options":options})
-
-
+    return render(
+        request,
+        "rewards/reward_items.html",
+        {"project": project, "products": products, "options": options},
+    )
 
 
 @login_required
@@ -120,7 +140,6 @@ def show(request, id):
     if reward.project.account != request.user:
         messages.error(request, "您無權訪問該頁面")
         return redirect("homapages:homepages")
-    
 
     if request.method == "POST":
         form = RewardForm(request.POST, instance=reward)
@@ -128,19 +147,17 @@ def show(request, id):
             reward = form.save(commit=False)
             reward.save()
 
-            # 更新與 Reward 關聯的商品
-            reward.rewardproduct_set.clear()  # 清空之前的關聯
-            product_ids = request.POST.getlist('products')
+            reward.rewardproduct_set.clear()
+            product_ids = request.POST.getlist("products")
             if product_ids:
                 products = RewardProduct.objects.filter(id__in=product_ids)
-                reward.rewardproduct_set.add(*products)  # 使用 add 批量添加新關聯
+                reward.rewardproduct_set.add(*products)
 
-            # 更新與 Reward 關聯的附加選項
-            reward.optionaladd_set.clear()  # 清空之前的關聯
-            option_ids = request.POST.getlist('options')
+            reward.optionaladd_set.clear()
+            option_ids = request.POST.getlist("options")
             if option_ids:
                 options = OptionalAdd.objects.filter(id__in=option_ids)
-                reward.optionaladd_set.add(*options)  # 使用 add 批量添加新關聯
+                reward.optionaladd_set.add(*options)
 
             messages.success(request, "Reward 更新成功")
             return redirect("rewards:show", id=reward.id)
@@ -149,7 +166,8 @@ def show(request, id):
 
     form = RewardForm(instance=reward)
 
-    return render(request, "rewards/show.html", {"reward": reward,"project":project})
+    return render(request, "rewards/show.html", {"reward": reward, "project": project})
+
 
 @login_required
 def edit(request, id):
@@ -164,7 +182,18 @@ def edit(request, id):
     options = OptionalAdd.objects.filter(project=project)
     related_products = RewardProduct.objects.filter(rewards=reward)
     related_options = OptionalAdd.objects.filter(rewards=reward)
-    return render(request, "rewards/edit.html", {"reward": reward, "form": form,"products":products,"options":options,"related_products":related_products,"related_options":related_options})
+    return render(
+        request,
+        "rewards/edit.html",
+        {
+            "reward": reward,
+            "form": form,
+            "products": products,
+            "options": options,
+            "related_products": related_products,
+            "related_options": related_options,
+        },
+    )
 
 
 def delete(request, id):
@@ -173,11 +202,11 @@ def delete(request, id):
     if request.POST:
         reward.delete()
         messages.success(request, "刪除成功")
-        return redirect("projects:rewards_index", slug = project.slug)
-    
-    return render(request, "rewards/delete.html", {"reward": reward,"project":project})
+        return redirect("projects:rewards_index", slug=project.slug)
 
-
+    return render(
+        request, "rewards/delete.html", {"reward": reward, "project": project}
+    )
 
 
 @login_required
@@ -189,18 +218,22 @@ def sponsor(request, slug):
     for reward in rewards:
         products = RewardProduct.objects.filter(rewards=reward)
         options = OptionalAdd.objects.filter(rewards=reward)
-        reward_details.append({
-            "reward": reward,
-            "products": products,
-            "options": options,
-        })
+        reward_details.append(
+            {
+                "reward": reward,
+                "products": products,
+                "options": options,
+            }
+        )
 
-    return render(request, "rewards/sponsor.html", {
-        "project": project,
-        "reward_details": reward_details,
-    })
-
-
+    return render(
+        request,
+        "rewards/sponsor.html",
+        {
+            "project": project,
+            "reward_details": reward_details,
+        },
+    )
 
 
 @login_required
@@ -212,17 +245,14 @@ def free_sponsor(request, slug):
         Sponsor.objects.create(
             account=request.user,
             project_id=project.id,
-            reward=None, 
+            reward=None,
             amount=amount,
-            status='pending',
+            status="pending",
         )
-        # project.raised_amount = int(project.raised_amount or 0) + amount
-        # project.save()
-
-        # messages.success(request, f"感謝您贊助了 {amount} 元！")
-        return redirect(f"{reverse('projects:free_sponsor_confirm', kwargs={'slug': project.slug})}?amount={amount}")
-    return render(request, "rewards/sponsor", {"project": project})    
-
+        return redirect(
+            f"{reverse('projects:free_sponsor_confirm', kwargs={'slug': project.slug})}?amount={amount}"
+        )
+    return render(request, "rewards/sponsor", {"project": project})
 
 
 @login_required
@@ -231,8 +261,7 @@ def reward_sponsor(request, slug):
 
     if request.POST:
         reward_id = request.POST.get("reward")
-        reward = get_object_or_404(Reward, id=reward_id , project=project)
-        # price = reward.price if reward.price is not None else 0
+        reward = get_object_or_404(Reward, id=reward_id, project=project)
         amount = reward.price if reward.price is not None else 0
         Sponsor.objects.create(
             account=request.user,
@@ -240,50 +269,170 @@ def reward_sponsor(request, slug):
             reward=reward,
             amount=amount,
         )
-        # project.raised_amount = int(project.raised_amount or 0) + amount
-        # project.save()
-
-        # messages.success(request, f"感謝您選擇了獎勵「{reward.title}」，贊助了 {amount} 元！")
-        return redirect(f"{reverse('projects:reward_sponsor_confirm', kwargs={'slug': project.slug})}?amount={amount}")
+        return redirect(
+            f"{reverse('projects:reward_sponsor_options', kwargs={'slug': project.slug})}?amount={amount}"
+        )
 
     rewards = project.rewards.all()
-    return render(request, "reward_sponsor_form.html", {"project": project, "rewards": rewards})
+    return render(
+        request, "rewards/sponsor.html", {"project": project, "rewards": rewards}
+    )
 
 
-
-def free_sponsor_confirm(request,slug):
+@login_required
+def reward_sponsor_options(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    reward = get_object_or_404(Reward, project=project)
     sponsors = Sponsor.objects.filter(account=request.user, project=project)
-    sponsor = sponsors.order_by('-id').first()
-    amount = request.GET.get('amount', sponsor.amount) 
+    sponsor = sponsors.order_by("-id").first()
 
-    if request.POST:
-        if "delete_sponsor" in request.POST:
-            sponsor.delete()   
-            return redirect("projects:sponsor", slug=project.slug)
+    if not sponsor or not sponsor.reward:
+        messages.error(request, "找不到相關的回饋項目")
+        return redirect("projects:sponsor", slug=project.slug)
 
-
-    return render(request, "rewards/free_sponsor_confirm.html", {"project": project,"sopnsor":sponsor,"amount":amount,"reward": reward})
-
-
-def reward_sponsor_confirm(request,slug):
-    project = get_object_or_404(Project, slug=slug)
-    reward = get_object_or_404(Reward, project=project)
-    sponsors = Sponsor.objects.filter(account=request.user, project=project)
-    sponsor = sponsors.order_by('-id').first()
-    amount = request.GET.get('amount', sponsor.amount) 
-    is_reward_sponsor = sponsor.reward is not None
-    optional_adds = OptionalAdd.objects.filter(project=project, rewards=reward)
+    reward = sponsor.reward
     reward_products = RewardProduct.objects.filter(project=project, rewards=reward)
+    optional_adds = OptionalAdd.objects.filter(project=project, rewards=reward)
 
     if request.POST:
         if "delete_sponsor" in request.POST:
-            sponsor.delete()   
+            sponsor.delete()
             return redirect("projects:sponsor", slug=project.slug)
 
+        amount = int(request.POST.get("amount", reward.price))
+        additional_product_ids = request.POST.getlist("additional_products")
 
-    return render(request, "rewards/reward_sponsor_confirm.html", {"project": project,"sopnsor":sponsor,"amount":amount,"is_reward_sponsor": is_reward_sponsor,
-            "reward": sponsor.reward if is_reward_sponsor else None,"optional_adds":optional_adds,"reward_products":reward_products})
+        additional_amount = 0
+        additional_products = []
+        if additional_product_ids:
+            additional_products = OptionalAdd.objects.filter(
+                id__in=additional_product_ids
+            )
+            additional_amount = sum(
+                int(product.price) for product in additional_products
+            )
+
+        sponsor.amount = amount + additional_amount
+        sponsor.save()
+
+        request.session["sponsor_data"] = {
+            "amount": int(amount),
+            "additional_amount": int(additional_amount),
+            "additional_product_ids": [str(id) for id in additional_product_ids],
+        }
+
+        return redirect("projects:reward_sponsor_confirm", slug=project.slug)
+
+    return render(
+        request,
+        "rewards/reward_sponsor_options.html",
+        {
+            "project": project,
+            "reward": reward,
+            "reward_products": reward_products,
+            "optional_adds": optional_adds,
+            "amount": int(sponsor.amount),
+        },
+    )
 
 
+@login_required
+def reward_sponsor_confirm(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    sponsors = Sponsor.objects.filter(account=request.user, project=project)
+    sponsor = sponsors.order_by("-id").first()
+
+    if not sponsor or not sponsor.reward:
+        messages.error(request, "找不到相關的回饋項目")
+        return redirect("projects:sponsor", slug=project.slug)
+
+    sponsor_data = request.session.get("sponsor_data", {})
+    amount = int(sponsor_data.get("amount", int(sponsor.reward.price)))
+    additional_amount = int(sponsor_data.get("additional_amount", 0))
+    additional_product_ids = sponsor_data.get("additional_product_ids", [])
+
+    additional_products = []
+    if additional_product_ids:
+        additional_products = OptionalAdd.objects.filter(id__in=additional_product_ids)
+
+    total_amount = amount + additional_amount
+
+    if request.POST:
+        if "delete_sponsor" in request.POST:
+            sponsor.delete()
+            return redirect("projects:sponsor", slug=project.slug)
+
+        order_id = f"RS{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        description = f"{project.title} - {sponsor.reward.title}"
+        if additional_products:
+            description += " (含加購商品)"
+
+        order = Order.objects.create(
+            order_id=order_id, amount=total_amount, description=description
+        )
+
+        ecpay = ECPayPayment()
+        order_params = ecpay.create_order(
+            order_id=order_id, amount=total_amount, description=description
+        )
+
+        if "sponsor_data" in request.session:
+            del request.session["sponsor_data"]
+
+        return render(
+            request,
+            "payments/checkout.html",
+            {"payment_url": ecpay.payment_url, "order_params": order_params},
+        )
+
+    return render(
+        request,
+        "rewards/reward_sponsor_confirm.html",
+        {
+            "project": project,
+            "sponsor": sponsor,
+            "reward": sponsor.reward,
+            "reward_products": RewardProduct.objects.filter(
+                project=project, rewards=sponsor.reward
+            ),
+            "additional_products": additional_products,
+            "amount": amount,
+            "additional_amount": additional_amount,
+            "total_amount": total_amount,
+        },
+    )
+
+
+def free_sponsor_confirm(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    sponsors = Sponsor.objects.filter(account=request.user, project=project)
+    sponsor = sponsors.order_by("-id").first()
+    amount = request.GET.get("amount", sponsor.amount if sponsor else 0)
+
+    if request.POST:
+        if "delete_sponsor" in request.POST:
+            sponsor.delete()
+            return redirect("projects:sponsor", slug=project.slug)
+        else:
+            order_id = f"FS{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            description = f"{project.title} - 自由贊助"
+
+            order = Order.objects.create(
+                order_id=order_id, amount=amount, description=description
+            )
+
+            ecpay = ECPayPayment()
+            order_params = ecpay.create_order(
+                order_id=order_id, amount=amount, description=description
+            )
+
+            return render(
+                request,
+                "payments/checkout.html",
+                {"payment_url": ecpay.payment_url, "order_params": order_params},
+            )
+
+    return render(
+        request,
+        "rewards/free_sponsor_confirm.html",
+        {"project": project, "sponsor": sponsor, "amount": amount},
+    )

@@ -1,0 +1,95 @@
+{% extends "shared/layout.html" %} {% block "content" %}
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">選擇加購商品</h1>
+    <p class="text-gray-600 mb-6">請選擇您想要加購的商品</p>
+
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-gray-700">您選擇的獎勵：</h2>
+      <p class="text-gray-800">{{ reward.title }}</p>
+    </div>
+
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-700">包含的商品：</h3>
+      <ul class="list-disc pl-6">
+        {% for product in reward_products %}
+        <li>{{ product.name }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <div
+      x-data="{ 
+        basePrice: {{ reward.price }},
+        additionalProducts: [],
+        get totalPrice() {
+          return this.basePrice + this.additionalProducts.reduce((sum, price) => sum + parseInt(price), 0);
+        }
+      }"
+      class="mb-6"
+    >
+      <div class="mb-6">
+        <p class="mt-1 text-sm text-gray-500">
+          贊助金額：NT${{ reward.price }} 元
+        </p>
+      </div>
+
+      <h3 class="text-lg font-semibold text-gray-700">可加購商品：</h3>
+      <form
+        method="POST"
+        action="{% url 'projects:reward_sponsor_options' project.slug %}"
+        class="space-y-4"
+      >
+        {% csrf_token %}
+        <input type="hidden" name="reward" value="{{ reward.id }}" />
+        <input type="hidden" name="amount" x-bind:value="basePrice" />
+
+        {% for option in optional_adds %}
+        <div class="flex items-center mb-2">
+          <input
+            type="checkbox"
+            id="option-{{ option.id }}"
+            name="additional_products"
+            value="{{ option.id }}"
+            data-price="{{ option.price }}"
+            class="mr-3"
+            @click="$event.target.checked ? 
+              additionalProducts.push('{{ option.price }}') : 
+              additionalProducts = additionalProducts.filter(p => p !== '{{ option.price }}')"
+          />
+          <label for="option-{{ option.id }}">
+            {{ option.name }} - NT${{ option.price }}
+          </label>
+        </div>
+        {% endfor %}
+
+        <div class="flex items-center justify-between mt-6">
+          <div class="text-sm text-gray-600">
+            總金額：<span
+              class="font-semibold"
+              x-text="'NT$' + totalPrice + ' 元'"
+            ></span>
+          </div>
+          <button
+            type="submit"
+            class="w-full bg-purple-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500"
+          >
+            下一步
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <form method="POST" class="mt-4">
+      {% csrf_token %}
+      <button
+        type="submit"
+        name="delete_sponsor"
+        class="w-full bg-gray-400 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-500 focus:ring-2 focus:ring-gray-300"
+      >
+        返回上一步
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -3,10 +3,10 @@
   <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
     <h1 class="text-2xl font-bold text-gray-800 mb-4">確認付款</h1>
     <p class="text-gray-600 mb-6">請確認以下項目並進行付款</p>
+
     <div class="mb-6">
       <h2 class="text-lg font-semibold text-gray-700">您選擇的獎勵：</h2>
       <p class="text-gray-800">{{ reward.title }}</p>
-      <p class="text-gray-800">贊助金額：NT${{ reward.price }} 元</p>
     </div>
 
     <div class="mb-6">
@@ -18,34 +18,57 @@
       </ul>
     </div>
 
-    <div x-data="rewardForm({{ reward.price }})" class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-700">可加購商品：</h3>
-      <form id="reward-form" method="POST" action="{% url 'projects:reward_sponsor' project.id %}" class="space-y-4">
-        {% csrf_token %}
-        <input type="hidden" name="reward" value="{{ reward.id }}" />
-        {% for option in optional_adds %}
-        <div class="flex items-center mb-2">
-          <input type="checkbox" id="option-{{ option.id }}" name="additional_products" value="{{ option.id }}" data-price="{{ option.price }}" class="mr-3" @click="updateTotal($event)" />
-          <label for="option-{{ option.id }}">{{ option.name }} - NT${{ option.price }}</label>
-        </div>
+    {% if additional_products %}
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-700">已選擇的加購商品：</h3>
+      <ul class="list-disc pl-6">
+        {% for product in additional_products %}
+        <li>{{ product.name }} - NT${{ product.price }}</li>
         {% endfor %}
-        <p class="text-gray-800 font-bold">
-          總金額：NT$
-          <span x-text="totalPrice"></span>
-          元
-        </p>
-        <button type="submit" class="btn w-full inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white;">
-          <i class="fas fa-check mr-2"></i>
-          <span>確認付款</span>
-        </button>
-      </form>
+      </ul>
     </div>
+    {% endif %}
+
+    <div class="mb-6">
+      <h3 class="text-lg font-semibold text-gray-700">付款金額：</h3>
+      <div class="mt-2 space-y-2">
+        <div class="flex justify-between text-gray-600">
+          <span>基本贊助金額：</span>
+          <span>NT${{ amount }} 元</span>
+        </div>
+        {% if additional_products %}
+        <div class="flex justify-between text-gray-600">
+          <span>加購商品金額：</span>
+          <span>NT${{ additional_amount }} 元</span>
+        </div>
+        {% endif %}
+        <div
+          class="flex justify-between text-lg font-semibold text-gray-800 pt-2 border-t"
+        >
+          <span>總付款金額：</span>
+          <span>NT${{ total_amount }} 元</span>
+        </div>
+      </div>
+    </div>
+
+    <form method="POST" class="space-y-4">
+      {% csrf_token %}
+      <button
+        type="submit"
+        class="w-full bg-purple-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500"
+      >
+        前往付款
+      </button>
+    </form>
 
     <form method="POST" class="mt-4">
       {% csrf_token %}
-      <button type="submit" name="delete_sponsor" class="btn w-full inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #85cacc">
-        <i class="fas fa-arrow-left mr-2"></i>
-        <span>返回上一步</span>
+      <button
+        type="submit"
+        name="delete_sponsor"
+        class="w-full bg-gray-400 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-500 focus:ring-2 focus:ring-gray-300"
+      >
+        返回上一步
       </button>
     </form>
   </div>

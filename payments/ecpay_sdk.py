@@ -27,10 +27,12 @@ class ECPayPayment:
             "TotalAmount": str(amount),
             "TradeDesc": urllib.parse.quote(description),
             "ItemName": description,
-            "ReturnURL": f"{self.base_url}/notify/",
+            "ReturnURL": f"{self.base_url}/payments/notify/",
             "ClientBackURL": f"{self.base_url}/payments/complete/",
             "ChoosePayment": "ALL",
             "EncryptType": "1",
+            "NeedExtraPaidInfo": "Y",
+            "Language": "ZH-TW",
         }
 
         check_mac = self._generate_check_mac(order_params)
@@ -41,12 +43,20 @@ class ECPayPayment:
     def _generate_check_mac(self, params):
         sorted_params = sorted(params.items())
 
-        param_str = f"HashKey={self.hash_key}"
+        param_str = "HashKey=" + self.hash_key
         for key, value in sorted_params:
-            param_str += f"&{key}={value}"
-        param_str += f"&HashIV={self.hash_iv}"
+            param_str += "&" + key + "=" + str(value)
+        param_str += "&HashIV=" + self.hash_iv
 
         encoded_str = urllib.parse.quote_plus(param_str).lower()
+
+        encoded_str = encoded_str.replace("%2d", "-")
+        encoded_str = encoded_str.replace("%5f", "_")
+        encoded_str = encoded_str.replace("%2e", ".")
+        encoded_str = encoded_str.replace("%21", "!")
+        encoded_str = encoded_str.replace("%2a", "*")
+        encoded_str = encoded_str.replace("%28", "(")
+        encoded_str = encoded_str.replace("%29", ")")
 
         check_mac = hashlib.sha256(encoded_str.encode("utf-8")).hexdigest().upper()
 

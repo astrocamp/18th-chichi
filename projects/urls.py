@@ -2,8 +2,21 @@ from django.urls import path
 from .views import index, new, show, edit, delete, collect_projects, like_projects
 from comments.views import index as comment_index, new as comment_new
 from faqs.views import index as faq_index, new as faq_new
-from update_records.views import index as update_records_index, new as update_records_new
-from rewards.views import index as rewards_index, new as rewards_new,sponsor,reward_sponsor, free_sponsor,free_sponsor_confirm,reward_items,reward_sponsor_confirm
+from update_records.views import (
+    index as update_records_index,
+    new as update_records_new,
+)
+from rewards.views import (
+    index as rewards_index,
+    new as rewards_new,
+    sponsor,
+    reward_sponsor,
+    free_sponsor,
+    free_sponsor_confirm,
+    reward_items,
+    reward_sponsor_confirm,
+    reward_sponsor_options,
+)
 
 
 app_name = "projects"
@@ -26,12 +39,25 @@ urlpatterns = [
         "<slug:slug>/update_records/new", update_records_new, name="update_records_new"
     ),
     path("<slug:slug>/like", like_projects, name="like"),
-    path('<slug:slug>/rewards', rewards_index , name = "rewards_index" ),
-    path('<slug:slug>/rewards/new', rewards_new , name = "rewards_new" ),
-    path('<slug:slug>/rewards/sponsor', sponsor , name = "sponsor" ),
-    path('<slug:slug>/rewards/free_sponsor', free_sponsor , name = "free_sponsor" ),
-    path('<slug:slug>/rewards/reward_items', reward_items , name = "reward_items" ),
-    path('<slug:slug>/rewards/reward_sponsor', reward_sponsor , name = "reward_sponsor" ),
-    path('<slug:slug>/rewards/sponsor/free_sponsor_confirm', free_sponsor_confirm , name = "free_sponsor_confirm" ),
-    path('<slug:slug>/rewards/sponsor/reward_sponsor_confirm', reward_sponsor_confirm , name = "reward_sponsor_confirm" ),
+    path("<slug:slug>/rewards", rewards_index, name="rewards_index"),
+    path("<slug:slug>/rewards/new", rewards_new, name="rewards_new"),
+    path("<slug:slug>/rewards/sponsor", sponsor, name="sponsor"),
+    path("<slug:slug>/rewards/free_sponsor", free_sponsor, name="free_sponsor"),
+    path("<slug:slug>/rewards/reward_items", reward_items, name="reward_items"),
+    path("<slug:slug>/rewards/reward_sponsor", reward_sponsor, name="reward_sponsor"),
+    path(
+        "<slug:slug>/rewards/sponsor/free_sponsor_confirm",
+        free_sponsor_confirm,
+        name="free_sponsor_confirm",
+    ),
+    path(
+        "<slug:slug>/rewards/sponsor/reward_sponsor_options",
+        reward_sponsor_options,
+        name="reward_sponsor_options",
+    ),
+    path(
+        "<slug:slug>/rewards/sponsor/reward_sponsor_confirm",
+        reward_sponsor_confirm,
+        name="reward_sponsor_confirm",
+    ),
 ]
