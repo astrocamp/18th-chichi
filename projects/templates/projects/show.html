@@ -11,9 +11,7 @@
     <div class="mb-8">
       <div class="mb-6">
         <p class="text-lg mb-1">目前累積金額</p>
-        <p class="text-3xl font-bold text-teal-600">
-          NT$ {{ project.raised_amount|default:"0" }}
-        </p>
+        <p class="text-3xl font-bold text-teal-600">NT$ {{ project.raised_amount|default:"0" }}</p>
         <div class="mt-2 bg-gray-200 rounded-full h-2">
           <div
             class="bg-teal-500 h-2 rounded-full"
@@ -26,23 +24,26 @@
         </div>
         <div class="flex justify-between text-sm text-gray-600 mt-1">
           <p>目標金額：NT$ {{ project.goal_amount|default:"0" }}</p>
-          <p>達成率：<span id="progress-percentage">0</span>%</p>
+          <p>
+            達成率：
+            <span id="progress-percentage">0</span>
+            %
+          </p>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <p class="text-lg mb-1">募資時間</p>
-          <p class="text-gray-600">
-            開始：{{ project.start_at|date:"Y/m/d H:i" }}
-          </p>
-          <p class="text-gray-600">
-            結束：{{ project.end_at|date:"Y/m/d H:i" }}
-          </p>
+          <p class="text-gray-600">開始：{{ project.start_at|date:"Y/m/d H:i" }}</p>
+          <p class="text-gray-600">結束：{{ project.end_at|date:"Y/m/d H:i" }}</p>
           <div class="flex items-center gap-4 mt-2">
-            <p class="text-teal-600"><i class="fas fa-clock mr-2"></i>倒數</p>
+            <p class="text-teal-600">
+              <i class="fas fa-clock mr-2"></i>
+              倒數
+            </p>
             <div class="flex gap-2">
-              <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded">{{ project.end_at|timeuntil }} </span>
+              <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded">{{ project.end_at|timeuntil }}</span>
             </div>
           </div>
         </div>
@@ -68,51 +69,39 @@
         {% csrf_token %}
         <button class="btn" style="background-color: #85cacc20; color: #85cacc">
           {% if favorited %}
-          <img
-            src="{% static 'svg/like-on.svg' %}"
-            alt="取消按讚"
-            class="w-4 h-4 mr-2"
-          />
+          <img src="{% static 'svg/like-on.svg' %}" alt="取消按讚" class="w-4 h-4 mr-2" />
           {% else %}
-          <img
-            src="{% static 'svg/like-off.svg' %}"
-            alt="按讚"
-            class="w-4 h-4 mr-2"
-          />
+          <img src="{% static 'svg/like-off.svg' %}" alt="按讚" class="w-4 h-4 mr-2" />
           {% endif %} {% if favorited %}取消按讚{% else %}按讚{% endif %}
         </button>
       </form>
 
-
-      <a
-        href="{% url 'projects:faq_index' project.slug %}"
-        class="btn"
-        style="background-color: #85cacc20; color: #85cacc"
-      >
-        <i class="fas fa-question-circle mr-2"></i>常見問題
+      <a href="{% url 'projects:comment_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-comments mr-2"></i>
+        留言討論
       </a>
-      <a
-        href="{% url 'projects:update_records_index' project.slug %}"
-        class="btn"
-        style="background-color: #85cacc20; color: #85cacc"
-      >
-        <i class="fas fa-newspaper mr-2"></i>更新記錄
+      <a href="{% url 'projects:faq_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-question-circle mr-2"></i>
+        常見問題
       </a>
-      <a
-        href="{% url 'projects:rewards_index' project.slug %}"
-        class="btn"
-        style="background-color: #85cacc20; color: #85cacc"
-      >
-        <i class="fas fa-gift mr-2"></i>回饋方案
+      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-newspaper mr-2"></i>
+        更新記錄
+      </a>
+      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-gift mr-2"></i>
+        回饋方案
       </a>
     </div>
 
     <!-- 專案說明 -->
     <div class="mb-8">
       <h2 class="text-2xl font-bold mb-4">專案說明</h2>
-      <div class="prose max-w-none text-gray-600">
-        {{ project.story|linebreaks }}
-      </div>
+      <div class="prose max-w-none text-gray-600">{{ project.story|linebreaks }}</div>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">個人圖片</h2>
+      <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-40 h-40 rounded-full object-cover" />
     </div>
 
     <!-- 贊助按鈕 -->
@@ -120,42 +109,28 @@
       {% if user == project.account %} {% if project.status == 'pending' %}
       <form action="" method="post" class="inline-block">
         {% csrf_token %}
-        <button
-          type="submit"
-          name="publish"
-          class="btn"
-          style="background-color: #85cacc; color: white; padding: 0.75rem 2rem"
-        >
-          <i class="fas fa-rocket mr-2"></i>上架專案
+        <button type="submit" name="publish" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-rocket mr-2"></i>
+          上架專案
         </button>
       </form>
       {% elif project.status == 'live' %}
       <form action="" method="post" class="inline-block">
         {% csrf_token %}
-        <button
-          type="submit"
-          name="unpublish"
-          class="btn"
-          style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem"
-        >
-          <i class="fas fa-stop-circle mr-2"></i>下架專案
+        <button type="submit" name="unpublish" class="btn" style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-stop-circle mr-2"></i>
+          下架專案
         </button>
       </form>
       {% endif %} {% else %}
-      <a
-        href="{% url 'projects:sponsor' project.slug %}"
-        class="btn"
-        style="background-color: #85cacc; color: white; padding: 0.75rem 2rem"
-      >
-        <i class="fas fa-hand-holding-heart mr-2"></i>立即贊助
+      <a href="{% url 'projects:sponsor' project.slug %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+        <i class="fas fa-hand-holding-heart mr-2"></i>
+        立即贊助
       </a>
       {% endif %}
-      <a
-        href="{% url 'projects:index' %}"
-        class="btn ml-4"
-        style="background-color: #85cacc20; color: #85cacc"
-      >
-        <i class="fas fa-arrow-left mr-2"></i>返回列表
+      <a href="{% url 'projects:index' %}" class="btn ml-4" style="background-color: #85cacc20; color: #85cacc">
+        <i class="fas fa-arrow-left mr-2"></i>
+        返回列表
       </a>
     </div>
   </div>
@@ -163,23 +138,19 @@
 
 <div class="comment">
   <h2>新增留言：</h2>
-    {% include "comments/comment_form.html" %}
-  <br>
-  <br>
-  <div id="comments-list" class="comments-list" >
-    {% for comment in comments%}
-    {% include "comments/comment_item.html" with comment=comment project=project %}
-    {% endfor %}
-  </div>
+  {% include "comments/comment_form.html" %}
+  <br />
+  <br />
+  <div id="comments-list" class="comments-list">{% for comment in comments%} {% include "comments/comment_item.html" with comment=comment project=project %} {% endfor %}</div>
 </div>
 {% endblock %} {% block "extra_js" %}
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     // 更新進度條
     function updateProgress() {
       const progressBar = document.getElementById("progress-bar");
       const progressPercentage = document.getElementById("progress-percentage");
-      
+
       if (!progressBar || !progressPercentage) return;
 
       const startDate = new Date(progressBar.dataset.start);
@@ -198,26 +169,26 @@
     function updateCountdown() {
       const countdownElement = document.getElementById("countdown");
       const daysElement = document.getElementById("countdown-days");
-      
+
       if (!countdownElement || !daysElement) return;
 
       const endDate = new Date(countdownElement.dataset.end);
       const now = new Date();
-      
+
       // 計算剩餘天數（不考慮時分秒）
       const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
       const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      
+
       const diffTime = endDateOnly - nowDateOnly;
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-      
+
       // 如果時間已過或無效，顯示 0
       daysElement.textContent = diffDays > 0 ? diffDays : 0;
     }
 
     updateProgress();
     updateCountdown();
-    
+
     // 每分鐘更新一次倒數
     setInterval(updateCountdown, 60 * 1000);
   });

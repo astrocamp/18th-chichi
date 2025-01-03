@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 def index(request):
     account = request.user
     if request.POST:
-        form = ProjectFrom(request.POST)
+        form = ProjectFrom(request.POST,request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
             project.account = account
