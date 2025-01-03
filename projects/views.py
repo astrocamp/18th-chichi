@@ -8,6 +8,8 @@ from django.utils import timezone
 from django.http import HttpResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
+from comments.models import Comment
+from django.template.loader import render_to_string
 
 
 @login_required
@@ -41,6 +43,7 @@ def new(request):
 def show(request, slug):
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
+    comments = project.comments.filter(parent__isnull=True).order_by("-created_at")
 
     if request.POST:
         # 處理上架邏輯
@@ -86,6 +89,7 @@ def show(request, slug):
             "collected": collected,
             "account": account,
             "favorited": favorited,
+            "comments": comments,
         },
     )
 
@@ -148,3 +152,57 @@ def like_projects(request, slug):
         favorite.delete()
 
     return redirect("projects:show", slug=project.slug)
+
+
+def comment_new(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    parent_slug = request.GET.get("parent_id")
+
+    if request.method == "POST":
+        content = request.POST.get("content")
+        if content:
+            parent = None
+            if parent_slug:
+                parent = get_object_or_404(Comment, slug=parent_slug)
+
+            comment = Comment(
+                content=content, project=project, account=request.user, parent=parent
+            )
+            comment.save()
+
+            if request.headers.get("HX-Request") == "true":
+                html = render_to_string(
+                    "comments/comment_item.html",
+                    {"comment": comment, "project": project},
+                    request=request,
+                )
+                return HttpResponse(html)
+            return redirect("projects:show", slug=project.slug)
+    return HttpResponse(status=400)
+
+
+@login_required
+def reply(request, slug):
+    parent_comment = get_object_or_404(Comment, slug=slug)
+    project = parent_comment.project
+
+    if request.method == "POST":
+        content = request.POST.get("content")
+        if content:
+            new_reply = Comment.objects.create(
+                project=project,
+                content=content,
+                account=request.user,
+                parent=parent_comment,
+            )
+            # HTMX 请求时返回单条回复模板
+            if request.headers.get("HX-Request"):
+                return render(
+                    request, "comments/comment_item.html", {"comment": new_reply}
+                )
+
+        else:
+            if request.headers.get("HX-Request"):
+                return HttpResponse("回复内容不能为空。", status=400)
+
+    return HttpResponse("无效请求。", status=400)

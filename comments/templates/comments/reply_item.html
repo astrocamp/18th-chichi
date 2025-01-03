@@ -1,0 +1,20 @@
+<!-- templates/comments/reply_item.html -->
+<div class="reply-item" id="reply-{{ comment.slug }}">
+    <p>
+        <strong>{{ comment.account.username }}</strong>: {{ comment.content }}
+    </p>
+    <small style="color: gray;">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+    
+
+    {% if user == comment.account %}
+    <form method="POST" action="{% url 'comments:delete' project.slug comment.slug %}"
+          hx-post="{% url 'comments:delete' project.slug comment.slug %}"
+          hx-target="#reply-{{ comment.slug }}"
+          hx-swap="outerHTML"
+          onsubmit="return confirm('確定要刪除這條回覆嗎？');"
+          style="display: inline;">
+        {% csrf_token %}
+        <button type="submit">刪除</button>
+    </form>
+    {% endif %}
+</div>

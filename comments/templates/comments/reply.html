@@ -1,19 +1,8 @@
-<div class="reply bg-gray-50 rounded-lg p-4" id="reply-{{ reply.slug }}">
-  <div class="flex justify-between items-start mb-2">
-    <div>
-      <p class="font-medium text-gray-900">{{ reply.account.username }}</p>
-      <p class="text-sm text-gray-500">{{ reply.created_at|date:"Y/m/d H:i" }}</p>
-    </div>
-    <form method="post"
-          hx-post="{% url 'comments:delete' reply.slug %}"
-          hx-target="#reply-{{ reply.slug }}" 
-          hx-swap="outerHTML"
-          hx-confirm="確定要刪除此回覆嗎？">
-      {% csrf_token %}
-      <button type="submit" class="text-red-500 hover:text-red-700">
-        <i class="fas fa-trash"></i>
-      </button>
-    </form>
+<!-- templates/comments/reply_item.html -->
+<div class="reply-item" id="reply-{{ comment.slug }}">
+      <p>
+          <strong>{{ comment.account.username }}</strong>: {{ comment.content }}
+      </p>
+      <small style="color: gray;">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+      
   </div>
-  <p class="text-gray-700">{{ reply.content }}</p>
-</div>

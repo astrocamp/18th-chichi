@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import login_required
 from projects.models import Project
 from django.template.loader import render_to_string
 from django.http import HttpResponse
+from django.contrib import messages
+from django.views.decorators.http import require_POST
 
 
 @login_required
@@ -35,62 +37,79 @@ def index(request, slug):
 @login_required
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
+    comments = project.comments.all().order_by("-created_at")  # 按時間降序排列留言
 
-    return render(request, "comments/new.html", {"project": project})
-
-
-@login_required
-def show(request, slug):
-    comment = get_object_or_404(Comment, slug=slug)
-    project = comment.project
-    if request.POST:
+    if request.method == "POST":
         content = request.POST.get("content")
         if content:
             new_comment = Comment.objects.create(
-                content=content,
-                project=project,
-                account=request.user,
-                parent=comment,
+                project=project, content=content, account=request.user
             )
-            if request.headers.get("HX-Request") == "true":
-                # 如果是 HTMX 請求，返回新回覆的局部HTML，不需整個網頁刷新
-                html = render_to_string(
-                    "comments/reply.html",
-                    {"reply": new_comment},
-                    request=request,
+            # 如果是 HTMX 請求，回傳部分模板
+            if request.headers.get("HX-Request"):
+                return render(
+                    request,
+                    "comments/comment_item.html",
+                    {"comment": new_comment, "project": project},
                 )
-                return HttpResponse(html)
-
-            return redirect("comments:show", slug=comment.slug)
-
-    # 獲取該評論的所有回覆
-    replies = comment.replies.all().order_by("-created_at").select_related("account")
-
-    return render(
-        request,
-        "comments/show.html",
-        {
-            "comment": comment,
-            "replies": replies,
-            "project": project,
-        },
-    )
+        else:
+            # 如果留言內容為空，返回錯誤
+            if request.headers.get("HX-Request"):
+                return HttpResponse("留言內容不能為空。", status=400)
+    return HttpResponse("無效的請求。", status=400)
 
 
 @login_required
-def delete(request, slug):
-    comment = get_object_or_404(Comment, slug=slug)
-    project = get_object_or_404(Project, slug=comment.project.slug)
+def reply(request, slug, comment_slug):
+    project = get_object_or_404(Project, slug=slug)
+    parent_comment = get_object_or_404(Comment, slug=comment_slug, project=project)
 
     if request.method == "POST":
+        content = request.POST.get("content")
+        if content:
+            # 创建回复
+            new_reply = Comment.objects.create(
+                project=project,
+                content=content,
+                account=request.user,
+                parent=parent_comment,
+            )
+            # 如果是 HTMX 请求，返回部分模板
+            if request.headers.get("HX-Request"):
+                return render(
+                    request,
+                    "comments/reply_item.html",
+                    {"comment": new_reply, "project": project},
+                )
+
+        else:
+            if request.headers.get("HX-Request"):
+                return HttpResponse("回覆內容不能為空。", status=400)
+
+    return HttpResponse("無效的請求。", status=400)
+
+
+@login_required
+@require_POST
+def delete(request, slug, comment_slug):
+    project = get_object_or_404(Project, slug=slug)
+    comment = get_object_or_404(Comment, slug=comment_slug, project=project)
+
+    if request.user == comment.account:
         comment.delete()
-        if request.headers.get("HX-Request") == "true":
-            return HttpResponse()
-        else:  # 如果不是 HTMX 請求，則根據評論是否有父評論進行重定向：
+        return HttpResponse("")
+    return redirect("projects:show", slug=project.slug)
 
-            if comment.parent:
-                return redirect("comments:show", slug=comment.slug)
-            else:
-                return redirect("projects:comment_index", slug=project.slug)
 
-    return render(request, "comments/delete.html", {"comment": comment})
+@login_required
+def load_reply_form(request, slug, comment_slug):
+    project = get_object_or_404(Project, slug=slug)
+    parent_comment = get_object_or_404(Comment, slug=comment_slug, project=project)
+    return render(
+        request,
+        "comments/reply_form.html",
+        {
+            "parent_comment": parent_comment,
+            "project": project,
+        },
+    )

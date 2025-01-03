@@ -1,0 +1,9 @@
+<form method="post"
+      hx-post="{% url 'comments:reply' project.slug parent_comment.slug %}"
+      hx-target="#replies-{{ parent_comment.slug }}"
+      hx-swap="beforeend"
+      hx-on::after-request="this.querySelector('textarea').value = ''">
+    {% csrf_token %}
+    <textarea name="content" placeholder="輸入回覆..." rows="2" required></textarea><br>
+    <button type="submit">送出回覆</button>
+</form>
