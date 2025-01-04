@@ -65,7 +65,7 @@ def show(request, slug):
                 return redirect("projects:show", slug=project.slug)
 
         else:
-            form = ProjectFrom(request.POST, instance=project)
+            form = ProjectFrom(request.POST,request.FILES,instance=project)
             form.save()
             project.update_at = timezone.now()
             project.save()
@@ -81,6 +81,7 @@ def show(request, slug):
         account=request.user, project=project
     ).first()
 
+    media_type = get_media_type(project.cover_image.name)
     return render(
         request,
         "projects/show.html",
@@ -90,13 +91,26 @@ def show(request, slug):
             "account": account,
             "favorited": favorited,
             "comments": comments,
+            "media_type": media_type,
         },
     )
 
+def get_media_type(file_name):
+    file_name = file_name.lower()
+    image_extensions = (".jpg", ".jpeg", ".png", ".gif")
+    video_extensions = (".mp4", ".mov", ".avi", ".wmv")
+
+    if file_name.endswith(image_extensions):
+        return "image"
+    elif file_name.endswith(video_extensions):
+        return "video"
+    return "unsupported"
 
 @login_required
 def edit(request, slug):
     project = get_object_or_404(Project, slug=slug)
+    media_type = get_media_type(project.cover_image.name)
+
 
     format_time_start = localtime(project.start_at).strftime("%Y-%m-%dT%H:%M")
     format_time_end = localtime(project.end_at).strftime("%Y-%m-%dT%H:%M")
@@ -107,6 +121,7 @@ def edit(request, slug):
             "project": project,
             "format_time_start": format_time_start,
             "format_time_end": format_time_end,
+            "media_type": media_type,
         },
     )
 

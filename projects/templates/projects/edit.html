@@ -82,27 +82,37 @@
             <div>
               <label
                 for="cover_image"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >專案封面</label
+                class="block text-lg font-semibold text-gray-600"
+                >個人媒體</label
               >
-              {% if project.cover_image %}
-              <div class="mb-2">
-                <img
-                  src="{{ project.cover_image.url }}"
-                  alt="Current cover"
-                  class="w-32 h-32 object-cover rounded-lg"
-                />
-              </div>
-              {% endif %}
               <input
                 type="file"
                 id="cover_image"
                 name="cover_image"
-                class="file-input file-input-bordered w-full"
-                accept="image/*"
+                class="mt-1"
               />
+            
+              <!-- 根據媒體類型動態顯示內容 -->
+              <div class="mt-4">
+                {% if media_type == "image" %}
+                <img
+                  src="{{ project.cover_image.url }}"
+                  alt="Profile Picture"
+                  class="w-40 h-40 rounded-full object-cover"
+                />
+                {% elif media_type == "video" %}
+                <video
+                  src="{{ project.cover_image.url }}"
+                  controls
+                  class="w-40 h-40 rounded-lg object-cover"
+                >
+                  您的瀏覽器不支援影片播放。
+                </video>
+                {% else %}
+                <p class="text-red-500">不支援的媒體格式。</p>
+                {% endif %}
+              </div>
             </div>
-          </div>
 
           <!-- 時間設定 -->
           <div class="space-y-4 pt-6">

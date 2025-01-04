@@ -99,6 +99,17 @@
       <h2 class="text-2xl font-bold mb-4">專案說明</h2>
       <div class="prose max-w-none text-gray-600">{{ project.story|linebreaks }}</div>
     </div>
+    <!-- 封面區 -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">個人媒體</h2>
+      {% if media_type == "image" %}
+      <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-40 h-40 rounded-full object-cover" />
+      {% elif media_type == "video" %}
+      <video src="{{ project.cover_image.url }}" controls class="w-40 h-40 rounded-lg object-cover">您的瀏覽器不支援影片播放。</video>
+      {% else %}
+      <p>不支援的媒體格式。</p>
+      {% endif %}
+    </div>
     <div>
       <h2 class="text-lg font-semibold text-gray-600">個人圖片</h2>
       <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-40 h-40 rounded-full object-cover" />
