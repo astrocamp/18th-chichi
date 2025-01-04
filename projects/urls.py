@@ -24,6 +24,14 @@ from comments.views import (
     reply_form as reply_form,
 )
 
+from comments.views import (
+    new as new_comment,
+    reply as reply_comment,
+    delete as delete_comment,
+    reply_form as reply_form,
+)
+
+
 app_name = "projects"
 
 urlpatterns = [

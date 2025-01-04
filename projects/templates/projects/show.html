@@ -169,15 +169,7 @@
 
 <div class="comment">
   <h2>新增留言：</h2>
-  <form method="post" 
-        hx-post="{% url 'comments:new' project.slug%}" 
-        hx-target="#comments-list" 
-        hx-swap="afterbegin"
-        hx-on::after-request="this.reset()">
-      {% csrf_token %}
-      <textarea name="content" placeholder="輸入留言..." rows="3" cols="50" required></textarea><br>
-      <button type="submit">送出留言</button>
-  </form>
+    {% include "comments/comment_form.html" %}
   <br>
   <br>
   <div id="comments-list" class="comments-list" >

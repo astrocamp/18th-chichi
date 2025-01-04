@@ -4,6 +4,6 @@
       hx-swap="beforeend"
       hx-on::after-request="this.querySelector('textarea').value = ''">
     {% csrf_token %}
-    <textarea name="content" placeholder="輸入回覆..." rows="2" required></textarea><br>
+    <textarea name="content" placeholder="輸入回覆..." rows="3" cols="50" required></textarea><br>
     <button type="submit">送出回覆</button>
 </form>

@@ -1,4 +1,4 @@
-<!-- templates/comments/comment_item.html -->
+<!-- 顯示單個留言、按鈕加載回覆表單、顯示留言所有評論 -->
 <div class="comment-item" id="comment-{{ comment.slug }}">
     <p>
         <strong>{{ comment.account.username }}</strong>: {{ comment.content }}
@@ -6,8 +6,7 @@
     <small style="color: gray;">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
     
     
-    <!-- 回覆留言按鈕 -->
-    <button hx-get="{% url 'comments:load_reply_form' project.slug  comment.slug %}"
+    <button hx-get="{% url 'comments:reply_form' project.slug  comment.slug %}"
             hx-target="#reply-form-container-{{ comment.slug }}"
             hx-swap="outerHTML">
         回覆留言
@@ -15,50 +14,21 @@
 
 
     {% if user == comment.account %}
-    <form method="POST" action="{% url 'comments:delete' project.slug comment.slug %}"
-          hx-post="{% url 'comments:delete' project.slug comment.slug %}"
+    <form hx-post="{% url 'comments:delete' project.slug comment.slug %}"
           hx-target="#comment-{{ comment.slug }}"
           hx-swap="outerHTML"
-          onsubmit="return confirm('確定要刪除這條回覆嗎？');"
+          hx-confirm="確定要刪除這條留言嗎"
           style="display: inline;">
         {% csrf_token %}
         <button type="submit">刪除</button>
     </form>
     {% endif %} 
-       
-    <!-- 回覆表單容器 -->
+
     <div id="reply-form-container-{{ comment.slug }}"></div>
     
-    <!-- 回覆列表 -->
-    <div id="replies-{{ comment.slug }}" class="replies">
+    <div id="replies-{{ comment.slug }}" class="replies"  style=" margin-left: 10px; margin-top: 5px;">
         {% for reply in comment.replies.all %}
         {% include "comments/reply_item.html" with comment=reply project=project %}
         {% endfor %}
     </div>
 </div>
-
-
-
-
-
-<!-- 
-
-<div class="reply-item" id="reply-{{ comment.slug }}">
-    <p>
-        <strong>{{ comment.account.username }}</strong>: {{ comment.content }}
-    </p>
-    <small style="color: gray;">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
-    
-
-    {% if user == comment.account %}
-    <form method="POST" action="{% url 'comments:delete' project.slug comment.slug %}"
-          hx-post="{% url 'comments:delete' project.slug comment.slug %}"
-          hx-target="#reply-{{ comment.slug }}"
-          hx-swap="outerHTML"
-          onsubmit="return confirm('確定要刪除這條回覆嗎？');"
-          style="display: inline;">
-        {% csrf_token %}
-        <button type="submit">刪除</button>
-    </form>
-    {% endif %}
-</div> -->
