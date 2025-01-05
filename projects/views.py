@@ -12,6 +12,10 @@ from comments.models import Comment
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Count
+from django.db.models import Sum
+from django.utils.timezone import make_aware
+import datetime
+
 
 
 
@@ -157,19 +161,30 @@ def like_projects(request, slug):
 
     return redirect("projects:show", slug=project.slug)
 
+
+def chart_page(request,slug):
+    project = get_object_or_404(Project, slug=slug)
+
+    return render(request, "projects/chart_page.html", {"slug": slug})
+
+
 @login_required
 def gender_proportion(request, slug):
     from .models import Sponsor
     project = get_object_or_404(Project, slug=slug)
 
+    # 獲取贊助者的性別數據並分組統計
     gender_data = (
         Sponsor.objects.filter(project=project)  
         .values("account__profile__gender")  
         .annotate(count=Count("id"))  
     )
 
+    # 構建數據
     labels = []
     data = []
+    total_count = 0  # 初始化總人數
+
     for entry in gender_data:
         gender = entry["account__profile__gender"]
         if gender == "M":
@@ -180,25 +195,84 @@ def gender_proportion(request, slug):
             labels.append("其他")
         else:
             labels.append("未知")
-        data.append(entry["count"])
+        count = entry["count"]
+        data.append(count)
+        total_count += count  # 累加總人數
 
+    # 返回的 JSON 數據
     response_data = {
         "labels": labels,
         "datasets": [
             {
-                "label": "贊助者性別比例",
+                "label": f"贊助者性別比例（總人數: {total_count}）",  # 添加總人數
                 "backgroundColor": ["#F8AFAF", "#FFE69B", "#A8D3F0", "#CACACA"],
-                "borderColor": "#FFFFFF",  
+                "borderColor": "#FFFFFF",
                 "borderWidth": 2,
-                "data": data, 
+                "data": data,
             }
         ],
     }
 
     return JsonResponse(response_data)
+@login_required
+def daily_sponsorship_amount(request, slug):
+    from .models import Sponsor
+    from django.db.models.functions import TruncDate
+    from django.db.models import Sum
 
-
-def chart_page(request,slug):
     project = get_object_or_404(Project, slug=slug)
 
-    return render(request, "projects/chart_page.html", {"slug": slug})
+    # 檢查是否有贊助紀錄
+    sponsors = Sponsor.objects.filter(project=project)
+    if not sponsors.exists():
+        return JsonResponse({
+            "labels": [],
+            "datasets": [{
+                "label": "Cumulative Amount",
+                "backgroundColor": "rgba(75, 192, 192, 0.2)",
+                "borderColor": "rgba(75, 192, 192, 1)",
+                "borderWidth": 2,
+                "data": [],
+            }]
+        })
+
+    # 獲取日期範圍
+    start_date = sponsors.order_by("created_at").first().created_at.date()
+    end_date = sponsors.order_by("-created_at").first().created_at.date()
+
+    # 用字典記錄每天的實際贊助金額
+    daily_totals = {}
+    
+    # 先計算每天的贊助總額
+    for sponsor in sponsors:
+        date = sponsor.created_at.date()
+        if date not in daily_totals:
+            daily_totals[date] = 0
+        daily_totals[date] += sponsor.amount
+
+    # 產生日期序列並計算累積金額
+    date_range = []
+    cumulative_amount = []
+    cumulative_total = 0
+    
+    current_date = start_date
+    while current_date <= end_date:
+        date_range.append(current_date)
+        # 取得當天的贊助金額（如果沒有則為0）並加入累積總額
+        daily_amount = daily_totals.get(current_date, 0)
+        cumulative_total += daily_amount
+        cumulative_amount.append(cumulative_total)
+        current_date += datetime.timedelta(days=1)
+
+    data = {
+        "labels": [date.strftime("%Y-%m-%d") for date in date_range],
+        "datasets": [{
+            "label": "Cumulative Amount",
+            "backgroundColor": "rgba(75, 192, 192, 0.2)",
+            "borderColor": "rgba(75, 192, 192, 1)",
+            "borderWidth": 2,
+            "data": cumulative_amount,
+        }]
+    }
+    
+    return JsonResponse(data)
