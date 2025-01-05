@@ -172,28 +172,36 @@ import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
 document.addEventListener("DOMContentLoaded", () => {
-  // 獲取畫布元素
-  const canvas = document.getElementById("chartCanvas");
-  canvas.width = 500; // 設置寬度
-  canvas.height = 400; // 設置高度
+  const canvas = document.getElementById("gender_proportion");
+  canvas.width = 300; // 設置寬度
+  canvas.height = 300; // 設置高度
 
-  // 從 data-slug 屬性中獲取 slug
   const slug = canvas.dataset.slug;
 
-  // 使用 slug 動態生成 API 路徑
-  fetch(`/projects/${slug}/chart_data/`)
+  fetch(`/projects/${slug}/gender_proportion/`)
     .then((response) => response.json())
     .then((data) => {
       const ctx = canvas.getContext("2d");
       if (ctx) {
         new Chart(ctx, {
-          type: "bar", // 圖表類型
+          type: "pie",
           data: data,
           options: {
             responsive: false, // 禁用響應式
             plugins: {
               legend: {
                 display: true,
+              },
+              tooltip: {
+                callbacks: {
+                  label: (tooltipItem) => {
+                    const dataset = tooltipItem.dataset;
+                    const currentValue = dataset.data[tooltipItem.dataIndex];
+                    const total = dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = ((currentValue / total) * 100).toFixed(2);
+                    return `${tooltipItem.label}: ${currentValue} (${percentage}%)`;
+                  },
+                },
               },
             },
           },

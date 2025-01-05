@@ -11,6 +11,8 @@ from django.contrib.auth.models import User
 from comments.models import Comment
 from django.template.loader import render_to_string
 from django.http import JsonResponse
+from django.db.models import Count
+
 
 
 
@@ -156,21 +158,44 @@ def like_projects(request, slug):
     return redirect("projects:show", slug=project.slug)
 
 @login_required
-def chart_data(request,slug):
+def gender_proportion(request, slug):
+    from .models import Sponsor
     project = get_object_or_404(Project, slug=slug)
-    data = {
-        "labels": ["January", "February", "March", "April"],
+
+    gender_data = (
+        Sponsor.objects.filter(project=project)  
+        .values("account__profile__gender")  
+        .annotate(count=Count("id"))  
+    )
+
+    labels = []
+    data = []
+    for entry in gender_data:
+        gender = entry["account__profile__gender"]
+        if gender == "M":
+            labels.append("男")
+        elif gender == "F":
+            labels.append("女")
+        elif gender == "O":
+            labels.append("其他")
+        else:
+            labels.append("未知")
+        data.append(entry["count"])
+
+    response_data = {
+        "labels": labels,
         "datasets": [
             {
-                "label": "Sales",
-                "backgroundColor": "rgba(75, 192, 192, 0.2)",
-                "borderColor": "rgba(200, 192, 192, 1)",
-                "borderWidth": 5,
-                "data": [12, 19, 3, 5],
+                "label": "贊助者性別比例",
+                "backgroundColor": ["#F8AFAF", "#FFE69B", "#A8D3F0", "#CACACA"],
+                "borderColor": "#FFFFFF",  
+                "borderWidth": 2,
+                "data": data, 
             }
         ],
     }
-    return JsonResponse(data)
+
+    return JsonResponse(response_data)
 
 
 def chart_page(request,slug):
