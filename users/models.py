@@ -16,5 +16,12 @@ class Profile(models.Model):
         upload_to="profile_pictures/", null=True, blank=True
     )
 
+    class Meta:
+        permissions = [
+            ("view_userprofile", "Can view user profile"),
+            ("change_userprofile", "Can change user profile"),
+            ("delete_userprofile", "Can delete user profile"),
+        ]
+
     def __str__(self):
         return self.name

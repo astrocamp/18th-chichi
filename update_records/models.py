@@ -27,3 +27,11 @@ class UpdateRecord(models.Model):
         null=True,
         always_update=False,
     )
+
+    class Meta:
+        permissions = [
+            ("view_custom_updaterecord", "Can view custom update record"),
+            ("add_custom_updaterecord", "Can add custom update record"),
+            ("change_custom_updaterecord", "Can change custom update record"),
+            ("delete_custom_updaterecord", "Can delete custom update record"),
+        ]

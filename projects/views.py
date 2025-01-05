@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .forms import ProjectFrom
 from .models import Project, CollectProject, FavoritePrject
 from django.utils.timezone import localtime
@@ -11,6 +11,7 @@ from django.contrib.auth.models import User
 
 
 @login_required
+@permission_required("projects.view_project", raise_exception=True)
 def index(request):
     account = request.user
     if request.POST:
@@ -32,12 +33,14 @@ def index(request):
 
 
 @login_required
+@permission_required("projects.add_project", raise_exception=True)
 def new(request):
     account = request.user
     return render(request, "projects/new.html", {"account": account})
 
 
 @login_required
+@permission_required("projects.view_project", raise_exception=True)
 def show(request, slug):
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
@@ -91,6 +94,7 @@ def show(request, slug):
 
 
 @login_required
+@permission_required("projects.change_project", raise_exception=True)
 def edit(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
@@ -108,6 +112,7 @@ def edit(request, slug):
 
 
 @login_required
+@permission_required("projects.delete_project", raise_exception=True)
 def delete(request, slug):
     # 獲取專案並確保是當前用戶的專案
     project = get_object_or_404(Project, slug=slug, account=request.user)
@@ -122,6 +127,7 @@ def delete(request, slug):
 
 @login_required
 @require_POST
+@permission_required("projects.add_collectproject", raise_exception=True)
 def collect_projects(request, slug):
     project = get_object_or_404(Project, slug=slug)
     collect, created = CollectProject.objects.get_or_create(
@@ -137,6 +143,7 @@ def collect_projects(request, slug):
 
 @login_required
 @require_POST
+@permission_required("projects.add_favoriteprject", raise_exception=True)
 def like_projects(request, slug):
     project = get_object_or_404(Project, slug=slug)
     favorite, created = FavoritePrject.objects.get_or_create(

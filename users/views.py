@@ -3,10 +3,11 @@ from .models import Profile
 from .forms import ProfileForm
 from django.utils import timezone
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 
 
 @login_required
+@permission_required("profiles.view_profile", raise_exception=True)
 def index(request):
     account = request.user
     profile = get_object_or_404(Profile, account=account)
@@ -32,6 +33,7 @@ def index(request):
 
 
 @login_required
+@permission_required("profiles.add_profile", raise_exception=True)
 def new(request):
     account = request.user
     profile = get_object_or_404(Profile, account=account)
@@ -44,6 +46,7 @@ def new(request):
 
 
 @login_required
+@permission_required("profiles.change_profile", raise_exception=True)
 def edit(request):
     account = request.user
     profile = get_object_or_404(Profile, account=account)

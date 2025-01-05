@@ -32,3 +32,11 @@ class Comment(models.Model):
     parent = models.ForeignKey(
         "self", null=True, related_name="replies", on_delete=models.CASCADE
     )
+
+    class Meta:
+        permissions = [
+            ("view_custom_comment", "Can view custom comment"),
+            ("add_custom_comment", "Can add custom comment"),
+            ("change_custom_comment", "Can change custom comment"),
+            ("delete_custom_comment", "Can delete custom comment"),
+        ]

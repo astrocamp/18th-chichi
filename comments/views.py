@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Comment
 from projects.models import Project
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from projects.models import Project
 from django.template.loader import render_to_string
 from django.http import HttpResponse
 
 
 @login_required
+@permission_required("comments.add_comment", raise_exception=True)
 def index(request, slug):
     project = get_object_or_404(Project, slug=slug)
     if request.POST:
@@ -33,6 +34,7 @@ def index(request, slug):
 
 
 @login_required
+@permission_required("comments.add_comment", raise_exception=True)
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
@@ -40,6 +42,7 @@ def new(request, slug):
 
 
 @login_required
+@permission_required("comments.view_comment", raise_exception=True)
 def show(request, slug):
     comment = get_object_or_404(Comment, slug=slug)
     project = comment.project
@@ -78,6 +81,7 @@ def show(request, slug):
 
 
 @login_required
+@permission_required("comments.delete_comment", raise_exception=True)
 def delete(request, slug):
     comment = get_object_or_404(Comment, slug=slug)
     project = get_object_or_404(Project, slug=comment.project.slug)

@@ -12,7 +12,6 @@ def generate_random_slug():
     return "".join(random.choice(letters_and_digits) for i in range(8))
 
 
-
 class Project(models.Model):
     STATUS_CHOICES = [
         ("pending", "待上架"),
@@ -70,40 +69,73 @@ class Project(models.Model):
         through_fields=("project", "account"),
     )
 
-
     sponsor_account = models.ManyToManyField(
         User,
         related_name="sponsor_project",
         through="Sponsor",
-        through_fields=("project","account"),
+        through_fields=("project", "account"),
     )
+
+    class Meta:
+        permissions = [
+            ("view_custom_project", "Can view custom project"),
+            ("add_custom_project", "Can add custom project"),
+            ("change_custom_project", "Can change custom project"),
+            ("delete_custom_project", "Can delete custom project"),
+        ]
+
 
 class CollectProject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        permissions = [
+            ("view_custom_collectproject", "Can view custom collect project"),
+            ("add_custom_collectproject", "Can add custom collect project"),
+            ("change_custom_collectproject", "Can change custom collect project"),
+            ("delete_custom_collectproject", "Can delete custom collect project"),
+        ]
+
+
 class FavoritePrject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        permissions = [
+            ("view_custom_favoriteproject", "Can view custom favorite project"),
+            ("add_custom_favoriteproject", "Can add custom favorite project"),
+            ("change_custom_favoriteproject", "Can change custom favorite project"),
+            ("delete_custom_favoriteproject", "Can delete custom favorite project"),
+        ]
+
+
 class Sponsor(models.Model):
     from rewards.models import Reward
+
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    reward = models.ForeignKey(Reward, on_delete=models.CASCADE,null=True)
-    amount = models.DecimalField(max_digits=10,decimal_places=0)
+    reward = models.ForeignKey(Reward, on_delete=models.CASCADE, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=0)
     created_at = models.DateTimeField(auto_now_add=True)
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('paid', 'Paid'),
-        ('failed', 'Failed'),
+        ("pending", "Pending"),
+        ("paid", "Paid"),
+        ("failed", "Failed"),
     ]
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default='pending',
+        default="pending",
     )
 
-
-
+    class Meta:
+        permissions = [
+            ("view_custom_sponsor", "Can view custom sponsor"),
+            ("add_custom_sponsor", "Can add custom sponsor"),
+            ("change_custom_sponsor", "Can change custom sponsor"),
+            ("delete_custom_sponsor", "Can delete custom sponsor"),
+        ]

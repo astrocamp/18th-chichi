@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.utils import timezone
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from .forms import FaqForm
 from .models import Faq
 from projects.models import Project
 
 
 @login_required
+@permission_required("faqs.view_faq", raise_exception=True)
 def index(request, slug):
     project = get_object_or_404(Project, slug=slug)
     if request.POST:
@@ -24,6 +25,7 @@ def index(request, slug):
 
 
 @login_required
+@permission_required("faqs.add_faq", raise_exception=True)
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
     form = FaqForm()
@@ -31,6 +33,7 @@ def new(request, slug):
 
 
 @login_required
+@permission_required("faqs.change_faq", raise_exception=True)
 def show(request, slug):
     faq = get_object_or_404(Faq, slug=slug)
     project = faq.project
@@ -53,6 +56,7 @@ def show(request, slug):
 
 
 @login_required
+@permission_required("faqs.change_faq", raise_exception=True)
 def edit(request, slug):
     faq = get_object_or_404(Faq, slug=slug)
     project = faq.project
@@ -69,6 +73,7 @@ def edit(request, slug):
 
 
 @login_required
+@permission_required("faqs.delete_faq", raise_exception=True)
 def delete(request, slug):
     faq = get_object_or_404(Faq, slug=slug)
     project = faq.project

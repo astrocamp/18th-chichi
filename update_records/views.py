@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import UpdateRecordFrom
 from .models import UpdateRecord
 from projects.models import Project
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.utils import timezone
 
 
 @login_required
+@permission_required("projects.view_updaterecord", raise_exception=True)
 def index(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
@@ -27,12 +28,14 @@ def index(request, slug):
 
 
 @login_required
+@permission_required("projects.add_updaterecord", raise_exception=True)
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
     return render(request, "update_records/new.html", {"project": project})
 
 
 @login_required
+@permission_required("projects.change_updaterecord", raise_exception=True)
 def show(request, slug):
     update_record = get_object_or_404(UpdateRecord, slug=slug)
     project = update_record.project
@@ -52,6 +55,7 @@ def show(request, slug):
 
 
 @login_required
+@permission_required("projects.change_updaterecord", raise_exception=True)
 def edit(request, slug):
     update_record = get_object_or_404(UpdateRecord, slug=slug)
     project = update_record.project
@@ -64,6 +68,7 @@ def edit(request, slug):
 
 
 @login_required
+@permission_required("projects.delete_updaterecord", raise_exception=True)
 def delete(request, slug):
     update_record = get_object_or_404(UpdateRecord, slug=slug)
     project = update_record.project

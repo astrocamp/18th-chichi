@@ -2,13 +2,14 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login as login_user, logout as logout_user
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from users.views import Profile
 
 
 @login_required
+@permission_required("auth.view_user", raise_exception=True)
 def index(request):
     account = request.user
     return render(request, "accounts/index.html", {"account": account})
@@ -55,6 +56,7 @@ def register(request):
 
 @require_POST
 @login_required
+@permission_required("auth.delete_user", raise_exception=True)
 def logout(request):
     logout_user(request)
     messages.success(request, "已登出")

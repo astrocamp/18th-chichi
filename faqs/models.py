@@ -25,3 +25,11 @@ class Faq(models.Model):
         null=True,
         always_update=False,
     )
+
+    class Meta:
+        permissions = [
+            ("view_custom_faq", "Can view custom FAQ"),
+            ("add_custom_faq", "Can add custom FAQ"),
+            ("change_custom_faq", "Can change custom FAQ"),
+            ("delete_custom_faq", "Can delete custom FAQ"),
+        ]
