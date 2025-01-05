@@ -170,8 +170,9 @@ function getCookie(name) {
 =======
 import { Chart, registerables } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
+import { BoxPlotController, BoxAndWiskers } from "@sgratzl/chartjs-chart-boxplot";
 
-Chart.register(...registerables, ChartDataLabels);
+Chart.register(...registerables, ChartDataLabels, BoxPlotController, BoxAndWiskers);
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("gender_proportion");
@@ -307,4 +308,79 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching chart data:", error));
 });
+<<<<<<< HEAD
 >>>>>>> 6f14527 (feat: add chart.js feature and update profile models)
+=======
+
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("gender_amount_boxplot");
+  canvas.width = 400;
+  canvas.height = 400;
+
+  const slug = canvas.dataset.slug;
+
+  fetch(`/projects/${slug}/gender_amount_boxplot/`)
+    .then((response) => response.json())
+    .then((data) => {
+      const ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        new Chart(ctx, {
+          type: "boxplot",
+          data: {
+            labels: data.labels,
+            datasets: [
+              {
+                label: data.datasets[0].label,
+                data: data.datasets[0].data.map((box) => ({
+                  min: box.min,
+                  q1: box.q1,
+                  median: box.median,
+                  q3: box.q3,
+                  max: box.max,
+                  outliers: box.outliers, // 確保包含離群值數據
+                })),
+                backgroundColor: data.datasets[0].backgroundColor,
+                borderColor: data.datasets[0].borderColor,
+                borderWidth: data.datasets[0].borderWidth,
+              },
+            ],
+          },
+          options: {
+            responsive: false,
+            maintainAspectRatio: false, // 確保圖表填滿畫布
+            plugins: {
+              legend: {
+                display: true,
+              },
+              title: {
+                display: true,
+                text: "贊助金額性別分布箱型圖",
+                font: {
+                  size: 16,
+                  weight: "bold",
+                },
+              },
+              tooltip: {
+                enabled: false, // 禁用 Tooltip，防止顯示數值
+              },
+              datalabels: {
+                display: false, // 確保禁用 DataLabels 插件
+              },
+            },
+            scales: {
+              y: {
+                title: {
+                  display: true,
+                  text: "金額 (單位: 元)",
+                },
+              },
+            },
+          },
+          plugins: [], // 確保未啟用其他插件，避免干擾
+        });
+      }
+    })
+    .catch((error) => console.error("Error fetching chart data:", error));
+});
+>>>>>>> 6fef3d5 (feat:add gender_amount_boxplot chart)

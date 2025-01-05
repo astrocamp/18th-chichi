@@ -18,6 +18,7 @@
     "tailwindcss": "^3.4.16"
   },
   "dependencies": {
+    "@sgratzl/chartjs-chart-boxplot": "^4.4.4",
     "alpinejs": "^3.14.7",
     "htmx.org": "^1.9.12",
     "sortablejs": "^1.15.6",

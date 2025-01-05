@@ -214,11 +214,10 @@ def gender_proportion(request, slug):
     }
 
     return JsonResponse(response_data)
+
 @login_required
 def daily_sponsorship_amount(request, slug):
     from .models import Sponsor
-    from django.db.models.functions import TruncDate
-    from django.db.models import Sum
 
     project = get_object_or_404(Project, slug=slug)
 
@@ -267,7 +266,7 @@ def daily_sponsorship_amount(request, slug):
     data = {
         "labels": [date.strftime("%Y-%m-%d") for date in date_range],
         "datasets": [{
-            "label": "Cumulative Amount",
+            "label": "每日累積金額",
             "backgroundColor": "rgba(75, 192, 192, 0.2)",
             "borderColor": "rgba(75, 192, 192, 1)",
             "borderWidth": 2,
@@ -276,3 +275,84 @@ def daily_sponsorship_amount(request, slug):
     }
     
     return JsonResponse(data)
+
+@login_required
+def gender_amount_boxplot(request, slug):
+    from .models import Sponsor
+    from django.db.models import Min, Max, Avg, Q
+    from decimal import Decimal
+    
+    project = get_object_or_404(Project, slug=slug)
+
+    # 過濾贊助數據並分性別進行統計
+    gender_data = (
+        Sponsor.objects.filter(project=project, reward__isnull=True)
+        .select_related('account__profile')
+        .values("account__profile__gender", "amount")
+    )
+
+    # 構建數據
+    gender_amounts = {"M": [], "F": [], "O": []}
+
+    for entry in gender_data:
+        gender = entry["account__profile__gender"]
+        amount = entry["amount"]
+        if gender in gender_amounts:
+            gender_amounts[gender].append(amount)
+
+    # 計算每個性別的箱型圖數據
+    boxplot_data = []
+    for gender, amounts in gender_amounts.items():
+        if amounts:  # 確保有數據才計算
+            sorted_amounts = sorted(amounts)
+            n = len(sorted_amounts)
+            
+            # 計算四分位數
+            q1_idx = int(n * 0.25)
+            q2_idx = int(n * 0.5)  # 中位數
+            q3_idx = int(n * 0.75)
+            
+            q1 = sorted_amounts[q1_idx]
+            median = sorted_amounts[q2_idx]
+            q3 = sorted_amounts[q3_idx]
+            
+            # 計算四分位距 (使用 Decimal)
+            iqr = q3 - q1
+            
+            # 計算上下限 (使用 Decimal)
+            lower_bound = max(min(sorted_amounts), q1 - iqr * Decimal('1.5'))
+            upper_bound = min(max(sorted_amounts), q3 + iqr * Decimal('1.5'))
+            
+            # 找出離群值
+            outliers = [x for x in sorted_amounts if x < lower_bound or x > upper_bound]
+            
+            boxplot_data.append({
+                'min': float(lower_bound),
+                'q1': float(q1),
+                'median': float(median),
+                'q3': float(q3),
+                'max': float(upper_bound),
+                'outliers': [float(x) for x in outliers]
+            })
+        else:
+            boxplot_data.append({
+                'min': 0,
+                'q1': 0,
+                'median': 0,
+                'q3': 0,
+                'max': 0,
+                'outliers': []
+            })
+
+    response_data = {
+        "labels": ["男", "女", "其他"],
+        "datasets": [{
+            "label": "贊助金額分布",
+            "data": boxplot_data,
+            "backgroundColor": ["#F8AFAF", "#A8D3F0", "#FFE69B"],
+            "borderColor": "#FFFFFF",
+            "borderWidth": 2
+        }]
+    }
+
+    return JsonResponse(response_data)
