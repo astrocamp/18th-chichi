@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     "rewards",
     "update_records",
     "payments",
+    "channels",
+    "chats",
 ]
 
 SITE_ID = 1
@@ -213,3 +215,21 @@ STORAGES = {
     },
 }
 CSRF_TRUSTED_ORIGINS = os.getenv("CSRF_TRUSTED_ORIGINS").split(",")
+
+# Channels 配置
+ASGI_APPLICATION = "core.asgi.application"
+
+# Channel Layers 配置
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                (
+                    os.getenv("REDIS_HOST"),  # Redis 主機地址
+                    os.getenv("REDIS_PORT"),  # Redis 端口
+                )
+            ],
+        },
+    },
+}

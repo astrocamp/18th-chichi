@@ -18,4 +18,5 @@ urlpatterns = [
     path("rewards/", include("rewards.urls")),
     path("update_records/", include("update_records.urls")),
     path("payments/", include("payments.urls")),
+    path("chats/", include("chats.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

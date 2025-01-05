@@ -9,6 +9,8 @@ from django.contrib.auth.models import User
 from django import forms
 from projects.models import Sponsor
 from users.models import Profile
+from users.views import Profile
+from chats.models import ChatRoom
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -62,6 +64,12 @@ def index(request):
         .select_related("project", "reward")
         .order_by("-created_at")
     )
+    owner_chats = ChatRoom.objects.filter(project__account=request.user).order_by(
+        "-updated_at"
+    )
+    visitor_chats = ChatRoom.objects.filter(visitor=request.user).order_by(
+        "-updated_at"
+    )
 
     return render(
         request,
@@ -70,6 +78,8 @@ def index(request):
             "user": account,
             "profile": profile,
             "sponsored_projects": sponsored_projects,
+            "owner_chats": owner_chats,
+            "visitor_chats": visitor_chats,
         },
     )
 
@@ -90,7 +100,6 @@ def login(request):
             return redirect("accounts:login")
 
     return render(request, "accounts/login.html")
-
 
 
 def register(request):

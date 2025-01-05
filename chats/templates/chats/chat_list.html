@@ -1,0 +1,71 @@
+{% extends "shared/layout.html"%}
+
+{% block "content" %}
+<div class="container mx-auto px-4 py-8">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold">所有聊天室</h1>
+        </div>
+
+        {% if owner_chats %}
+            <div class="mb-8">
+                <h2 class="text-xl font-semibold mb-4">我的專案聊天室</h2>
+                <div class="space-y-4">
+                    {% for chat in owner_chats %}
+                        <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">{{ chat.project.title }}</h3>
+                                    <p class="text-sm text-gray-600">
+                                        與 {{ chat.visitor.username }} 的對話
+                                    </p>
+                                </div>
+                                <a href="{% url 'chats:room' chat.project.slug chat.slug %}" 
+                                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    進入聊天室
+                                </a>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">
+                                最後更新：{{ chat.updated_at|date:"Y/m/d H:i" }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if visitor_chats %}
+            <div>
+                <h2 class="text-xl font-semibold mb-4">我參與的聊天室</h2>
+                <div class="space-y-4">
+                    {% for chat in visitor_chats %}
+                        <div class="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-medium">{{ chat.project.title }}</h3>
+                                    <p class="text-sm text-gray-600">
+                                        與 {{ chat.project.account.username }} 的對話
+                                    </p>
+                                </div>
+                                <a href="{% url 'chats:room' chat.project.slug chat.slug %}" 
+                                   class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                    進入聊天室
+                                </a>
+                            </div>
+                            <div class="mt-2 text-sm text-gray-500">
+                                最後更新：{{ chat.updated_at|date:"Y/m/d H:i" }}
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not owner_chats and not visitor_chats %}
+            <div class="text-center text-gray-500 py-8">
+                目前沒有任何聊天室
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %} 

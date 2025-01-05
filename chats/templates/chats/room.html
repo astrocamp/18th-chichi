@@ -1,0 +1,174 @@
+{% extends "shared/layout.html"%}
+
+{% block "content" %}
+<div class="container mx-auto px-4 py-8">
+    <div class="chat-container bg-white rounded-lg shadow-lg">
+        <div class="chat-header border-b p-4">
+            <h2 class="text-xl font-bold">{{ project.title }}</h2>
+            <p class="text-gray-600">
+                與 
+                {% if request.user == project.account %}
+                    {{ chat_room.visitor.username }}
+                {% else %}
+                    {{ project.account.username }}
+                {% endif %}
+                的對話
+            </p>
+        </div>
+        
+        <div id="chat-messages" class="h-[500px] overflow-y-auto p-4 space-y-4">
+            {% for message in chat_messages %}
+                <div class="flex {% if message.sender == request.user %}justify-end{% else %}justify-start{% endif %}">
+                    <div class="max-w-[70%] {% if message.sender == request.user %}bg-blue-500 text-white{% else %}bg-gray-100{% endif %} rounded-lg px-4 py-2">
+                        <div class="text-sm {% if message.sender == request.user %}text-blue-100{% else %}text-gray-600{% endif %}">{{ message.sender.username }}</div>
+                        <div class="break-words">{{ message.content }}</div>
+                        <div class="text-xs {% if message.sender == request.user %}text-blue-100{% else %}text-gray-500{% endif %} text-right">
+                            {{ message.created_at|date:"H:i" }}
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="text-center text-gray-500 py-4">
+                    還沒有任何訊息，開始對話吧！
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="input-container border-t p-4">
+            <div class="flex space-x-2">
+                <input type="text" 
+                       id="chat-message-input" 
+                       class="flex-1 rounded-lg border border-gray-300 p-2 focus:outline-none focus:border-blue-500"
+                       placeholder="輸入訊息...">
+                <button id="chat-message-submit" 
+                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                    發送
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const roomSlug = '{{ chat_room.slug }}';
+    const projectSlug = '{{ project.slug }}';
+    const currentUser = '{{ request.user.username }}';
+    const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const wsPort = '8001';
+    
+    let chatSocket = null;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
+    const reconnectDelay = 3000;
+
+    function connectWebSocket() {
+        chatSocket = new WebSocket(
+            wsProtocol + '//' + window.location.hostname + ':' + wsPort + '/ws/chat/' + projectSlug + '/' + roomSlug + '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+
+            if (data.error) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-center text-red-500 p-2';
+                errorDiv.textContent = data.error;
+                document.getElementById('chat-messages').appendChild(errorDiv);
+                return;
+            }
+
+            const isCurrentUser = data.sender === currentUser;
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `flex ${isCurrentUser ? 'justify-end' : 'justify-start'}`;
+            
+            const messageContent = document.createElement('div');
+            messageContent.className = `max-w-[70%] ${
+                isCurrentUser 
+                ? 'bg-blue-500 text-white' 
+                : 'bg-gray-100'
+            } rounded-lg px-4 py-2`;
+            
+            const senderDiv = document.createElement('div');
+            senderDiv.className = `text-sm ${
+                isCurrentUser ? 'text-blue-100' : 'text-gray-600'
+            }`;
+            senderDiv.textContent = data.sender;
+            
+            const textDiv = document.createElement('div');
+            textDiv.className = 'break-words';
+            textDiv.textContent = data.message;
+            
+            const timeDiv = document.createElement('div');
+            timeDiv.className = `text-xs ${
+                isCurrentUser ? 'text-blue-100' : 'text-gray-500'
+            } text-right`;
+            const timestamp = data.timestamp ? new Date(data.timestamp) : new Date();
+            timeDiv.textContent = timestamp.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit',
+                hour12: false 
+            });
+            
+            messageContent.appendChild(senderDiv);
+            messageContent.appendChild(textDiv);
+            messageContent.appendChild(timeDiv);
+            messageDiv.appendChild(messageContent);
+            
+            const messagesContainer = document.getElementById('chat-messages');
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
+
+        chatSocket.onclose = function(e) {
+            if (reconnectAttempts < maxReconnectAttempts) {
+                setTimeout(connectWebSocket, reconnectDelay);
+                reconnectAttempts++;
+            } else {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'text-center text-red-500 p-2';
+                errorDiv.textContent = '聊天連接已斷開，請重新整理頁面';
+                document.getElementById('chat-messages').appendChild(errorDiv);
+            }
+        };
+
+        chatSocket.onopen = function(e) {
+            reconnectAttempts = 0;
+            const messagesContainer = document.getElementById('chat-messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        };
+    }
+
+    window.addEventListener('load', function() {
+        const messagesContainer = document.getElementById('chat-messages');
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    });
+
+    connectWebSocket();
+
+    const messageInput = document.querySelector('#chat-message-input');
+    const submitButton = document.querySelector('#chat-message-submit');
+
+    messageInput.focus();
+    messageInput.onkeyup = function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            submitButton.click();
+        }
+    };
+
+    submitButton.onclick = function(e) {
+        const message = messageInput.value.trim();
+        if (message && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInput.value = '';
+        } else if (!chatSocket || chatSocket.readyState !== WebSocket.OPEN) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'text-center text-red-500 p-2';
+            errorDiv.textContent = '無法發送訊息，聊天連接已斷開';
+            document.getElementById('chat-messages').appendChild(errorDiv);
+        }
+    };
+</script>
+{% endblock %} 
