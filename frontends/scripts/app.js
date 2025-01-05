@@ -166,40 +166,6 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-import { Chart, registerables } from "chart.js";
-Chart.register(...registerables);
-
-document.addEventListener("DOMContentLoaded", () => {
-  // 獲取畫布元素
-  const canvas = document.getElementById("chartCanvas");
-  canvas.width = 500; // 設置寬度
-  canvas.height = 400; // 設置高度
-
-  // 從 data-slug 屬性中獲取 slug
-  const slug = canvas.dataset.slug;
-
-  // 使用 slug 動態生成 API 路徑
-  fetch(`/projects/${slug}/chart_data/`)
-    .then((response) => response.json())
-    .then((data) => {
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        new Chart(ctx, {
-          type: "bar", // 圖表類型
-          data: data,
-          options: {
-            responsive: false, // 禁用響應式
-            plugins: {
-              legend: {
-                display: true,
-              },
-            },
-          },
-        });
-      }
-    })
-    .catch((error) => console.error("Error fetching chart data:", error));
-});
 
 import { Chart, registerables } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
