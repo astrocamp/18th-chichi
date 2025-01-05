@@ -37,21 +37,18 @@ def create_chat(request, project_slug):
     ).first()
 
     if existing_chat:
-        return redirect(
-            "chats:room", project_slug=project.slug, room_slug=existing_chat.slug
-        )
+        return redirect("chats:room", room_slug=existing_chat.slug)
 
     chat_room = ChatRoom.objects.create(project=project, visitor=request.user)
 
-    return redirect("chats:room", project_slug=project.slug, room_slug=chat_room.slug)
+    return redirect("chats:room", room_slug=chat_room.slug)
 
 
 @login_required
-def chat_room(request, project_slug, room_slug):
-    project = get_object_or_404(Project, slug=project_slug)
-    chat_room = get_object_or_404(ChatRoom, project=project, slug=room_slug)
+def chat_room(request, room_slug):
+    chat_room = get_object_or_404(ChatRoom, slug=room_slug)
 
-    if request.user not in [project.account, chat_room.visitor]:
+    if request.user not in [chat_room.project.account, chat_room.visitor]:
         return HttpResponseForbidden("您沒有權限訪問此聊天室")
 
     chat_messages = Message.objects.filter(chat_room=chat_room).order_by("created_at")
@@ -61,7 +58,7 @@ def chat_room(request, project_slug, room_slug):
         "chats/room.html",
         {
             "chat_room": chat_room,
-            "project": project,
+            "project": chat_room.project,
             "chat_messages": chat_messages,
         },
     )

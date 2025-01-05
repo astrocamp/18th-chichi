@@ -1,8 +1,13 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.utils.text import slugify
+from autoslug import AutoSlugField
+import uuid
 
 User = get_user_model()
+
+
+def generate_random_slug(instance):
+    return str(uuid.uuid4())[:8]
 
 
 class ChatRoom(models.Model):
@@ -12,14 +17,11 @@ class ChatRoom(models.Model):
     visitor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="visited_chat_rooms"
     )
-    slug = models.SlugField(unique=True, max_length=100)
+    slug = AutoSlugField(
+        populate_from=generate_random_slug, unique=True, max_length=100
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(f"{self.project.id}-{self.visitor.id}")
-        super().save(*args, **kwargs)
 
     @property
     def participants(self):

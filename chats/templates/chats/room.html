@@ -51,7 +51,6 @@
 
 <script>
     const roomSlug = '{{ chat_room.slug }}';
-    const projectSlug = '{{ project.slug }}';
     const currentUser = '{{ request.user.username }}';
     const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const wsPort = '8001';
@@ -63,7 +62,7 @@
 
     function connectWebSocket() {
         chatSocket = new WebSocket(
-            wsProtocol + '//' + window.location.hostname + ':' + wsPort + '/ws/chat/' + projectSlug + '/' + roomSlug + '/'
+            wsProtocol + '//' + window.location.hostname + ':' + wsPort + '/ws/chat/' + roomSlug + '/'
         );
 
         chatSocket.onmessage = function(e) {

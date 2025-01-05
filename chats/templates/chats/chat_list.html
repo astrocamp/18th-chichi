@@ -20,7 +20,7 @@
                                         與 {{ chat.visitor.username }} 的對話
                                     </p>
                                 </div>
-                                <a href="{% url 'chats:room' chat.project.slug chat.slug %}" 
+                                <a href="{% url 'chats:room' chat.slug %}" 
                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                     進入聊天室
                                 </a>
@@ -47,7 +47,7 @@
                                         與 {{ chat.project.account.username }} 的對話
                                     </p>
                                 </div>
-                                <a href="{% url 'chats:room' chat.project.slug chat.slug %}" 
+                                <a href="{% url 'chats:room' chat.slug %}" 
                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                     進入聊天室
                                 </a>
