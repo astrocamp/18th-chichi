@@ -36,10 +36,11 @@ def new(request):
     account = request.user
     profile = get_object_or_404(Profile, account=account)
     form = ProfileForm(request.FILES, instance=profile)
+    today = timezone.now().date()
     return render(
         request,
         "profiles/new.html",
-        {"profile": profile, "form": form, "account": account},
+        {"profile": profile, "form": form, "account": account, "today": today},
     )
 
 

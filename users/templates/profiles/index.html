@@ -1,5 +1,4 @@
-{% extends "shared/layout.html" %}
-{% block "content" %}
+{% extends "shared/layout.html" %} {% block "content" %}
 <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
   <h1 class="text-3xl font-bold text-gray-800 mb-4">個人資料</h1>
 
@@ -9,7 +8,12 @@
       <h2 class="text-lg font-semibold text-gray-600">名稱</h2>
       <p class="text-gray-800">{{ profile.name|default_if_none:"" }}</p>
     </div>
-    
+
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600">性別</h2>
+      <p class="text-gray-800">{{ profile.get_gender_display|default_if_none:"未指定" }}</p>
+    </div>
+
     <!-- Phone -->
     <div>
       <h2 class="text-lg font-semibold text-gray-600">電話</h2>
@@ -19,14 +23,12 @@
     <!-- Birthday -->
     <div>
       <h2 class="text-lg font-semibold text-gray-600">生日</h2>
-      <p class="text-gray-800">
-        {{ profile.birthday|date:"Y-m-d"|default_if_none:"" }}
-      </p>
+      <p class="text-gray-800">{{ profile.birthday|date:"Y-m-d"|default_if_none:"" }}</p>
     </div>
 
     <!-- Location -->
     <div>
-      <h2 class="text-lg font-semibold text-gray-600">地點</h2>
+      <h2 class="text-lg font-semibold text-gray-600">居住地區</h2>
       <p class="text-gray-800">{{ profile.location|default_if_none:"" }}</p>
     </div>
 
@@ -34,11 +36,11 @@
     <div>
       <h2 class="text-lg font-semibold text-gray-600">網站</h2>
       {% if profile.website %}
-        <p class="text-blue-600 underline">
-          <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a>
-        </p>
+      <p class="text-blue-600 underline">
+        <a href="{{ profile.website }}" target="_blank">{{ profile.website }}</a>
+      </p>
       {% else %}
-        <p class="text-gray-500 italic">尚未填寫網站</p>
+      <p class="text-gray-500 italic">尚未填寫網站</p>
       {% endif %}
     </div>
 
@@ -46,13 +48,9 @@
     <div>
       <h2 class="text-lg font-semibold text-gray-600">個人圖片</h2>
       {% if profile.profile_picture %}
-        <img
-          src="{{ profile.profile_picture.url }}"
-          alt="Profile Picture"
-          class="w-40 h-40 rounded-full object-cover"
-        />
+      <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="w-40 h-40 rounded-full object-cover" />
       {% else %}
-        <p class="text-gray-500 italic">尚未上傳個人圖片</p>
+      <p class="text-gray-500 italic">尚未上傳個人圖片</p>
       {% endif %}
     </div>
 

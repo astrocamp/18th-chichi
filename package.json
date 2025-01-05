@@ -20,7 +20,8 @@
   "dependencies": {
     "alpinejs": "^3.14.7",
     "htmx.org": "^1.9.12",
-    "sortablejs": "^1.15.6"
+    "sortablejs": "^1.15.6",
+    "chart.js": "^4.4.7",
   },
   "config": {
     "commitizen": {

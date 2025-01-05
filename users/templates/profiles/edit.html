@@ -2,12 +2,7 @@
 <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
   <h1 class="text-3xl font-bold text-gray-800 mb-4">更新個人資料</h1>
 
-  <form
-    method="POST"
-    action="{% url 'profile:index' %}"
-    enctype="multipart/form-data"
-    class="space-y-6"
-  >
+  <form method="POST" action="{% url 'profile:index' %}" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
 
     <!-- 名稱 -->
@@ -23,6 +18,19 @@
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
       />
     </div>
+        <!-- 性別 -->
+        <div>
+          <label for="gender" class="block text-lg font-semibold text-gray-600">性別</label>
+          <select 
+              name="gender" 
+              id="gender" 
+              class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+          >
+              <option value="M" {% if profile.gender == "M" %}selected{% endif %}>男</option>
+              <option value="F" {% if profile.gender == "F" %}selected{% endif %}>女</option>
+              <option value="O" {% if profile.gender == "O" %}selected{% endif %}>其他</option>
+          </select>
+      </div>
 
     <!-- 電話 -->
     <div>
@@ -47,6 +55,7 @@
         type="date"
         id="birthday"
         name="birthday"
+        max="{{ today|date:'Y-m-d' }}"
         value="{{ format_time|default_if_none:'' }}"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
       />
@@ -118,11 +127,7 @@
         class="mt-1"
       />
       {% if profile.profile_picture %}
-      <img
-        src="{{ profile.profile_picture.url }}"
-        alt="Profile Picture"
-        class="mt-4 w-40 h-40 rounded-full object-cover"
-      />
+      <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="mt-4 w-40 h-40 rounded-full object-cover" />
       {% else %}
       <p class="text-gray-500 italic">尚未上傳個人圖片</p>
       {% endif %}

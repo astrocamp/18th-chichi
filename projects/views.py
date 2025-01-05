@@ -10,6 +10,8 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from comments.models import Comment
 from django.template.loader import render_to_string
+from django.http import JsonResponse
+
 
 
 @login_required
@@ -152,3 +154,26 @@ def like_projects(request, slug):
         favorite.delete()
 
     return redirect("projects:show", slug=project.slug)
+
+@login_required
+def chart_data(request,slug):
+    project = get_object_or_404(Project, slug=slug)
+    data = {
+        "labels": ["January", "February", "March", "April"],
+        "datasets": [
+            {
+                "label": "Sales",
+                "backgroundColor": "rgba(75, 192, 192, 0.2)",
+                "borderColor": "rgba(200, 192, 192, 1)",
+                "borderWidth": 5,
+                "data": [12, 19, 3, 5],
+            }
+        ],
+    }
+    return JsonResponse(data)
+
+
+def chart_page(request,slug):
+    project = get_object_or_404(Project, slug=slug)
+
+    return render(request, "projects/chart_page.html", {"slug": slug})
