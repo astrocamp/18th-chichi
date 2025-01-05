@@ -12,10 +12,12 @@ from comments.models import Comment
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Count
-from django.db.models import Sum
 from django.utils.timezone import make_aware
 import datetime
-
+import random
+from datetime import date
+from django.db.models import Min, Max, Avg, Q
+from decimal import Decimal
 
 
 
@@ -279,8 +281,6 @@ def daily_sponsorship_amount(request, slug):
 @login_required
 def gender_amount_boxplot(request, slug):
     from .models import Sponsor
-    from django.db.models import Min, Max, Avg, Q
-    from decimal import Decimal
     
     project = get_object_or_404(Project, slug=slug)
 
@@ -353,6 +353,118 @@ def gender_amount_boxplot(request, slug):
             "borderColor": "#FFFFFF",
             "borderWidth": 2
         }]
+    }
+
+    return JsonResponse(response_data)
+
+@login_required
+def reward_grouped_bar_chart(request, slug):
+    from .models import Sponsor
+
+    project = get_object_or_404(Project, slug=slug)
+
+    def get_age_group(birthday):
+        if not birthday:
+            return None  # 如果生日不存在，返回 None
+        age = (date.today() - birthday).days // 365
+        if age < 18:
+            return "未成年"
+        elif 18 <= age <= 25:
+            return "18-25"
+        elif 26 <= age <= 35:
+            return "26-35"
+        elif 36 <= age <= 45:
+            return "36-45"
+        else:
+            return "46+"
+
+    # 修改查詢以排除 reward 為 null 的記錄
+    sponsor_data = (
+        Sponsor.objects.filter(
+            project=project,
+            reward__isnull=False  # 排除 reward 為 null 的記錄
+        )
+        .select_related("reward", "account__profile")
+        .values("reward__title", "account__profile__gender", "account__profile__birthday")
+        .annotate(count=Count("id"))
+        .order_by("reward__title")  # 確保結果有序
+    )
+
+    # 初始化所有可能的組合
+    gender_groups = ["M", "F", "O"]
+    age_groups = ["未成年", "18-25", "26-35", "36-45", "46+"]
+    
+    # 構建數據
+    grouped_data = {}
+    for entry in sponsor_data:
+        reward_title = entry["reward__title"] or "無回饋"
+        gender = entry["account__profile__gender"]
+        age_group = get_age_group(entry["account__profile__birthday"])
+
+        # 過濾掉 "未知" 性別和年齡組的數據
+        if not gender or not age_group:
+            continue
+
+        group_key = f"{gender}_{age_group}"
+        count = entry["count"]
+
+        if reward_title not in grouped_data:
+            grouped_data[reward_title] = {
+                f"{g}_{a}": 0 
+                for g in gender_groups 
+                for a in age_groups
+            }
+            
+        grouped_data[reward_title][group_key] = count
+
+    # 準備所有可能的組合
+    all_combinations = [
+        f"{gender}_{age}" 
+        for gender in gender_groups 
+        for age in age_groups
+    ]
+
+    # 構建每個組合的數據集
+    labels = list(grouped_data.keys())
+    datasets = []
+    
+    # 定義固定的顏色映射
+    colors = {
+        "M_18-25": "#4E79A7",  # 藍色
+        "M_26-35": "#76B7B2",  # 淺藍
+        "M_36-45": "#59A14F",  # 綠色
+        "M_46+": "#8CD17D",    # 淺綠
+        "M_未成年": "#A0CBE8",  # 淺藍灰
+        "F_18-25": "#F28E2B",  # 橘色
+        "F_26-35": "#FF9DA7",  # 粉紅
+        "F_36-45": "#E15759",  # 紅色
+        "F_46+": "#FFB4A2",    # 淺粉
+        "F_未成年": "#FFB4A2",  # 淺粉
+        "O_18-25": "#9C755F",  # 棕色
+        "O_26-35": "#BAB0AC",  # 灰色
+        "O_36-45": "#808080",  # 深灰
+        "O_46+": "#666666",    # 暗灰
+        "O_未成年": "#CCCCCC",  # 淺灰
+    }
+
+    for combination in all_combinations:
+        dataset = {
+            "label": combination,
+            "backgroundColor": colors.get(combination, f"#{random.randint(0, 0xFFFFFF):06x}"),
+            "borderColor": "#FFFFFF",
+            "borderWidth": 1,
+            "data": [
+                grouped_data[reward].get(combination, 0)
+                for reward in labels
+            ]
+        }
+        # 只加入有數據的數據集
+        if any(dataset["data"]):
+            datasets.append(dataset)
+
+    response_data = {
+        "labels": labels,
+        "datasets": datasets,
     }
 
     return JsonResponse(response_data)

@@ -125,7 +125,6 @@ library.add(
 // 自動掃描 DOM 並渲染圖標
 dom.watch();
 
-<<<<<<< HEAD
 document.addEventListener("DOMContentLoaded", function () {
   var element = document.getElementById("faq-list");
   if (element) {
@@ -167,7 +166,41 @@ function getCookie(name) {
   }
   return cookieValue;
 }
-=======
+import { Chart, registerables } from "chart.js";
+Chart.register(...registerables);
+
+document.addEventListener("DOMContentLoaded", () => {
+  // 獲取畫布元素
+  const canvas = document.getElementById("chartCanvas");
+  canvas.width = 500; // 設置寬度
+  canvas.height = 400; // 設置高度
+
+  // 從 data-slug 屬性中獲取 slug
+  const slug = canvas.dataset.slug;
+
+  // 使用 slug 動態生成 API 路徑
+  fetch(`/projects/${slug}/chart_data/`)
+    .then((response) => response.json())
+    .then((data) => {
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        new Chart(ctx, {
+          type: "bar", // 圖表類型
+          data: data,
+          options: {
+            responsive: false, // 禁用響應式
+            plugins: {
+              legend: {
+                display: true,
+              },
+            },
+          },
+        });
+      }
+    })
+    .catch((error) => console.error("Error fetching chart data:", error));
+});
+
 import { Chart, registerables } from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import { BoxPlotController, BoxAndWiskers } from "@sgratzl/chartjs-chart-boxplot";
@@ -308,9 +341,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching chart data:", error));
 });
-<<<<<<< HEAD
->>>>>>> 6f14527 (feat: add chart.js feature and update profile models)
-=======
 
 document.addEventListener("DOMContentLoaded", () => {
   const canvas = document.getElementById("gender_amount_boxplot");
@@ -383,4 +413,73 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => console.error("Error fetching chart data:", error));
 });
->>>>>>> 6fef3d5 (feat:add gender_amount_boxplot chart)
+
+document.addEventListener("DOMContentLoaded", () => {
+  const canvas = document.getElementById("reward_grouped_bar_chart");
+  canvas.width = 400;
+  canvas.height = 400;
+
+  const slug = canvas.dataset.slug;
+
+  fetch(`/projects/${slug}/reward_grouped_bar_chart/`)
+    .then((response) => response.json())
+    .then((data) => {
+      const ctx = canvas.getContext("2d");
+
+      if (ctx) {
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: data.labels,
+            datasets: data.datasets,
+          },
+          options: {
+            responsive: false,
+            plugins: {
+              legend: {
+                display: true,
+              },
+              title: {
+                display: true,
+                text: "熱門回饋方案",
+              },
+              tooltip: {
+                enabled: true, // 啟用 Tooltip
+                callbacks: {
+                  label: (tooltipItem) => {
+                    return `人數: ${tooltipItem.raw}`;
+                  },
+                },
+              },
+              datalabels: {
+                display: false, // 禁用數據標籤
+              },
+            },
+            scales: {
+              x: {
+                title: {
+                  display: true,
+                  text: "回饋方案",
+                },
+              },
+              y: {
+                title: {
+                  display: true,
+                  text: "贊助人數",
+                },
+                ticks: {
+                  stepSize: 1, // 設置步長為 1，僅顯示整數
+                  callback: (value) => {
+                    if (Number.isInteger(value)) return value; // 確保只顯示整數
+                    return null;
+                  },
+                },
+                suggestedMax: Math.max(...data.datasets.flatMap((dataset) => dataset.data)) + 2, // 上方多留 2 個單位空間
+              },
+            },
+          },
+        });
+      }
+    })
+    .catch((error) => console.error("Error fetching chart data:", error));
+});

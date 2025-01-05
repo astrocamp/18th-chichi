@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import index, new, show, edit, delete, collect_projects, like_projects,gender_proportion,chart_page,daily_sponsorship_amount,gender_amount_boxplot
+from .views import index, new, show, edit, delete, collect_projects, like_projects,gender_proportion,chart_page,daily_sponsorship_amount,gender_amount_boxplot,reward_grouped_bar_chart
 from comments.views import index as comment_index, new as comment_new
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
@@ -92,5 +92,6 @@ urlpatterns = [
     path("<slug:slug>/chart_page/", chart_page, name="chart_page"),
     path("<slug:slug>/daily_sponsorship_amount/", daily_sponsorship_amount, name="daily_sponsorship_amount"),
     path("<slug:slug>/gender_amount_boxplot/", gender_amount_boxplot, name="gender_amount_boxplot"),
+    path("<slug:slug>/reward_grouped_bar_chart/", reward_grouped_bar_chart, name="reward_grouped_bar_chart"),
 
 ]
