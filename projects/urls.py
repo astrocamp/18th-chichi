@@ -15,6 +15,7 @@ from .views import (
     comment,
     public,
     comments_index,
+    get_subcategories,
 )
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
@@ -91,5 +92,10 @@ urlpatterns = [
         "<slug:slug>/reward_grouped_bar_chart/",
         reward_grouped_bar_chart,
         name="reward_grouped_bar_chart",
+    ),
+    path(
+        "get_subcategories/",
+        get_subcategories,
+        name="get_subcategories",
     ),
 ]

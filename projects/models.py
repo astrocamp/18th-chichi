@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.timezone import now
 from autoslug import AutoSlugField
 from django.db.models import Sum
+from categories.models import Category
 import random
 import string
 from django.utils import timezone
@@ -28,6 +29,7 @@ class Project(models.Model):
     start_at = models.DateTimeField(null=True)
     end_at = models.DateTimeField()
     story = models.TextField()
+    categories = models.ManyToManyField(Category, through="ProjectCategory")
     location = models.CharField(null=True, max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -37,6 +39,7 @@ class Project(models.Model):
         choices=STATUS_CHOICES,
         default="pending",
     )
+
     slug = AutoSlugField(
         populate_from=generate_random_slug,
         unique=True,
@@ -158,3 +161,12 @@ class Sponsor(models.Model):
         choices=STATUS_CHOICES,
         default="pending",
     )
+
+
+class ProjectCategory(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+
+def __str__(self):
+    return f"{self.project.name} - {self.category.title}"

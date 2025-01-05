@@ -5,7 +5,7 @@ from .models import Project, CollectProject, FavoritePrject
 from django.utils.timezone import localtime, now
 from django.views.decorators.http import require_POST
 from django.utils import timezone
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
 from comments.models import Comment
@@ -41,6 +41,9 @@ def calculate_progress_percentage(raised_amount, goal_amount):
     percentage = (raised_amount or 0) / goal_amount * 100
     # 確保百分比不超過 100%
     return min(round(percentage, 1), 100)  # 四捨五入到小數點第一位，並限制最大值為 100
+
+
+from categories.models import Category
 
 
 @login_required
@@ -80,7 +83,10 @@ def index(request):
 @login_required
 def new(request):
     account = request.user
-    return render(request, "projects/new.html", {"account": account})
+    categories = Category.objects.filter(parent__isnull=True)
+    return render(
+        request, "projects/new.html", {"account": account, "categories": categories}
+    )
 
 
 @login_required
@@ -647,3 +653,13 @@ def comments_index(request, slug):
         "projects/comments.html",
         {"comments": comments, "project": project, "user": request.user},
     )
+
+
+def get_subcategories(request):
+    parent_id = request.GET.get("parent_id")
+    if parent_id:
+        subcategories = Category.objects.filter(parent_id=parent_id).values(
+            "id", "title"
+        )
+        return JsonResponse(list(subcategories), safe=False)
+    return JsonResponse([], safe=False)
