@@ -2,7 +2,7 @@
     <p>
         <strong>{{ comment.account.username }}</strong>: {{ comment.content }}
     </p>
-    <small style="color: gray;">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+    <small class="text-gray-500 text-xs">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
     
 
     {% if user == comment.account %}

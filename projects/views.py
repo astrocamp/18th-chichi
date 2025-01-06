@@ -43,7 +43,7 @@ def new(request):
 def show(request, slug):
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
-    comments = project.comments.filter(parent__isnull=True).order_by("-created_at")
+    comments = project.comments.filter(parent__isnull=True).order_by("-id")
 
     if request.POST:
         # 處理上架邏輯
