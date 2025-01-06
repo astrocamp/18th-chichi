@@ -8,4 +8,7 @@ import "./register.js";
 
 window.htmx = htmx;
 
+
+
+
 Alpine.start();
