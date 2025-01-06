@@ -1,6 +1,45 @@
 import Alpine from "alpinejs";
 import htmx from "htmx.org";
 import Sortable from "sortablejs";
+import { library, dom } from '@fortawesome/fontawesome-svg-core'
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { 
+  faBookmark, 
+  faClock, 
+  faComments,
+  faQuestionCircle,
+  faNewspaper,
+  faGift,
+  faRocket,
+  faStopCircle,
+  faHandHoldingHeart,
+  faArrowLeft,
+  faSave,
+  faUserEdit,
+  faUserPlus,
+  faProjectDiagram,
+  faUser,
+  faTrash,
+  faPlus,
+  faPlusCircle,
+  faUndo,
+  faBox,
+  faCheck,
+  faEdit,
+  faFileAlt,
+  faShippingFast,
+  faMapMarkerAlt,
+  faInfoCircle,
+  faCalendarAlt,
+  faMagnifyingGlass,
+  faSignInAlt,
+  faSignOutAlt,
+  faPaperPlane,
+  faSpinner,
+  faHouse,
+  faHeart,
+  faArrowRight
+} from "@fortawesome/free-solid-svg-icons";
 
 window.Alpine = Alpine
 window.htmx = htmx
@@ -44,48 +83,6 @@ window.formHandler = formHandler
 
 Alpine.start()
 
-// Font Awesome
-import { library, dom } from '@fortawesome/fontawesome-svg-core'
-import { 
-  faBookmark, 
-  faClock, 
-  faComments,
-  faQuestionCircle,
-  faNewspaper,
-  faGift,
-  faRocket,
-  faStopCircle,
-  faHandHoldingHeart,
-  faArrowLeft,
-  faSave,
-  faUserEdit,
-  faUserPlus,
-  faProjectDiagram,
-  faUser,
-  faTrash,
-  faPlus,
-  faPlusCircle,
-  faUndo,
-  faBox,
-  faCheck,
-  faEdit,
-  faFileAlt,
-  faShippingFast,
-  faMapMarkerAlt,
-  faInfoCircle,
-  faCalendarAlt,
-  faMagnifyingGlass,
-  faSignInAlt,
-  faSignOutAlt,
-  faPaperPlane,
-  faSpinner,
-  faHouse,
-  faHeart,
-  faArrowRight,
-  faCheck,
-  faMagnifyingGlass
-} from '@fortawesome/free-solid-svg-icons'
-
 // 添加圖示到庫中
 library.add(
   faBookmark,
@@ -122,10 +119,8 @@ library.add(
   faSpinner,
   faHouse,
   faHeart,
-  faArrowRight,
-  faCheck,
-  faMagnifyingGlass
-)
+  faArrowRight
+);
 
 // 自動掃描 DOM 並渲染圖標
 dom.watch();
