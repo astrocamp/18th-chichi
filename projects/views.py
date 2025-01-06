@@ -52,9 +52,11 @@ def index(request):
     if request.POST:
         form = ProjectFrom(request.POST, request.FILES)
         if form.is_valid():
+            print(form.cleaned_data["categories"])
             project = form.save(commit=False)
             project.account = account
             project.save()
+            project.categories.add(form.cleaned_data["categories"][0])
             return redirect("projects:show", slug=project.slug)
         else:
             return HttpResponse(f"輸入錯誤: {form.errors}")
