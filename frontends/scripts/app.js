@@ -9,6 +9,8 @@ import "./register.js";
 window.htmx = htmx;
 
 
+window.Alpine = Alpine;
+window.htmx = htmx;
 
 
 Alpine.start();
