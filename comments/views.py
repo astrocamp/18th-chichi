@@ -11,7 +11,7 @@ from django.views.decorators.http import require_POST
 @login_required
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    comments = project.comments.all().order_by("-created_at")
+    comments = project.comments.order_by("-id")
 
     if request.method == "POST":
         content = request.POST.get("content")

@@ -1,9 +1,8 @@
-<!-- 顯示單個留言、按鈕加載回覆表單、顯示留言所有評論 -->
 <div class="comment-item" id="comment-{{ comment.slug }}">
     <p>
         <strong>{{ comment.account.username }}</strong>: {{ comment.content }}
     </p>
-    <small style="color: gray;">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+    <small class="text-gray-500 text-xs">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
     
     
     <button hx-get="{% url 'comments:reply_form' project.slug  comment.slug %}"
