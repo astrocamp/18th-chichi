@@ -1,10 +1,83 @@
-// Font Awesome 引入
+// Font Awesome
 import { library, dom } from "@fortawesome/fontawesome-svg-core";
-import { faSpinner, faHouse, faHeart, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons"; // 引入 spinner 圖標
-import "@fortawesome/fontawesome-svg-core/styles.css"; // 引入基本樣式
+import {
+  faBookmark,
+  faClock,
+  faComments,
+  faQuestionCircle,
+  faNewspaper,
+  faGift,
+  faRocket,
+  faStopCircle,
+  faHandHoldingHeart,
+  faArrowLeft,
+  faSave,
+  faUserEdit,
+  faUserPlus,
+  faProjectDiagram,
+  faUser,
+  faTrash,
+  faPlus,
+  faPlusCircle,
+  faUndo,
+  faBox,
+  faCheck,
+  faEdit,
+  faFileAlt,
+  faShippingFast,
+  faMapMarkerAlt,
+  faInfoCircle,
+  faCalendarAlt,
+  faMagnifyingGlass,
+  faSignInAlt,
+  faSignOutAlt,
+  faPaperPlane,
+  faChartBar,
+  faSpinner,
+  faHouse,
+  faHeart,
+  faArrowRight,
+} from "@fortawesome/free-solid-svg-icons";
 
-// 將圖標添加到庫中
-library.add(faSpinner, faHouse, faHeart, faMagnifyingGlass);
+// 添加圖示到庫中
+library.add(
+  faBookmark,
+  faClock,
+  faComments,
+  faQuestionCircle,
+  faNewspaper,
+  faGift,
+  faRocket,
+  faStopCircle,
+  faHandHoldingHeart,
+  faArrowLeft,
+  faSave,
+  faUserEdit,
+  faUserPlus,
+  faProjectDiagram,
+  faUser,
+  faTrash,
+  faPlus,
+  faPlusCircle,
+  faUndo,
+  faBox,
+  faCheck,
+  faEdit,
+  faFileAlt,
+  faShippingFast,
+  faMapMarkerAlt,
+  faInfoCircle,
+  faCalendarAlt,
+  faMagnifyingGlass,
+  faSignInAlt,
+  faSignOutAlt,
+  faPaperPlane,
+  faChartBar,
+  faSpinner,
+  faHouse,
+  faHeart,
+  faArrowRight
+);
 
 // 自動掃描 DOM 並渲染圖標
 dom.watch();
