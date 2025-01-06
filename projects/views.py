@@ -23,13 +23,15 @@ def index(request):
             project.save()
             return redirect("projects:show", slug=project.slug)
         else:
-            return HttpResponse("輸入錯誤")
-
+            return HttpResponse(f"輸入錯誤: {form.errors}")
     projects = Project.objects.filter(account=account)
+
     for project in projects:
-        project.update_status()  # 更新專案的上下架狀態
+        project.update_status()
+        media_type = get_media_type(project.cover_image.name)
+  # 更新專案的上下架狀態
     return render(
-        request, "projects/index.html", {"projects": projects, "account": account}
+        request, "projects/index.html", {"projects": projects, "account": account, "media_type": media_type}
     )
 
 
