@@ -9,11 +9,14 @@
     <!-- 封面區 -->
     <div>
       <h2 class="text-lg font-semibold text-gray-600 mb-4">封面圖片</h2>
-      <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center" style="max-height: 400px">
+      <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center"
+        style="max-height: 400px">
         {% if media_type == "image" %}
-        <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-auto h-auto max-w-full max-h-full object-contain" />
+        <img src="{{ project.cover_image.url }}" alt="cover_image"
+          class="w-auto h-auto max-w-full max-h-full object-contain" />
         {% elif media_type == "video" %}
-        <video src="{{ project.cover_image.url }}" controls class="w-auto h-auto max-w-full max-h-full object-contain rounded-lg">您的瀏覽器不支援影片播放。</video>
+        <video src="{{ project.cover_image.url }}" controls
+          class="w-auto h-auto max-w-full max-h-full object-contain rounded-lg">您的瀏覽器不支援影片播放。</video>
         {% else %}
         <p class="text-gray-600">不支援的媒體格式。</p>
         {% endif %}
@@ -29,10 +32,7 @@
         <div class="mt-2 bg-gray-200 rounded-full h-4">
           <!-- 修改高度為 h-4 -->
           <!-- 進度條 -->
-          <div
-            class="bg-teal-500 h-4 rounded-full"
-            style="width: {{ progress_percentage }}%"
-          ></div>
+          <div class="bg-teal-500 h-4 rounded-full" style="width: {{ progress_percentage }}%"></div>
         </div>
         <div class="flex justify-between text-sm text-gray-600 mt-1">
           <p>目標金額：NT$ {{ project.goal_amount|default:"0" }}</p>
@@ -62,6 +62,10 @@
         <div>
           <p class="text-lg mb-1">募資地點</p>
           <p class="text-gray-600">{{ project.location }}</p>
+          <p class="text-lg mb-1">分類</p>
+          <p class="text-gray-600">
+            {{ project.category.title }}{% if project.sub_category %} / {{ project.sub_category.title }}{% endif %}
+          </p>
         </div>
       </div>
     </div>
@@ -72,23 +76,28 @@
         <i class="fas fa-edit mr-2"></i>
         編輯專案
       </a>
-      <a href="{% url 'projects:comment' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:comment' project.slug %}" class="btn"
+        style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-comments mr-2"></i>
         留言板
       </a>
-      <a href="{% url 'projects:faq_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:faq_index' project.slug %}" class="btn"
+        style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-question-circle mr-2"></i>
         常見問題
       </a>
-      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn"
+        style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-newspaper mr-2"></i>
         更新記錄
       </a>
-      <a href="{% url 'projects:chart_page' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:chart_page' project.slug %}" class="btn"
+        style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-chart-bar mr-2"></i>
         數據分析
       </a>
-      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn"
+        style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-gift mr-2"></i>
         回饋方案
       </a>
@@ -105,7 +114,8 @@
       {% if user == project.account %} {% if project.status == 'pending' %}
       <form action="" method="post" class="inline-block">
         {% csrf_token %}
-        <button type="submit" name="publish" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+        <button type="submit" name="publish" class="btn"
+          style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
           <i class="fas fa-rocket mr-2"></i>
           上架專案
         </button>
@@ -113,7 +123,8 @@
       {% elif project.status == 'live' %}
       <form action="" method="post" class="inline-block">
         {% csrf_token %}
-        <button type="submit" name="unpublish" class="btn" style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
+        <button type="submit" name="unpublish" class="btn"
+          style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
           <i class="fas fa-stop-circle mr-2"></i>
           下架專案
         </button>
@@ -123,7 +134,8 @@
         <i class="fas fa-arrow-left mr-2"></i>
         返回列表
       </a>
-      <a href="{% url 'projects:public' slug=project.slug %}" class="btn ml-4" style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:public' slug=project.slug %}" class="btn ml-4"
+        style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-arrow-right mr-2"></i>
         前往商品頁面
       </a>
