@@ -52,7 +52,6 @@ def index(request):
     if request.POST:
         form = ProjectFrom(request.POST, request.FILES)
         if form.is_valid():
-            print(form.cleaned_data["categories"])
             project = form.save(commit=False)
             project.account = account
             project.save()
