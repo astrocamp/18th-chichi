@@ -1,127 +1,109 @@
-{% extends "shared/layout.html" %} {% block "content" %}
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-lg">
+{% extends "shared/layout.html" %}
+{% load humanize %}
+
+{% block "content" %}
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- 返回按鈕 -->
+    <div class="mb-6">
+      <a href="{% url 'projects:public' project.slug %}" class="text-[#1EA29E] hover:text-[#198784]">
+        返回專案頁面
+      </a>
+    </div>
+
+    <!-- 專案標題 -->
+    <h1 class="text-2xl font-bold text-gray-900 mb-8">{{ project.title }}</h1>
+
     <!-- 狀態條 -->
     <div class="mb-8">
-      <div class="flex justify-between items-center">
-        <div class="flex flex-col items-center w-20">
-          <div
-            class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold"
-          >
+      <div class="flex justify-center items-center">
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 bg-[#1EA29E] rounded-full flex items-center justify-center text-white font-medium">
             1
           </div>
-          <span class="text-sm mt-2 text-center">選擇金額</span>
+          <span class="mt-2 text-sm font-medium text-[#1EA29E]">選擇配件</span>
         </div>
-        <div class="flex-1 h-1 mx-4 bg-purple-600"></div>
-        <div class="flex flex-col items-center w-20">
-          <div
-            class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold"
-          >
+        <div class="w-24 h-1 bg-[#1EA29E]"></div>
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-400 font-medium">
             2
           </div>
-          <span class="text-sm mt-2 text-center">確認訂單</span>
+          <span class="mt-2 text-sm font-medium text-gray-400">確認贊助內容</span>
         </div>
-        <div class="flex-1 h-1 mx-4 bg-gray-300"></div>
-        <div class="flex flex-col items-center w-20">
-          <div
-            class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-bold"
-          >
+        <div class="w-24 h-1 bg-gray-200"></div>
+        <div class="flex flex-col items-center">
+          <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center text-gray-400 font-medium">
             3
           </div>
-          <span class="text-sm mt-2 text-center">完成付款</span>
+          <span class="mt-2 text-sm font-medium text-gray-400">完成付款</span>
         </div>
       </div>
     </div>
 
-    <h1 class="text-2xl font-bold text-gray-800 mb-4">選擇加購商品</h1>
-    <p class="text-gray-600 mb-6">請選擇您想要加購的商品</p>
+    <!-- 選擇配件 -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-bold text-gray-900 mb-6">選擇配件</h2>
 
-    <div class="mb-6">
-      <h2 class="text-lg font-semibold text-gray-700">您選擇的獎勵：</h2>
-      <p class="text-gray-800">{{ reward.title }}</p>
-    </div>
-
-    <div class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-700">包含的商品：</h3>
-      <ul class="list-disc pl-6">
-        {% for product in reward_products %}
-        <li>{{ product.name }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <div
-      x-data="{ 
-        basePrice: {{ reward.price }},
-        additionalProducts: [],
-        get totalPrice() {
-          return this.basePrice + this.additionalProducts.reduce((sum, price) => sum + parseInt(price), 0);
-        }
-      }"
-      class="mb-6"
-    >
-      <div class="mb-6">
-        <p class="mt-1 text-sm text-gray-500">
-          贊助金額：NT${{ reward.price }} 元
-        </p>
-      </div>
-
-      <h3 class="text-lg font-semibold text-gray-700">可加購商品：</h3>
-      <form
-        method="POST"
-        action="{% url 'projects:reward_sponsor_options' project.slug %}"
-        class="space-y-4"
-      >
+      <form method="POST" class="space-y-8">
         {% csrf_token %}
-        <input type="hidden" name="reward" value="{{ reward.id }}" />
-        <input type="hidden" name="amount" x-bind:value="basePrice" />
-
-        {% for option in optional_adds %}
-        <div class="flex items-center mb-2">
-          <input
-            type="checkbox"
-            id="option-{{ option.id }}"
-            name="additional_products"
-            value="{{ option.id }}"
-            data-price="{{ option.price }}"
-            class="mr-3"
-            @click="$event.target.checked ? 
-              additionalProducts.push('{{ option.price }}') : 
-              additionalProducts = additionalProducts.filter(p => p !== '{{ option.price }}')"
-          />
-          <label for="option-{{ option.id }}">
-            {{ option.name }} - NT${{ option.price }}
-          </label>
-        </div>
-        {% endfor %}
-
-        <div class="flex items-center justify-between mt-6">
-          <div class="text-sm text-gray-600">
-            總金額：<span
-              class="font-semibold"
-              x-text="'NT$' + totalPrice + ' 元'"
-            ></span>
+        
+        <!-- 基本方案資訊 -->
+        <div class="bg-gray-50 p-4 rounded-lg">
+          <h3 class="text-lg font-medium text-gray-900">{{ reward.title }}</h3>
+          <p class="text-2xl font-bold text-[#1EA29E] mt-2">
+            NT$ {{ reward.price|intcomma }}
+          </p>
+          
+          <!-- 包含商品 -->
+          {% if reward_products %}
+          <div class="mt-4">
+            <h4 class="font-medium text-gray-700 mb-2">包含商品：</h4>
+            <ul class="list-disc list-inside text-gray-600">
+              {% for product in reward_products %}
+              <li>{{ product.name }}</li>
+              {% endfor %}
+            </ul>
           </div>
-          <button
-            type="submit"
-            class="w-full bg-purple-600 text-white font-medium py-2 px-4 rounded-lg hover:bg-purple-700 focus:ring-2 focus:ring-purple-500"
-          >
-            下一步
+          {% endif %}
+        </div>
+
+        <!-- 可選配件 -->
+        {% if optional_adds %}
+        <div>
+          <h3 class="text-lg font-medium text-gray-900 mb-4">可選配件</h3>
+          <div class="space-y-4">
+            {% for option in optional_adds %}
+            <label class="flex items-start p-4 border rounded-lg hover:border-[#1EA29E] cursor-pointer">
+              <input type="checkbox" name="additional_products" value="{{ option.id }}"
+                class="mt-1 h-4 w-4 text-[#1EA29E] border-gray-300 rounded focus:ring-[#1EA29E]">
+              <div class="ml-3 flex-1">
+                <div class="flex justify-between">
+                  <span class="text-gray-900 font-medium">{{ option.name }}</span>
+                  <span class="text-[#1EA29E] font-medium">+NT$ {{ option.price|intcomma }}</span>
+                </div>
+              </div>
+            </label>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- 分隔線 -->
+        <hr class="border-gray-200">
+
+        <!-- 按鈕區 -->
+        <div class="flex justify-between">
+          <button type="submit" name="delete_sponsor" 
+            class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+            取消贊助
+          </button>
+          <button type="submit"
+            class="px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1EA29E] hover:bg-[#198784] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1EA29E]">
+            下一步：確認贊助
           </button>
         </div>
       </form>
     </div>
-
-    <form method="POST" class="mt-4">
-      {% csrf_token %}
-      <button
-        type="submit"
-        name="delete_sponsor"
-        class="w-full bg-gray-400 text-white font-medium py-2 px-4 rounded-lg hover:bg-gray-500 focus:ring-2 focus:ring-gray-300"
-      >
-        返回上一步
-      </button>
-    </form>
   </div>
 </div>
 {% endblock %}

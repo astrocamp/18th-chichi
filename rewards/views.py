@@ -259,24 +259,25 @@ def free_sponsor(request, slug):
 def reward_sponsor(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
-    if request.POST:
+    if request.method == "POST":
         reward_id = request.POST.get("reward")
         reward = get_object_or_404(Reward, id=reward_id, project=project)
+
+        # 創建 Sponsor 記錄
         amount = reward.price if reward.price is not None else 0
-        Sponsor.objects.create(
+        sponsor = Sponsor.objects.create(
             account=request.user,
             project=project,
             reward=reward,
             amount=amount,
-        )
-        return redirect(
-            f"{reverse('projects:reward_sponsor_options', kwargs={'slug': project.slug})}?amount={amount}"
+            status="pending",
         )
 
-    rewards = project.rewards.all()
-    return render(
-        request, "rewards/sponsor.html", {"project": project, "rewards": rewards}
-    )
+        # 重定向到選擇配件頁面
+        return redirect("projects:reward_sponsor_options", slug=project.slug)
+
+    # 如果不是 POST 請求，重定向回專案頁面
+    return redirect("projects:public", slug=project.slug)
 
 
 @login_required
@@ -435,4 +436,21 @@ def free_sponsor_confirm(request, slug):
         request,
         "rewards/free_sponsor_confirm.html",
         {"project": project, "sponsor": sponsor, "amount": amount},
+    )
+
+
+def rewards_content(request, slug):
+    """處理贊助方案內容的視圖函數"""
+    from projects.models import Project  # 在函數內部導入以避免循環引用
+
+    project = get_object_or_404(Project, slug=slug)
+    rewards = Reward.objects.filter(project=project).order_by("price")
+
+    return render(
+        request,
+        "rewards/partials/rewards_content.html",
+        {
+            "project": project,
+            "rewards": rewards,
+        },
     )

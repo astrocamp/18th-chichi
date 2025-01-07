@@ -41,6 +41,12 @@
                 專案內容
               </button>
               <button 
+                @click="activeTab = 'rewards'"
+                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'rewards'}"
+                class="border-b-2 py-4 px-1 text-sm font-medium">
+                贊助方案
+              </button>
+              <button 
                 @click="activeTab = 'faq'"
                 :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'faq'}"
                 class="border-b-2 py-4 px-1 text-sm font-medium">
@@ -65,6 +71,21 @@
           <div class="py-8">
             <div x-show="activeTab === 'story'" class="prose max-w-none">
               {{ project.story|safe }}
+            </div>
+            <div x-show="activeTab === 'rewards'" class="space-y-6">
+              <!-- 贊助方案使用 htmx 動態載入 -->
+              <div 
+                hx-get="{% url 'rewards:rewards_content' project.slug %}"
+                hx-trigger="load"
+                hx-target="this"
+                hx-swap="innerHTML"
+                hx-indicator="#rewards-loading"
+              >
+                <div id="rewards-loading" class="text-center py-8">
+                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#1EA29E]"></div>
+                  <p class="mt-2 text-gray-600">載入贊助方案中...</p>
+                </div>
+              </div>
             </div>
             <div x-show="activeTab === 'faq'" class="space-y-6">
               <!-- FAQ 內容使用 htmx 動態載入 -->
@@ -128,26 +149,20 @@
 
             <!-- 進度條 -->
             <div class="relative pt-1">
-              <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+              <div class="overflow-hidden h-4 mb-4 text-xs flex rounded bg-gray-200">
                 <div
-                  class="bg-[#1EA29E] h-2 rounded"
+                  class="bg-[#1EA29E] h-4 rounded"
                   style="width: {{ progress_percentage }}%"
                 ></div>
               </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-4 mb-6">
+            <div class="grid grid-cols-1 gap-4">
               <div class="text-center">
                 <p class="text-2xl font-bold text-gray-900">{{ project.backers_count }}</p>
                 <p class="text-sm text-gray-500">贊助人數</p>
               </div>
             </div>
-
-            <!-- 贊助按鈕 -->
-            <a href="{% url 'projects:sponsor' project.slug %}"
-              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1EA29E] hover:bg-[#198784] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1EA29E]">
-              立即贊助
-            </a>
           </div>
 
           <!-- 專案資訊 -->
