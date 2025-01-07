@@ -91,7 +91,7 @@
             <div x-show="activeTab === 'comments'" class="space-y-6">
               <!-- 留言區使用 htmx 動態載入 -->
               <div 
-                hx-get="{% url 'projects:comment_index' project.slug %}" 
+                hx-get="{% url 'projects:comments_index' project.slug %}" 
                 hx-trigger="load"
                 hx-target="this"
                 hx-swap="innerHTML"

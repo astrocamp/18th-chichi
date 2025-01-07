@@ -13,8 +13,8 @@ from .views import (
     gender_amount_boxplot,
     reward_grouped_bar_chart,
     public,
+    comments_index,
 )
-from comments.views import index as comment_index, new as comment_new
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
     index as update_records_index,
@@ -32,14 +32,6 @@ from rewards.views import (
     reward_sponsor_options,
 )
 
-from comments.views import (
-    new as new_comment,
-    reply as reply_comment,
-    delete as delete_comment,
-    reply_form as reply_form,
-)
-
-
 app_name = "projects"
 
 urlpatterns = [
@@ -50,6 +42,7 @@ urlpatterns = [
     path("<slug:slug>/edit", edit, name="edit"),
     path("<slug:slug>/delete", delete, name="delete"),
     path("<slug:slug>/collect", collect_projects, name="collect"),
+    path("<slug:slug>/comments", comments_index, name="comments_index"),
     path("<slug:slug>/faq", faq_index, name="faq_index"),
     path("<slug:slug>/faq/new", faq_new, name="faq_new"),
     path(
@@ -57,22 +50,6 @@ urlpatterns = [
     ),
     path(
         "<slug:slug>/update_records/new", update_records_new, name="update_records_new"
-    ),
-    path("<slug:slug>/comments/new/", new_comment, name="new_comment"),
-    path(
-        "<slug:slug>/comments/reply/<slug:comment_slug>/",
-        reply_comment,
-        name="reply_comment",
-    ),
-    path(
-        "<slug:slug>/comments/delete/<slug:comment_slug>/",
-        delete_comment,
-        name="delete_comment",
-    ),
-    path(
-        "<slug:slug>/comments/reply_form/<slug:comment_slug>/",
-        reply_form,
-        name="reply_form",
     ),
     path("<slug:slug>/like", like_projects, name="like"),
     path("<slug:slug>/rewards", rewards_index, name="rewards_index"),

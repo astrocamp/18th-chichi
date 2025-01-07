@@ -526,3 +526,73 @@ def public(request, slug):
     }
 
     return render(request, "projects/public.html", context)
+
+
+def comments_index(request, slug):
+    """
+    顯示專案的留言列表，整合 comments app 的功能
+    """
+    project = get_object_or_404(Project, slug=slug)
+
+    # 獲取主留言（沒有父留言的留言）
+    comments = (
+        Comment.objects.filter(project=project, parent__isnull=True)
+        .order_by("-created_at")
+        .select_related("account")
+        .prefetch_related("replies", "replies__account")
+    )
+
+    if request.method == "DELETE":
+        if not request.user.is_authenticated:
+            return HttpResponse("請先登入", status=401)
+
+        comment_id = request.GET.get("comment_id")
+        if comment_id:
+            comment = get_object_or_404(Comment, id=comment_id, project=project)
+            if request.user == comment.account:
+                comment.delete()
+                messages.success(request, "留言已刪除")
+            else:
+                return HttpResponse("您沒有權限刪除這則留言", status=403)
+
+    if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "請先登入")
+            return redirect("projects:comments_index", slug=project.slug)
+
+        content = request.POST.get("content")
+        parent_id = request.POST.get("parent_id")
+
+        if content:
+            # 如果有 parent_id，表示這是一個回覆
+            if parent_id:
+                parent_comment = get_object_or_404(
+                    Comment, id=parent_id, project=project
+                )
+                Comment.objects.create(
+                    project=project,
+                    content=content,
+                    account=request.user,
+                    parent=parent_comment,
+                )
+                messages.success(request, "回覆成功")
+            else:
+                # 這是一個主留言
+                Comment.objects.create(
+                    project=project, content=content, account=request.user
+                )
+                messages.success(request, "留言成功")
+
+    # 如果是 htmx 請求，返回部分模板
+    if request.headers.get("HX-Request"):
+        return render(
+            request,
+            "projects/partials/comments_content.html",
+            {"comments": comments, "project": project, "user": request.user},
+        )
+
+    return render(
+        request,
+        "projects/comments.html",
+        {"comments": comments, "project": project, "user": request.user},
+    )
