@@ -65,16 +65,19 @@
     <!-- 操作按鈕 -->
     <div class="mt-6 space-x-4">
       {% if profile.phone %}
-      <a href="{% url 'profile:edit' %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
-        <i class="fas fa-user-edit mr-2"></i>更新個人資料
+      <a href="{% url 'profile:edit' %}" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+        <i class="fas fa-user-edit mr-2"></i>
+        更新個人資料
       </a>
       {% else %}
-      <a href="{% url 'profile:new' %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
-        <i class="fas fa-user-plus mr-2"></i>新增個人資料
+      <a href="{% url 'profile:new' %}" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+        <i class="fas fa-user-plus mr-2"></i>
+        新增個人資料
       </a>
       {% endif %}
-      <a href="{% url 'accounts:index' %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
-        <i class="fas fa-arrow-left mr-2"></i>回個人頁面
+      <a href="{% url 'accounts:index' %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+        <i class="fas fa-arrow-left mr-2"></i>
+        回個人頁面
       </a>
     </div>
   </div>

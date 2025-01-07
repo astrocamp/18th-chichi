@@ -73,6 +73,10 @@
 
     <!-- 功能按鈕 -->
     <div class="flex flex-wrap gap-4 mb-8">
+      <a href="{% url 'projects:edit' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+        <i class="fas fa-edit mr-2"></i>
+        編輯專案
+      </a>
       <a href="{% url 'projects:comment' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-comments mr-2"></i>
         留言板

@@ -1,16 +1,12 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <div
-    class="relative py-16"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
-  >
+
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">我的帳戶</h1>
-        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          管理您的個人資料和設定
-        </p>
+        <h1 class="text-3xl font-bold mb-3 text-gray-800">我的帳戶</h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto">管理您的個人資料和設定</p>
       </div>
     </div>
   </div>
@@ -22,15 +18,11 @@
         <!-- 個人資料卡片 -->
         <div class="bg-white rounded-lg shadow-md p-8 mb-8">
           <div class="flex items-center space-x-4 mb-6">
-            <div
-              class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center"
-            >
+            <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
               <i class="fas fa-user text-3xl text-gray-400"></i>
             </div>
             <div>
-              <h2 class="text-2xl font-semibold text-gray-800">
-                {{ user.username }}
-              </h2>
+              <h2 class="text-2xl font-semibold text-gray-800">{{ user.username }}</h2>
               <p class="text-gray-600">{{ user.email }}</p>
             </div>
           </div>
@@ -52,11 +44,7 @@
 
             <div>
               <div class="space-y-3">
-                <a
-                  href="{% url 'projects:index' %}"
-                  class="block text-xl font-semibold hover:text-teal-600"
-                  style="color: #85cacc"
-                >
+                <a href="{% url 'projects:index' %}" class="block text-xl font-semibold hover:text-teal-600" style="color: #1ea29e">
                   <i class="fas fa-project-diagram mr-2"></i>
                   我的專案
                 </a>
@@ -81,10 +69,7 @@
                   </div>
                   <div class="text-right">
                     <p class="text-sm font-medium {% if collect.project.status == 'live' %}text-teal-600{% elif collect.project.status == 'pending' %}text-yellow-600{% else %}text-red-600{% endif %}">
-                      {% if collect.project.status == 'live' %}募資中
-                      {% elif collect.project.status == 'pending' %}未開始
-                      {% else %}已結束
-                      {% endif %}
+                      {% if collect.project.status == 'live' %}募資中 {% elif collect.project.status == 'pending' %}未開始 {% else %}已結束 {% endif %}
                     </p>
                   </div>
                 </div>
@@ -98,12 +83,9 @@
 
         <!-- 操作按鈕 -->
         <div class="flex justify-end space-x-4">
-          <a
-            href="{% url 'profile:edit' %}"
-            class="btn"
-            style="background-color: #85cacc20; color: #85cacc"
-          >
-            <i class="fas fa-user-edit mr-2"></i>編輯個人資料
+          <a href="{% url 'profile:edit' %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+            <i class="fas fa-user-edit mr-2"></i>
+            編輯個人資料
           </a>
         </div>
       </div>

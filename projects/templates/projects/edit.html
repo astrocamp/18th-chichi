@@ -1,16 +1,12 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <div
-    class="relative py-16"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
-  >
+  
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">編輯專案</h1>
-        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          修改專案內容，完善你的募資計畫
-        </p>
+        <h1 class="text-3xl font-bold mb-3 text-gray-800">編輯專案</h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto">修改專案內容，完善你的募資計畫</p>
       </div>
     </div>
   </div>
@@ -79,41 +75,55 @@
               />
             </div>
 
-            <div>
-              <label
-                for="cover_image"
-                class="block text-lg font-semibold text-gray-600"
-                >個人媒體</label
-              >
-              <input
-                type="file"
-                id="cover_image"
-                name="cover_image"
-                class="mt-1"
-              />
-            
-              <!-- 根據媒體類型動態顯示內容 -->
-              <div class="mt-4">
-                {% if media_type == "image" %}
-                <img
-                  src="{{ project.cover_image.url }}"
-                  alt="Profile Picture"
-                  class="w-40 h-40 rounded-full object-cover"
+            <div class="max-w-xl" x-data="fileUploadHandler()">
+              <label for="cover_image" class="block text-sm font-medium text-gray-700 mb-1">封面圖片</label>
+              <div class="relative">
+                <input
+                  type="file"
+                  id="cover_image"
+                  name="cover_image"
+                  accept="image/*,video/*"
+                  class="sr-only"
+                  @change="handleFile($event)"
                 />
-                {% elif media_type == "video" %}
-                <video
-                  src="{{ project.cover_image.url }}"
-                  controls
-                  class="w-40 h-40 rounded-lg object-cover"
+                <label
+                  for="cover_image"
+                  class="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-lg shadow-sm cursor-pointer hover:opacity-90"
+                  style="background-color: #1ea29e"
                 >
-                  您的瀏覽器不支援影片播放。
-                </video>
-                {% else %}
-                <p class="text-red-500">不支援的媒體格式。</p>
-                {% endif %}
+                  選擇檔案
+                </label>
+                <span class="ml-4 text-gray-600 text-sm" x-text="fileName"></span>
+            
+                <!-- 預覽圖片區域 -->
+                <div class="mt-4 flex justify-center items-center" x-show="previewUrl" x-transition>
+                  <div class="relative bg-gray-100 rounded-lg overflow-hidden" style="width: 300px; height: 300px">
+                    <img :src="previewUrl" alt="預覽圖片" class="absolute inset-0 w-full h-full object-contain" />
+                  </div>
+                </div>
+            
+                <!-- 原有的媒體顯示區域 -->
+                <div class="mt-4" x-show="!previewUrl">
+                  {% if media_type == "image" %}
+                  <img
+                    src="{{ project.cover_image.url }}"
+                    alt="Profile Picture"
+                    class="w-40 h-40 rounded-full object-cover"
+                  />
+                  {% elif media_type == "video" %}
+                  <video
+                    src="{{ project.cover_image.url }}"
+                    controls
+                    class="w-40 h-40 rounded-lg object-cover"
+                  >
+                    您的瀏覽器不支援影片播放。
+                  </video>
+                  {% else %}
+                  <p class="text-red-500">不支援的媒體格式。</p>
+                  {% endif %}
+                </div>
               </div>
             </div>
-
           <!-- 時間設定 -->
           <div class="space-y-4 pt-6">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">時間設定</h2>
@@ -172,18 +182,32 @@
             </div>
 
             <div>
-              <label
-                for="location"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >專案地點</label
-              >
-              <input
-                type="text"
-                id="location"
-                name="location"
-                class="input input-bordered w-full"
-                value="{{ project.location }}"
-              />
+              <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點</label>
+              <select id="location" name="location" class="input input-bordered w-full">
+                <option value="" {% if project.location == "" %}selected{% endif %}>請選擇縣市</option>
+                <option value="台北市" {% if project.location == "台北市" %}selected{% endif %}>台北市</option>
+                <option value="新北市" {% if project.location == "新北市" %}selected{% endif %}>新北市</option>
+                <option value="桃園市" {% if project.location == "桃園市" %}selected{% endif %}>桃園市</option>
+                <option value="台中市" {% if project.location == "台中市" %}selected{% endif %}>台中市</option>
+                <option value="台南市" {% if project.location == "台南市" %}selected{% endif %}>台南市</option>
+                <option value="高雄市" {% if project.location == "高雄市" %}selected{% endif %}>高雄市</option>
+                <option value="基隆市" {% if project.location == "基隆市" %}selected{% endif %}>基隆市</option>
+                <option value="新竹市" {% if project.location == "新竹市" %}selected{% endif %}>新竹市</option>
+                <option value="新竹縣" {% if project.location == "新竹縣" %}selected{% endif %}>新竹縣</option>
+                <option value="苗栗縣" {% if project.location == "苗栗縣" %}selected{% endif %}>苗栗縣</option>
+                <option value="彰化縣" {% if project.location == "彰化縣" %}selected{% endif %}>彰化縣</option>
+                <option value="南投縣" {% if project.location == "南投縣" %}selected{% endif %}>南投縣</option>
+                <option value="雲林縣" {% if project.location == "雲林縣" %}selected{% endif %}>雲林縣</option>
+                <option value="嘉義市" {% if project.location == "嘉義市" %}selected{% endif %}>嘉義市</option>
+                <option value="嘉義縣" {% if project.location == "嘉義縣" %}selected{% endif %}>嘉義縣</option>
+                <option value="屏東縣" {% if project.location == "屏東縣" %}selected{% endif %}>屏東縣</option>
+                <option value="宜蘭縣" {% if project.location == "宜蘭縣" %}selected{% endif %}>宜蘭縣</option>
+                <option value="花蓮縣" {% if project.location == "花蓮縣" %}selected{% endif %}>花蓮縣</option>
+                <option value="台東縣" {% if project.location == "台東縣" %}selected{% endif %}>台東縣</option>
+                <option value="澎湖縣" {% if project.location == "澎湖縣" %}selected{% endif %}>澎湖縣</option>
+                <option value="金門縣" {% if project.location == "金門縣" %}selected{% endif %}>金門縣</option>
+                <option value="連江縣" {% if project.location == "連江縣" %}selected{% endif %}>連江縣</option>
+              </select>
             </div>
           </div>
 
@@ -199,14 +223,14 @@
               <a
                 href="{% url 'projects:show' project.slug %}"
                 class="btn"
-                style="background-color: #85cacc20; color: #85cacc"
+                style="background-color: #85cacc20; color: #1EA29E"
               >
                 取消
               </a>
               <button
                 type="submit"
                 class="btn text-white"
-                style="background-color: #85cacc; border: none"
+                style="background-color: #1EA29E; border: none"
               >
                 儲存變更
               </button>

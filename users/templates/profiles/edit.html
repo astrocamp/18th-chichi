@@ -63,20 +63,41 @@
 
     <!-- 地點 -->
     <div>
-      <label for="location" class="block text-lg font-semibold text-gray-600"
-        >地點</label
-      >
-      <input
-        type="text"
+      <label for="location" class="block text-lg font-semibold text-gray-600">地點</label>
+      <select
         id="location"
         name="location"
-        value="{{ profile.location|default_if_none:'' }}"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
-      />
+      >
+        <option value="" {% if profile.location == "" or profile.location is None %}selected{% endif %}>請選擇地點</option>
+        <option value="台北市" {% if profile.location == "台北市" %}selected{% endif %}>台北市</option>
+        <option value="新北市" {% if profile.location == "新北市" %}selected{% endif %}>新北市</option>
+        <option value="桃園市" {% if profile.location == "桃園市" %}selected{% endif %}>桃園市</option>
+        <option value="台中市" {% if profile.location == "台中市" %}selected{% endif %}>台中市</option>
+        <option value="台南市" {% if profile.location == "台南市" %}selected{% endif %}>台南市</option>
+        <option value="高雄市" {% if profile.location == "高雄市" %}selected{% endif %}>高雄市</option>
+        <option value="基隆市" {% if profile.location == "基隆市" %}selected{% endif %}>基隆市</option>
+        <option value="新竹市" {% if profile.location == "新竹市" %}selected{% endif %}>新竹市</option>
+        <option value="新竹縣" {% if profile.location == "新竹縣" %}selected{% endif %}>新竹縣</option>
+        <option value="苗栗縣" {% if profile.location == "苗栗縣" %}selected{% endif %}>苗栗縣</option>
+        <option value="彰化縣" {% if profile.location == "彰化縣" %}selected{% endif %}>彰化縣</option>
+        <option value="南投縣" {% if profile.location == "南投縣" %}selected{% endif %}>南投縣</option>
+        <option value="雲林縣" {% if profile.location == "雲林縣" %}selected{% endif %}>雲林縣</option>
+        <option value="嘉義市" {% if profile.location == "嘉義市" %}selected{% endif %}>嘉義市</option>
+        <option value="嘉義縣" {% if profile.location == "嘉義縣" %}selected{% endif %}>嘉義縣</option>
+        <option value="屏東縣" {% if profile.location == "屏東縣" %}selected{% endif %}>屏東縣</option>
+        <option value="宜蘭縣" {% if profile.location == "宜蘭縣" %}selected{% endif %}>宜蘭縣</option>
+        <option value="花蓮縣" {% if profile.location == "花蓮縣" %}selected{% endif %}>花蓮縣</option>
+        <option value="台東縣" {% if profile.location == "台東縣" %}selected{% endif %}>台東縣</option>
+        <option value="澎湖縣" {% if profile.location == "澎湖縣" %}selected{% endif %}>澎湖縣</option>
+        <option value="金門縣" {% if profile.location == "金門縣" %}selected{% endif %}>金門縣</option>
+        <option value="連江縣" {% if profile.location == "連江縣" %}selected{% endif %}>連江縣</option>
+      </select>
     </div>
 
     <!-- 網站 -->
     <div>
+      {% if profile.website %}
       <label for="website" class="block text-lg font-semibold text-gray-600"
         >網站</label
       >
@@ -87,12 +108,6 @@
         value="{{ profile.website|default_if_none:'' }}"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
       />
-      {% if profile.website %}
-      <p class="text-blue-600 underline mt-2">
-        <a href="{{ profile.website }}" target="_blank"
-          >{{ profile.website }}</a
-        >
-      </p>
       {% else %}
       <p class="text-gray-500 italic">尚未填寫網站</p>
       {% endif %}
@@ -135,10 +150,10 @@
 
     <!-- 提交按鈕 -->
     <div class="flex justify-end space-x-4">
-      <a href="{% url 'profile:index' %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+      <a href="{% url 'profile:index' %}" class="btn" style="background-color: #85cacc20; color: #1EA29E">
         <i class="fas fa-arrow-left mr-2"></i>返回
       </a>
-      <button type="submit" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+      <button type="submit" class="btn" style="background-color: #1EA29E; color: white; padding: 0.75rem 2rem">
         <i class="fas fa-save mr-2"></i>更新
       </button>
     </div>

@@ -55,12 +55,12 @@
                 ></div>
               </div>
               <div class="flex justify-between text-sm">
-                <span class="font-bold" style="color: #85cacc">NT$ {{ project.raised_amount|default:'0'|floatformat:0 }}</span>
+                <span class="font-bold" style="color: #1ea29e">NT$ {{ project.raised_amount|default:'0'|floatformat:0 }}</span>
                 <span class="text-gray-500">目標 {{ project.goal_amount|floatformat:0 }}</span>
               </div>
             </div>
             <div class="mt-6 flex justify-end space-x-2">
-              <a href="{% url 'projects:edit' project.slug %}" class="btn btn-sm" style="background-color: #85cacc20; color: #85cacc">編輯</a>
+              <a href="{% url 'projects:edit' project.slug %}" class="btn btn-sm" style="background-color: #85cacc20; color: #1ea29e">編輯</a>
               <a href="{% url 'projects:show' project.slug %}" class="btn btn-sm text-white" style="background-color: #1ea29e">查看</a>
             </div>
           </div>
