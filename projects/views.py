@@ -14,10 +14,9 @@ from django.http import JsonResponse
 from django.db.models import Count
 from django.utils.timezone import make_aware
 import random
-from datetime import date,timedelta
+from datetime import date, timedelta
 from django.db.models import Min, Max, Avg, Q
 from decimal import Decimal
-
 
 
 from datetime import datetime
@@ -92,6 +91,8 @@ def new(request):
 
 @login_required
 def show(request, slug):
+    from .models import ProjectCategory
+
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
     comments = project.comments.filter(parent__isnull=True).order_by("-id")
@@ -138,6 +139,14 @@ def show(request, slug):
     ).first()
 
     media_type = get_media_type(project.cover_image.name)
+    categories = Category.objects.filter(
+        id__in=ProjectCategory.objects.filter(project_id=project.id).values_list(
+            "category_id", flat=True
+        )
+    )
+
+    parent_ids = [category.parent_id for category in categories if category.parent_id]
+    parent_categories = Category.objects.filter(id__in=parent_ids)
     return render(
         request,
         "projects/show.html",
@@ -149,6 +158,8 @@ def show(request, slug):
             "comments": comments,
             "media_type": media_type,
             "progress_percentage": progress_percentage,  # 加入達成率
+            "categories": categories,
+            "parent_categories": parent_categories,
         },
     )
 
@@ -178,11 +189,14 @@ def get_media_type(file_name):
 
 @login_required
 def edit(request, slug):
+    from .models import ProjectCategory
+
     project = get_object_or_404(Project, slug=slug)
     media_type = get_media_type(project.cover_image.name)
 
     format_time_start = localtime(project.start_at).strftime("%Y-%m-%dT%H:%M")
     format_time_end = localtime(project.end_at).strftime("%Y-%m-%dT%H:%M")
+    categories = Category.objects.filter(parent__isnull=True)
     return render(
         request,
         "projects/edit.html",
@@ -191,6 +205,7 @@ def edit(request, slug):
             "format_time_start": format_time_start,
             "format_time_end": format_time_end,
             "media_type": media_type,
+            "categories": categories,
         },
     )
 

@@ -30,10 +30,7 @@ class Project(models.Model):
     end_at = models.DateTimeField()
     story = models.TextField()
     categories = models.ManyToManyField(
-        Category,
-        through="ProjectCategory",
-        through_fields=("project", "category", "subcategory"),
-        related_name="projects",
+        Category, through="ProjectCategory", through_fields=("project", "category")
     )
     location = models.CharField(null=True, max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -170,13 +167,7 @@ class Sponsor(models.Model):
 
 class ProjectCategory(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    category = models.ForeignKey(
-        Category, on_delete=models.CASCADE, related_name="project_categories"
-    )
-    subcategory = models.ForeignKey(
-        Category,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="subcategory_project_categories",
-    )
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("project", "category")
