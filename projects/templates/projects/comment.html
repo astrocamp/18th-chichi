@@ -1,0 +1,46 @@
+{% extends "shared/layout.html" %} {% block "content" %}
+<div class="min-h-screen bg-white">
+  <!-- Hero Section -->
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+    <div class="container mx-auto px-4">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold mb-3 text-gray-800">留言區</h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto">查看留言並新增你的想法</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Content Section -->
+  <div class="py-16">
+    <div class="container mx-auto px-4">
+      <div class="max-w-2xl mx-auto">
+        <!-- 返回按鈕 -->
+        <div class="mb-8">
+          <a href="{% url 'projects:show' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回專案詳情
+          </a>
+        </div>
+
+        <!-- 新增留言 -->
+        <div class="bg-white rounded-lg shadow-md p-8 mb-8">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">新增留言</h2>
+          <div>{% include "comments/comment_form.html" %}</div>
+        </div>
+
+        <!-- 留言列表 -->
+        <div class="bg-white rounded-lg shadow-md p-8">
+          <h2 class="text-2xl font-semibold text-gray-800 mb-4">留言列表</h2>
+          <div id="comments-list" class="space-y-8">
+            {% for comment in comments %}
+            <div class="bg-gray-50 rounded-lg shadow-sm p-6">{% include "comments/comment_item.html" with comment=comment project=project %}</div>
+            {% empty %}
+            <p class="text-gray-600">目前沒有留言。</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

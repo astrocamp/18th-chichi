@@ -1,20 +1,5 @@
 from django.urls import path
-from .views import (
-    index,
-    new,
-    show,
-    edit,
-    delete,
-    collect_projects,
-    like_projects,
-    gender_proportion,
-    chart_page,
-    daily_sponsorship_amount,
-    gender_amount_boxplot,
-    reward_grouped_bar_chart,
-    public,
-    comments_index,
-)
+from .views import index, new, show, edit, delete, collect_projects, like_projects,gender_proportion,chart_page,daily_sponsorship_amount,gender_amount_boxplot,reward_grouped_bar_chart,comment,public,comments_index
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
     index as update_records_index,
@@ -43,6 +28,7 @@ urlpatterns = [
     path("<slug:slug>/delete", delete, name="delete"),
     path("<slug:slug>/collect", collect_projects, name="collect"),
     path("<slug:slug>/comments", comments_index, name="comments_index"),
+    path("<slug:slug>/comment", comment, name="comment"),
     path("<slug:slug>/faq", faq_index, name="faq_index"),
     path("<slug:slug>/faq/new", faq_new, name="faq_new"),
     path(

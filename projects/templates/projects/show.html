@@ -6,15 +6,31 @@
     {% if project.subtitle %}
     <p class="text-xl text-gray-600 mb-6">{{ project.subtitle }}</p>
     {% endif %}
+    <!-- 封面區 -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-600 mb-4">封面圖片</h2>
+      <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center" style="max-height: 400px">
+        {% if media_type == "image" %}
+        <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-auto h-auto max-w-full max-h-full object-contain" />
+        {% elif media_type == "video" %}
+        <video src="{{ project.cover_image.url }}" controls class="w-auto h-auto max-w-full max-h-full object-contain rounded-lg">您的瀏覽器不支援影片播放。</video>
+        {% else %}
+        <p class="text-gray-600">不支援的媒體格式。</p>
+        {% endif %}
+      </div>
+    </div>
 
     <!-- 金額資訊 -->
     <div class="mb-8">
       <div class="mb-6">
         <p class="text-lg mb-1">目前累積金額</p>
         <p class="text-3xl font-bold text-teal-600">NT$ {{ project.raised_amount|default:"0" }}</p>
-        <div class="mt-2 bg-gray-200 rounded-full h-2">
+        <!-- 進度條容器 -->
+        <div class="mt-2 bg-gray-200 rounded-full h-4">
+          <!-- 修改高度為 h-4 -->
+          <!-- 進度條 -->
           <div
-            class="bg-teal-500 h-2 rounded-full"
+            class="bg-teal-500 h-4 rounded-full"
             id="progress-bar"
             data-start="{{ project.start_at|date:'Y-m-d H:i:s' }}"
             data-raised="{{ project.raised_amount|default:0 }}"
@@ -57,42 +73,25 @@
 
     <!-- 功能按鈕 -->
     <div class="flex flex-wrap gap-4 mb-8">
-      <form action="{% url 'projects:collect' project.slug %}" method="post">
-        {% csrf_token %}
-        <button class="btn" style="background-color: #85cacc20; color: #85cacc">
-          <i class="fas fa-bookmark mr-2"></i>
-          {% if collected %}取消收藏{% else %}收藏{% endif %}
-        </button>
-      </form>
-
-      <form action="{% url 'projects:like' project.slug %}" method="post">
-        {% csrf_token %}
-        <button class="btn" style="background-color: #85cacc20; color: #85cacc">
-          {% if favorited %}
-          <img src="{% static 'svg/like-on.svg' %}" alt="取消按讚" class="w-4 h-4 mr-2" />
-          {% else %}
-          <img src="{% static 'svg/like-off.svg' %}" alt="按讚" class="w-4 h-4 mr-2" />
-          {% endif %} {% if favorited %}取消按讚{% else %}按讚{% endif %}
-        </button>
-      </form>
-      <a href="{% url 'projects:faq_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+      <a href="{% url 'projects:comment' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+        <i class="fas fa-comments mr-2"></i>
+        留言板
+      </a>
+      <a href="{% url 'projects:faq_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-question-circle mr-2"></i>
         常見問題
       </a>
-      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-newspaper mr-2"></i>
         更新記錄
       </a>
-      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
+      <a href="{% url 'projects:chart_page' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+        <i class="fas fa-chart-bar mr-2"></i>
+        數據分析
+      </a>
+      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-gift mr-2"></i>
         回饋方案
-      </a>
-      <a
-        href="{% url 'projects:chart_page' project.slug %}"
-        class="btn"
-        style="background-color: #85cacc20; color: #85cacc"
-      >
-        <i class="fas fa-chart-bar mr-2"></i>數據分析
       </a>
     </div>
 
@@ -101,24 +100,13 @@
       <h2 class="text-2xl font-bold mb-4">專案說明</h2>
       <div class="prose max-w-none text-gray-600">{{ project.story|linebreaks }}</div>
     </div>
-    <!-- 封面區 -->
-    <div>
-      <h2 class="text-lg font-semibold text-gray-600">個人媒體</h2>
-      {% if media_type == "image" %}
-      <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-40 h-40 rounded-full object-cover" />
-      {% elif media_type == "video" %}
-      <video src="{{ project.cover_image.url }}" controls class="w-40 h-40 rounded-lg object-cover">您的瀏覽器不支援影片播放。</video>
-      {% else %}
-      <p>不支援的媒體格式。</p>
-      {% endif %}
-    </div>
 
     <!-- 贊助按鈕 -->
     <div class="text-center">
       {% if user == project.account %} {% if project.status == 'pending' %}
       <form action="" method="post" class="inline-block">
         {% csrf_token %}
-        <button type="submit" name="publish" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
+        <button type="submit" name="publish" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
           <i class="fas fa-rocket mr-2"></i>
           上架專案
         </button>
@@ -131,13 +119,8 @@
           下架專案
         </button>
       </form>
-      {% endif %} {% else %}
-      <a href="{% url 'projects:sponsor' project.slug %}" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
-        <i class="fas fa-hand-holding-heart mr-2"></i>
-        立即贊助
-      </a>
-      {% endif %}
-      <a href="{% url 'projects:index' %}" class="btn ml-4" style="background-color: #85cacc20; color: #85cacc">
+      {% endif %} {% endif %}
+      <a href="{% url 'projects:index' %}" class="btn ml-4" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-arrow-left mr-2"></i>
         返回列表
       </a>
@@ -145,13 +128,6 @@
   </div>
 </div>
 
-<div class="comment">
-  <h2>新增留言：</h2>
-  {% include "comments/comment_form.html" %}
-  <br />
-  <br />
-  <div id="comments-list" class="comments-list">{% for comment in comments%} {% include "comments/comment_item.html" with comment=comment project=project %} {% endfor %}</div>
-</div>
 {% endblock %} {% block "extra_js" %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {

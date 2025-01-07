@@ -1,18 +1,13 @@
-<div class="reply-item" id="reply-{{ comment.slug }}">
-    <p>
-        <strong>{{ comment.account.username }}</strong>: {{ comment.content }}
-    </p>
-    <small class="text-gray-500 text-xs">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
-    
-
-    {% if user == comment.account %}
-    <form hx-post="{% url 'comments:delete' project.slug comment.slug %}"
-          hx-target="#reply-{{ comment.slug }}"
-          hx-swap="outerHTML"
-          hx-confirm="確定要刪除這條回覆嗎"
-          style="display: inline;">
-        {% csrf_token %}
-        <button type="submit">刪除</button>
-    </form>
-    {% endif %}
+<div class="reply-item bg-gray-100 rounded-md p-4 shadow-sm mt-4" id="reply-{{ comment.slug }}">
+  <p class="text-gray-800">
+    <strong>{{ comment.account.username }}</strong>
+    : {{ comment.content }}
+  </p>
+  <small class="text-gray-500 text-xs">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
+  {% if user == comment.account %}
+  <form hx-post="{% url 'comments:delete' project.slug comment.slug %}" hx-target="#reply-{{ comment.slug }}" hx-swap="outerHTML" hx-confirm="確定要刪除這條回覆嗎" class="inline-block mt-2">
+    {% csrf_token %}
+    <button type="submit" class="text-red-500 hover:underline">刪除</button>
+  </form>
+  {% endif %}
 </div>

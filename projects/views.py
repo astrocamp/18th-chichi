@@ -130,6 +130,12 @@ def show(request, slug):
         },
     )
 
+def comment(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    account = get_object_or_404(User, id=request.user.id)
+    comments = project.comments.filter(parent__isnull=True).order_by("-id")
+    return render(request, "projects/comment.html", {"project": project, "account": account, "comments": comments})
+
 
 def get_media_type(file_name):
     file_name = file_name.lower()

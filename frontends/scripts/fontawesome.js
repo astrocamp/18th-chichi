@@ -37,6 +37,7 @@ import {
   faHouse,
   faHeart,
   faArrowRight,
+  faComment,
 } from "@fortawesome/free-solid-svg-icons";
 
 // 添加圖示到庫中
@@ -76,7 +77,8 @@ library.add(
   faSpinner,
   faHouse,
   faHeart,
-  faArrowRight
+  faArrowRight,
+  faComment
 );
 
 // 自動掃描 DOM 並渲染圖標
