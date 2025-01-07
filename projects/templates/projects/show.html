@@ -190,4 +190,52 @@
     setInterval(updateCountdown, 60 * 1000);
   });
 </script>
+<div
+class="max-w-md mx-auto p-4 bg-white shadow-md rounded"
+x-data="{
+  copyText: 'https://chichii.com/projects/{{project.slug}}', // 預設要複製的文字
+  copyMessage: '',
+  copySuccess: false,
+
+  copyToClipboard() {
+    if (!this.copyText) {
+      this.copyMessage = '請輸入要複製的內容。';
+      this.copySuccess = false;
+      return;
+    }
+    navigator.clipboard.writeText(this.copyText)
+      .then(() => {
+        this.copyMessage = `成功複製: ${this.copyText}`;
+        this.copySuccess = true;
+      })
+      .catch((error) => {
+        console.error('複製失敗:', error);
+        this.copyMessage = '複製失敗';
+        this.copySuccess = false;
+      });
+  }
+}"
+>
+<h1 class="text-xl font-bold mb-4">一鍵複製專案</h1>
+<div class="flex items-center mb-2">
+  <input
+    type="text"
+    x-model="copyText"
+    class="copyInput w-full border border-gray-300 rounded px-2 py-1"
+    readonly
+  >
+  <button
+    @click="copyToClipboard"
+    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ml-2"
+  >
+    複製到剪貼板
+  </button>
+</div>
+<div
+  x-text="copyMessage"
+  :class="copySuccess ? 'text-green-600' : 'text-red-600'"
+  class="text-sm mt-2"
+></div>
+</div>
+
 {% endblock %}
