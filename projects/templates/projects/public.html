@@ -10,13 +10,15 @@
       <!-- 左側專案內容 -->
       <div class="lg:col-span-8">
         <!-- 專案圖片輪播 -->
-        <div x-data="{ currentSlide: 0 }" class="relative mb-8 rounded-lg overflow-hidden">
-          <div class="aspect-w-16 aspect-h-9">
-            <img :src="project.images[currentSlide]" class="w-full h-full object-cover" alt="Project image">
+        <div x-data="{ currentSlide: 0, images: [
+          '{{ project.cover_image.url }}'
+        ] }" class="relative mb-8 rounded-lg overflow-hidden bg-gray-100">
+          <div class="h-[480px]">
+            <img :src="images[currentSlide]" class="w-full h-full object-contain" alt="Project image">
           </div>
           <!-- 輪播控制按鈕 -->
           <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            <template x-for="(image, index) in project.images" :key="index">
+            <template x-for="(image, index) in images" :key="index">
               <button 
                 @click="currentSlide = index"
                 :class="{'bg-white': currentSlide === index, 'bg-white/50': currentSlide !== index}"
@@ -70,7 +72,7 @@
           <!-- 內容區域 -->
           <div class="py-8">
             <div x-show="activeTab === 'story'" class="prose max-w-none">
-              {{ project.story|safe }}
+              <div class="whitespace-pre-wrap">{{ project.story|safe }}</div>
             </div>
             <div x-show="activeTab === 'rewards'" class="space-y-6">
               <!-- 贊助方案使用 htmx 動態載入 -->
@@ -182,6 +184,10 @@
               <div>
                 <p class="text-sm text-gray-500">專案分類</p>
                 <p class="text-sm font-medium text-gray-900">{{ project.category.name }}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">專案地點</p>
+                <p class="text-sm font-medium text-gray-900">{{ project.location }}</p>
               </div>
             </div>
           </div>
