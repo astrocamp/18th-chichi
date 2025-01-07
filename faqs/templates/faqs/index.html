@@ -1,87 +1,40 @@
 {% extends "shared/layout.html" %} {% block "content" %}
-<h1>FAQs</h1>
-<a href="{% url 'projects:faq_new' project.slug %}">New Question</a>
-<a href="{% url 'projects:show' project.slug %}">回專案頁面</a>
-
-<div class="container mx-auto py-8 px-4">
-    <div class="grid grid-cols-1 gap-6" id = "faq-list">
-        {% for faq in faqs %}
-            <a href="{% url 'faqs:show' faq.slug %}" class="faq-item block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow" data-id="{{ faq.id }}">
-                <div class="text-lg font-semibold mb-2 text-gray-800">{{ faq.question|linebreaks }}</div>
-                <span class="text-sm text-gray-500">建立時間: {{ faq.created_at|date:"Y-m-d H:i:s" }}</span>
-            </a>
-        {% endfor %}    
+<div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  <div class="container mx-auto px-4">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold mb-3 text-gray-800">常見問題詳情</h1>
+      <p class="text-lg text-gray-600 max-w-xl mx-auto">管理專案專案相關的問題與解答</p>
     </div>
+  </div>
 </div>
 
-  <!-- FAQ Section -->
-  <div class="py-16">
-    <div class="container mx-auto px-4">
-      <div class="max-w-3xl mx-auto">
-        <!-- 操作按鈕 -->
-        <div class="flex justify-between items-center mb-8">
-          <a
-            href="{% url 'projects:show' project.slug %}"
-            class="btn"
-            style="background-color: #85cacc20; color: #85cacc"
-          >
-            <i class="fas fa-arrow-left mr-2"></i>
-            回到專案
-          </a>
-          <a
-            href="{% url 'projects:faq_new' project.slug %}"
-            class="btn text-white"
-            style="background-color: #85cacc; border: none"
-          >
-            <i class="fas fa-plus mr-2"></i>
-            新增問題
-          </a>
-        </div>
+<!-- FAQ Section -->
+<div class="py-16">
+  <div class="container mx-auto px-4">
+    <div class="max-w-3xl mx-auto">
+      <!-- 操作按鈕 -->
+      <div class="flex justify-between items-center mb-8">
+        <a href="{% url 'projects:show' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+          <i class="fas fa-arrow-left mr-2"></i>
+          回到專案
+        </a>
+        <a href="{% url 'projects:faq_new' project.slug %}" class="btn text-white" style="background-color: #1ea29e; border: none">
+          <i class="fas fa-plus mr-2"></i>
+          新增問題
+        </a>
+      </div>
 
-        <!-- FAQ 列表 -->
-        <div class="space-y-6">
-          {% for faq in faqs %}
-          <div class="bg-white rounded-lg shadow-md p-6">
-            <div class="flex justify-between items-start mb-4">
-              <div class="flex-1">
-                <h3 class="text-lg font-medium text-gray-800 mb-2">
-                  {{ faq.question }}
-                </h3>
-                {% if faq.answer %}
-                <p class="text-gray-600">{{ faq.answer|truncatewords:30 }}</p>
-                {% else %}
-                <p class="text-gray-500 italic">尚未回答</p>
-                {% endif %}
-              </div>
-              <div class="ml-4 flex flex-col items-end">
-                <a
-                  href="{% url 'faqs:show' faq.slug %}"
-                  class="text-sm mb-2"
-                  style="color: #85cacc"
-                >
-                  查看詳情
-                </a>
-                <span class="text-sm text-gray-500">
-                  {{ faq.create_at|date:"Y/m/d H:i" }}
-                </span>
-              </div>
-            </div>
-          </div>
-          {% empty %}
-          <div class="text-center py-12">
-            <p class="text-gray-500 mb-4">目前還沒有任何常見問題</p>
-            <a
-              href="{% url 'projects:faq_new' project.slug %}"
-              class="btn text-white"
-              style="background-color: #85cacc; border: none"
-            >
-              立即新增問題
-            </a>
-          </div>
-          {% endfor %}
-        </div>
+      <!-- FAQ 列表 -->
+      <div class="grid grid-cols-1 gap-6" id="faq-list">
+        {% for faq in faqs %}
+        <a href="{% url 'faqs:show' faq.slug %}" class="faq-item block bg-white border border-gray-200 shadow-sm rounded-lg p-6 hover:shadow-md transition-shadow" data-id="{{ faq.id }}">
+          <div class="text-lg font-semibold mb-2 text-gray-800">{{ faq.question|linebreaks }}</div>
+          <span class="text-sm text-gray-500">建立時間: {{ faq.created_at|date:"Y-m-d H:i:s" }}</span>
+        </a>
+        {% endfor %}
       </div>
     </div>
   </div>
 </div>
+
 {% endblock %}

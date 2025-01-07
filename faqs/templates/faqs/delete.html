@@ -1,16 +1,11 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <div
-    class="relative py-16"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
-  >
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">刪除常見問題</h1>
-        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          請確認是否要刪除此問題，此操作無法復原
-        </p>
+        <h1 class="text-3xl font-bold mb-3 text-gray-800">刪除常見問題</h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto">請確認是否要刪除此問題，此操作無法復原</p>
       </div>
     </div>
   </div>
@@ -21,18 +16,26 @@
       <div class="max-w-2xl mx-auto">
         <!-- 返回按鈕 -->
         <div class="mb-8">
-          <a
-            href="{% url 'faqs:show' faq.slug %}"
-            class="btn"
-            style="background-color: #85cacc20; color: #85cacc"
-          >
+          <a href="{% url 'faqs:show' faq.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
             <i class="fas fa-arrow-left mr-2"></i>
             返回問題詳情
           </a>
         </div>
 
-        <!-- 確認刪除卡片 -->
+        <!-- 刪除確認卡片 -->
         <div class="bg-white rounded-lg shadow-md p-8">
+          <!-- 警告訊息 -->
+          <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+            <div class="flex">
+              <div class="flex-shrink-0">
+                <i class="fas fa-exclamation-triangle text-red-400"></i>
+              </div>
+              <div class="ml-3">
+                <p class="text-sm text-red-700">警告：刪除後，此問題及其解答將永久消失且無法復原。請確認是否要繼續？</p>
+              </div>
+            </div>
+          </div>
+
           <!-- FAQ 內容預覽 -->
           <div class="mb-8">
             <h2 class="text-2xl font-semibold text-gray-800 mb-4">問題內容</h2>
@@ -41,26 +44,13 @@
             </div>
           </div>
 
-          <!-- 警告訊息 -->
-          <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8">
-            <p class="text-red-600">
-              警告：刪除後，此問題及其解答將永久消失且無法復原。請確認是否要繼續？
-            </p>
-          </div>
-
-          <!-- 操作按鈕 -->
-          <form method="POST" class="flex justify-end space-x-4">
+          <!-- 刪除表單 -->
+          <form method="POST" action="{% url 'faqs:delete' faq.slug %}" class="space-y-6">
             {% csrf_token %}
-            <a
-              href="{% url 'faqs:show' faq.slug %}"
-              class="btn"
-              style="background-color: #85cacc20; color: #85cacc"
-            >
-              取消
-            </a>
-            <button type="submit" class="btn btn-error text-white">
-              確認刪除
-            </button>
+            <div class="flex justify-end space-x-4">
+              <a href="{% url 'faqs:show' faq.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">取消</a>
+              <button type="submit" class="btn btn-error text-white">確認刪除</button>
+            </div>
           </form>
         </div>
       </div>
