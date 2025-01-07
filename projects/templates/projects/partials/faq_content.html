@@ -1,0 +1,55 @@
+<div id="faq-content" class="space-y-6">
+  {% for faq in faqs %}
+  <div x-data="{ open: false }" class="bg-white rounded-lg shadow-md">
+    <!-- FAQ 問題 (點擊區域) -->
+    <button 
+      @click="open = !open" 
+      class="w-full p-6 text-left flex justify-between items-start focus:outline-none"
+    >
+      <div class="flex-1">
+        <h3 class="text-lg font-medium text-gray-800">
+          {{ faq.question }}
+        </h3>
+      </div>
+      <div class="ml-4 flex-shrink-0">
+        <!-- 箭頭圖標 -->
+        <svg 
+          :class="{'rotate-180': open}"
+          class="h-6 w-6 transform transition-transform duration-200 text-gray-500"
+          xmlns="http://www.w3.org/2000/svg" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+        </svg>
+      </div>
+    </button>
+    
+    <!-- FAQ 答案 (摺疊區域) -->
+    <div 
+      x-show="open" 
+      x-transition:enter="transition ease-out duration-200"
+      x-transition:enter-start="opacity-0 transform -translate-y-2"
+      x-transition:enter-end="opacity-100 transform translate-y-0"
+      x-transition:leave="transition ease-in duration-200"
+      x-transition:leave-start="opacity-100 transform translate-y-0"
+      x-transition:leave-end="opacity-0 transform -translate-y-2"
+      class="px-6 pb-6"
+    >
+      {% if faq.answer %}
+      <p class="text-gray-600">{{ faq.answer|linebreaks }}</p>
+      {% else %}
+      <p class="text-gray-500 italic">尚未回答</p>
+      {% endif %}
+      <div class="mt-2 text-sm text-gray-500 text-right">
+        {{ faq.created_at|date:"Y/m/d H:i" }}
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="text-center py-12">
+    <p class="text-gray-500">目前還沒有任何常見問題</p>
+  </div>
+  {% endfor %}
+</div> 

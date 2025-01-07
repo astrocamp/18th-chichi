@@ -4,13 +4,16 @@ from .models import UpdateRecord
 from projects.models import Project
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
+from django.contrib import messages
 
 
-@login_required
 def index(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            messages.error(request, "請先登入")
+            return redirect("projects:update_records_index", slug=project.slug)
         UpdateRecord.objects.create(
             title=request.POST["title"],
             description=request.POST["description"],
@@ -19,6 +22,15 @@ def index(request, slug):
         return redirect("projects:update_records_index", slug=project.slug)
 
     update_records = UpdateRecord.objects.filter(project=project)
+
+    # 如果是htmx請求，返回projects下的內容模板
+    if request.headers.get("HX-Request"):
+        return render(
+            request,
+            "projects/partials/update_records_content.html",
+            {"update_records": update_records},
+        )
+
     return render(
         request,
         "update_records/index.html",

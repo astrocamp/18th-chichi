@@ -1,5 +1,20 @@
 from django.urls import path
-from .views import index, new, show, edit, delete, collect_projects, like_projects,gender_proportion,chart_page,daily_sponsorship_amount,gender_amount_boxplot,reward_grouped_bar_chart
+from .views import (
+    index,
+    new,
+    show,
+    edit,
+    delete,
+    collect_projects,
+    like_projects,
+    gender_proportion,
+    chart_page,
+    daily_sponsorship_amount,
+    gender_amount_boxplot,
+    reward_grouped_bar_chart,
+    public,
+)
+from comments.views import index as comment_index, new as comment_new
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
     index as update_records_index,
@@ -25,14 +40,13 @@ from comments.views import (
 )
 
 
-
-
 app_name = "projects"
 
 urlpatterns = [
     path("", index, name="index"),
     path("new/", new, name="new"),
     path("<slug:slug>", show, name="show"),
+    path("<slug:slug>/public", public, name="public"),
     path("<slug:slug>/edit", edit, name="edit"),
     path("<slug:slug>/delete", delete, name="delete"),
     path("<slug:slug>/collect", collect_projects, name="collect"),
@@ -68,24 +82,35 @@ urlpatterns = [
     path("<slug:slug>/rewards/reward_items", reward_items, name="reward_items"),
     path("<slug:slug>/rewards/reward_sponsor", reward_sponsor, name="reward_sponsor"),
     path(
-        "<slug:slug>/rewards/sponsor/free_sponsor_confirm",
+        "<slug:slug>/rewards/free_sponsor_confirm",
         free_sponsor_confirm,
         name="free_sponsor_confirm",
     ),
     path(
-        "<slug:slug>/rewards/sponsor/reward_sponsor_options",
+        "<slug:slug>/rewards/reward_sponsor_options",
         reward_sponsor_options,
         name="reward_sponsor_options",
     ),
     path(
-        "<slug:slug>/rewards/sponsor/reward_sponsor_confirm",
+        "<slug:slug>/rewards/reward_sponsor_confirm",
         reward_sponsor_confirm,
         name="reward_sponsor_confirm",
     ),
     path("<slug:slug>/chart_page/", chart_page, name="chart_page"),
     path("<slug:slug>/gender_proportion/", gender_proportion, name="gender_proportion"),
-    path("<slug:slug>/daily_sponsorship_amount/", daily_sponsorship_amount, name="daily_sponsorship_amount"),
-    path("<slug:slug>/gender_amount_boxplot/", gender_amount_boxplot, name="gender_amount_boxplot"),
-    path("<slug:slug>/reward_grouped_bar_chart/", reward_grouped_bar_chart, name="reward_grouped_bar_chart"),
-
+    path(
+        "<slug:slug>/daily_sponsorship_amount/",
+        daily_sponsorship_amount,
+        name="daily_sponsorship_amount",
+    ),
+    path(
+        "<slug:slug>/gender_amount_boxplot/",
+        gender_amount_boxplot,
+        name="gender_amount_boxplot",
+    ),
+    path(
+        "<slug:slug>/reward_grouped_bar_chart/",
+        reward_grouped_bar_chart,
+        name="reward_grouped_bar_chart",
+    ),
 ]

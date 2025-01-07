@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ProjectFrom
 from .models import Project, CollectProject, FavoritePrject
-from django.utils.timezone import localtime
+from django.utils.timezone import localtime, now
 from django.views.decorators.http import require_POST
 from django.utils import timezone
 from django.http import HttpResponse
@@ -20,13 +20,33 @@ from django.db.models import Min, Max, Avg, Q
 from decimal import Decimal
 
 
+from datetime import datetime
+
+
+def calculate_total_days(end_date):
+    """計算到結束日期的總天數"""
+    if not end_date:
+        return 0
+    current_date = now()
+    if current_date > end_date:
+        return 0
+    time_difference = end_date - current_date
+    return time_difference.days + 1  # +1 是因為要包含今天
+
+
+def calculate_progress_percentage(raised_amount, goal_amount):
+    """計算達成率"""
+    if not goal_amount or goal_amount == 0:
+        return 0
+    percentage = (raised_amount or 0) / goal_amount * 100
+    return round(percentage, 1)  # 四捨五入到小數點第一位
 
 
 @login_required
 def index(request):
     account = request.user
     if request.POST:
-        form = ProjectFrom(request.POST,request.FILES)
+        form = ProjectFrom(request.POST, request.FILES)
         if form.is_valid():
             project = form.save(commit=False)
             project.account = account
@@ -40,9 +60,11 @@ def index(request):
     for project in projects:
         project.update_status()
         media_type = get_media_type(project.cover_image.name)
-  # 更新專案的上下架狀態
+    # 更新專案的上下架狀態
     return render(
-        request, "projects/index.html", {"projects": projects, "account": account, "media_type": media_type}
+        request,
+        "projects/index.html",
+        {"projects": projects, "account": account, "media_type": media_type},
     )
 
 
@@ -78,7 +100,7 @@ def show(request, slug):
                 return redirect("projects:show", slug=project.slug)
 
         else:
-            form = ProjectFrom(request.POST,request.FILES,instance=project)
+            form = ProjectFrom(request.POST, request.FILES, instance=project)
             form.save()
             project.update_at = timezone.now()
             project.save()
@@ -108,6 +130,7 @@ def show(request, slug):
         },
     )
 
+
 def get_media_type(file_name):
     file_name = file_name.lower()
     image_extensions = (".jpg", ".jpeg", ".png", ".gif")
@@ -119,11 +142,11 @@ def get_media_type(file_name):
         return "video"
     return "unsupported"
 
+
 @login_required
 def edit(request, slug):
     project = get_object_or_404(Project, slug=slug)
     media_type = get_media_type(project.cover_image.name)
-
 
     format_time_start = localtime(project.start_at).strftime("%Y-%m-%dT%H:%M")
     format_time_end = localtime(project.end_at).strftime("%Y-%m-%dT%H:%M")
@@ -182,7 +205,7 @@ def like_projects(request, slug):
     return redirect("projects:show", slug=project.slug)
 
 
-def chart_page(request,slug):
+def chart_page(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
     return render(request, "projects/chart_page.html", {"slug": slug})
@@ -191,19 +214,18 @@ def chart_page(request,slug):
 @login_required
 def gender_proportion(request, slug):
     from .models import Sponsor
+
     project = get_object_or_404(Project, slug=slug)
 
-    
     gender_data = (
-        Sponsor.objects.filter(project=project)  
-        .values("account__profile__gender")  
-        .annotate(count=Count("id"))  
+        Sponsor.objects.filter(project=project)
+        .values("account__profile__gender")
+        .annotate(count=Count("id"))
     )
 
-    
     labels = []
     data = []
-    total_count = 0  
+    total_count = 0
 
     for entry in gender_data:
         gender = entry["account__profile__gender"]
@@ -217,14 +239,13 @@ def gender_proportion(request, slug):
             labels.append("未知")
         count = entry["count"]
         data.append(count)
-        total_count += count  
+        total_count += count
 
-    
     response_data = {
         "labels": labels,
         "datasets": [
             {
-                "label": f"贊助者性別比例（總人數: {total_count}）",  
+                "label": f"贊助者性別比例（總人數: {total_count}）",
                 "backgroundColor": ["#F8AFAF", "#FFE69B", "#A8D3F0", "#CACACA"],
                 "borderColor": "#FFFFFF",
                 "borderWidth": 2,
@@ -235,45 +256,47 @@ def gender_proportion(request, slug):
 
     return JsonResponse(response_data)
 
+
 @login_required
 def daily_sponsorship_amount(request, slug):
     from .models import Sponsor
+
     project = get_object_or_404(Project, slug=slug)
     sponsors = Sponsor.objects.filter(project=project)
     if not sponsors.exists():
-        return JsonResponse({
-            "labels": [],
-            "datasets": [{
-                "label": "Cumulative Amount",
-                "backgroundColor": "rgba(75, 192, 192, 0.2)",
-                "borderColor": "rgba(75, 192, 192, 1)",
-                "borderWidth": 2,
-                "data": [],
-            }]
-        })
+        return JsonResponse(
+            {
+                "labels": [],
+                "datasets": [
+                    {
+                        "label": "Cumulative Amount",
+                        "backgroundColor": "rgba(75, 192, 192, 0.2)",
+                        "borderColor": "rgba(75, 192, 192, 1)",
+                        "borderWidth": 2,
+                        "data": [],
+                    }
+                ],
+            }
+        )
 
-    
     start_date = sponsors.order_by("created_at").first().created_at.date()
     end_date = sponsors.order_by("-created_at").first().created_at.date()
 
-    
     daily_totals = {}
-    
-    
+
     for sponsor in sponsors:
         date = sponsor.created_at.date()
         if date not in daily_totals:
             daily_totals[date] = 0
         daily_totals[date] += sponsor.amount
 
-    
     date_range = []
     cumulative_amount = []
     cumulative_total = 0
-    
+
     current_date = start_date
     while current_date <= end_date:
-        date_range.append(current_date)        
+        date_range.append(current_date)
         daily_amount = daily_totals.get(current_date, 0)
         cumulative_total += daily_amount
         cumulative_amount.append(cumulative_total)
@@ -281,31 +304,32 @@ def daily_sponsorship_amount(request, slug):
 
     data = {
         "labels": [date.strftime("%Y-%m-%d") for date in date_range],
-        "datasets": [{
-            "label": "每日累積金額",
-            "backgroundColor": "rgba(75, 192, 192, 0.2)",
-            "borderColor": "rgba(75, 192, 192, 1)",
-            "borderWidth": 2,
-            "data": cumulative_amount,
-        }]
+        "datasets": [
+            {
+                "label": "每日累積金額",
+                "backgroundColor": "rgba(75, 192, 192, 0.2)",
+                "borderColor": "rgba(75, 192, 192, 1)",
+                "borderWidth": 2,
+                "data": cumulative_amount,
+            }
+        ],
     }
-    
+
     return JsonResponse(data)
+
 
 @login_required
 def gender_amount_boxplot(request, slug):
     from .models import Sponsor
-    
+
     project = get_object_or_404(Project, slug=slug)
 
-    
     gender_data = (
         Sponsor.objects.filter(project=project, reward__isnull=True)
-        .select_related('account__profile')
+        .select_related("account__profile")
         .values("account__profile__gender", "amount")
     )
 
-    
     gender_amounts = {"M": [], "F": [], "O": []}
 
     for entry in gender_data:
@@ -314,62 +338,57 @@ def gender_amount_boxplot(request, slug):
         if gender in gender_amounts:
             gender_amounts[gender].append(amount)
 
-    
     boxplot_data = []
     for gender, amounts in gender_amounts.items():
-        if amounts:  
+        if amounts:
             sorted_amounts = sorted(amounts)
             n = len(sorted_amounts)
-            
-            
+
             q1_idx = int(n * 0.25)
-            q2_idx = int(n * 0.5)  
+            q2_idx = int(n * 0.5)
             q3_idx = int(n * 0.75)
-            
+
             q1 = sorted_amounts[q1_idx]
             median = sorted_amounts[q2_idx]
             q3 = sorted_amounts[q3_idx]
-            
-            
+
             iqr = q3 - q1
-            
-            
-            lower_bound = max(min(sorted_amounts), q1 - iqr * Decimal('1.5'))
-            upper_bound = min(max(sorted_amounts), q3 + iqr * Decimal('1.5'))
-            
-            
+
+            lower_bound = max(min(sorted_amounts), q1 - iqr * Decimal("1.5"))
+            upper_bound = min(max(sorted_amounts), q3 + iqr * Decimal("1.5"))
+
             outliers = [x for x in sorted_amounts if x < lower_bound or x > upper_bound]
-            
-            boxplot_data.append({
-                'min': float(lower_bound),
-                'q1': float(q1),
-                'median': float(median),
-                'q3': float(q3),
-                'max': float(upper_bound),
-                'outliers': [float(x) for x in outliers]
-            })
+
+            boxplot_data.append(
+                {
+                    "min": float(lower_bound),
+                    "q1": float(q1),
+                    "median": float(median),
+                    "q3": float(q3),
+                    "max": float(upper_bound),
+                    "outliers": [float(x) for x in outliers],
+                }
+            )
         else:
-            boxplot_data.append({
-                'min': 0,
-                'q1': 0,
-                'median': 0,
-                'q3': 0,
-                'max': 0,
-                'outliers': []
-            })
+            boxplot_data.append(
+                {"min": 0, "q1": 0, "median": 0, "q3": 0, "max": 0, "outliers": []}
+            )
 
     response_data = {
         "labels": ["男", "女", "其他"],
-        "datasets": [{
-            "label": "贊助金額分布",
-            "data": boxplot_data,
-            "backgroundColor": ["#F8AFAF", "#A8D3F0", "#FFE69B"],
-            "borderColor": "#FFFFFF",
-            "borderWidth": 2
-        }]
+        "datasets": [
+            {
+                "label": "贊助金額分布",
+                "data": boxplot_data,
+                "backgroundColor": ["#F8AFAF", "#A8D3F0", "#FFE69B"],
+                "borderColor": "#FFFFFF",
+                "borderWidth": 2,
+            }
+        ],
     }
 
     return JsonResponse(response_data)
+
 
 @login_required
 def reward_grouped_bar_chart(request, slug):
@@ -379,7 +398,7 @@ def reward_grouped_bar_chart(request, slug):
 
     def get_age_group(birthday):
         if not birthday:
-            return None  
+            return None
         age = (date.today() - birthday).days // 365
         if age < 18:
             return "未成年"
@@ -392,30 +411,25 @@ def reward_grouped_bar_chart(request, slug):
         else:
             return "46+"
 
-    
     sponsor_data = (
-        Sponsor.objects.filter(
-            project=project,
-            reward__isnull=False  
-        )
+        Sponsor.objects.filter(project=project, reward__isnull=False)
         .select_related("reward", "account__profile")
-        .values("reward__title", "account__profile__gender", "account__profile__birthday")
+        .values(
+            "reward__title", "account__profile__gender", "account__profile__birthday"
+        )
         .annotate(count=Count("id"))
-        .order_by("reward__title")  
+        .order_by("reward__title")
     )
 
-    
     gender_groups = ["M", "F", "O"]
     age_groups = ["未成年", "18-25", "26-35", "36-45", "46+"]
-    
-    
+
     grouped_data = {}
     for entry in sponsor_data:
         reward_title = entry["reward__title"] or "無回饋"
         gender = entry["account__profile__gender"]
         age_group = get_age_group(entry["account__profile__birthday"])
 
-        
         if not gender or not age_group:
             continue
 
@@ -424,53 +438,45 @@ def reward_grouped_bar_chart(request, slug):
 
         if reward_title not in grouped_data:
             grouped_data[reward_title] = {
-                f"{g}_{a}": 0 
-                for g in gender_groups 
-                for a in age_groups
+                f"{g}_{a}": 0 for g in gender_groups for a in age_groups
             }
-            
+
         grouped_data[reward_title][group_key] = count
 
-    
     all_combinations = [
-        f"{gender}_{age}" 
-        for gender in gender_groups 
-        for age in age_groups
+        f"{gender}_{age}" for gender in gender_groups for age in age_groups
     ]
 
-    
     labels = list(grouped_data.keys())
     datasets = []
-    
-    
+
     colors = {
-        "M_18-25": "#4E79A7",  
-        "M_26-35": "#76B7B2",  
-        "M_36-45": "#59A14F",  
-        "M_46+": "#8CD17D",    
-        "M_未成年": "#A0CBE8",  
-        "F_18-25": "#F28E2B",  
-        "F_26-35": "#FF9DA7",  
-        "F_36-45": "#E15759",  
-        "F_46+": "#FFB4A2",    
-        "F_未成年": "#FFB4A2",  
-        "O_18-25": "#9C755F",  
-        "O_26-35": "#BAB0AC",  
-        "O_36-45": "#808080",  
-        "O_46+": "#666666",    
-        "O_未成年": "#CCCCCC",  
+        "M_18-25": "#4E79A7",
+        "M_26-35": "#76B7B2",
+        "M_36-45": "#59A14F",
+        "M_46+": "#8CD17D",
+        "M_未成年": "#A0CBE8",
+        "F_18-25": "#F28E2B",
+        "F_26-35": "#FF9DA7",
+        "F_36-45": "#E15759",
+        "F_46+": "#FFB4A2",
+        "F_未成年": "#FFB4A2",
+        "O_18-25": "#9C755F",
+        "O_26-35": "#BAB0AC",
+        "O_36-45": "#808080",
+        "O_46+": "#666666",
+        "O_未成年": "#CCCCCC",
     }
 
     for combination in all_combinations:
         dataset = {
             "label": combination,
-            "backgroundColor": colors.get(combination, f"#{random.randint(0, 0xFFFFFF):06x}"),
+            "backgroundColor": colors.get(
+                combination, f"#{random.randint(0, 0xFFFFFF):06x}"
+            ),
             "borderColor": "#FFFFFF",
             "borderWidth": 1,
-            "data": [
-                grouped_data[reward].get(combination, 0)
-                for reward in labels
-            ]
+            "data": [grouped_data[reward].get(combination, 0) for reward in labels],
         }
         if any(dataset["data"]):
             datasets.append(dataset)
@@ -481,3 +487,42 @@ def reward_grouped_bar_chart(request, slug):
     }
 
     return JsonResponse(response_data)
+
+
+def public(request, slug):
+    """
+    公開的專案頁面，不需要登入即可查看
+    """
+    project = get_object_or_404(Project, slug=slug)
+
+    # 計算專案相關數據
+    project.update_status()  # 更新專案狀態
+
+    # 計算總剩餘天數
+    total_days = calculate_total_days(project.end_at)
+
+    # 計算達成率
+    progress_percentage = calculate_progress_percentage(
+        project.raised_amount, project.goal_amount
+    )
+
+    # 如果用戶已登入，檢查是否已收藏和按讚
+    collected = None
+    favorited = None
+    if request.user.is_authenticated:
+        collected = CollectProject.objects.filter(
+            account=request.user, project=project
+        ).exists()
+        favorited = FavoritePrject.objects.filter(
+            account=request.user, project=project
+        ).exists()
+
+    context = {
+        "project": project,
+        "collected": collected,
+        "favorited": favorited,
+        "total_days": total_days,
+        "progress_percentage": progress_percentage,
+    }
+
+    return render(request, "projects/public.html", context)

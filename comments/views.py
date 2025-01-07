@@ -3,9 +3,51 @@ from .models import Comment
 from projects.models import Project
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
-from projects.models import Project
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
+from django.contrib import messages
+
+
+def index(request, slug):
+    project = get_object_or_404(Project, slug=slug)
+    if request.POST:
+        if not request.user.is_authenticated:
+            messages.error(request, "請先登入")
+            return redirect("projects:comment_index", slug=project.slug)
+        comment = Comment()
+        comment.content = request.POST.get("content")
+        comment.project = project
+        comment.account = request.user
+        comment.save()
+        return redirect("projects:comment_index", slug=project.slug)
+
+    comments = (
+        Comment.objects.filter(parent__isnull=True, project=project)
+        .order_by("-created_at")
+        .select_related("account", "project")
+    )
+
+    # 如果是htmx請求，返回projects下的內容模板
+    if request.headers.get("HX-Request"):
+        return render(
+            request,
+            "projects/partials/comments_content.html",
+            {
+                "comments": comments,
+                "project": project,
+                "user": request.user,
+            },
+        )
+
+    return render(
+        request,
+        "comments/index.html",
+        {
+            "comments": comments,
+            "project": project,
+            "user": request.user,
+        },
+    )
 
 
 @login_required

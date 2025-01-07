@@ -1,0 +1,178 @@
+{% extends "shared/layout.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block "content" %}
+<div class="min-h-screen bg-gray-50">
+  <!-- 主要內容區塊 -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="lg:grid lg:grid-cols-12 lg:gap-8">
+      <!-- 左側專案內容 -->
+      <div class="lg:col-span-8">
+        <!-- 專案圖片輪播 -->
+        <div x-data="{ currentSlide: 0 }" class="relative mb-8 rounded-lg overflow-hidden">
+          <div class="aspect-w-16 aspect-h-9">
+            <img :src="project.images[currentSlide]" class="w-full h-full object-cover" alt="Project image">
+          </div>
+          <!-- 輪播控制按鈕 -->
+          <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            <template x-for="(image, index) in project.images" :key="index">
+              <button 
+                @click="currentSlide = index"
+                :class="{'bg-white': currentSlide === index, 'bg-white/50': currentSlide !== index}"
+                class="w-2 h-2 rounded-full">
+              </button>
+            </template>
+          </div>
+        </div>
+
+        <!-- 專案標題和描述 -->
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ project.title }}</h1>
+        <p class="text-xl text-gray-600 mb-8">{{ project.subtitle }}</p>
+
+        <!-- 專案內容標籤頁 -->
+        <div x-data="{ activeTab: 'story' }" class="mb-8">
+          <div class="border-b border-gray-200">
+            <nav class="-mb-px flex space-x-8">
+              <button 
+                @click="activeTab = 'story'"
+                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'story'}"
+                class="border-b-2 py-4 px-1 text-sm font-medium">
+                專案內容
+              </button>
+              <button 
+                @click="activeTab = 'faq'"
+                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'faq'}"
+                class="border-b-2 py-4 px-1 text-sm font-medium">
+                常見問題
+              </button>
+              <button 
+                @click="activeTab = 'updates'"
+                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'updates'}"
+                class="border-b-2 py-4 px-1 text-sm font-medium">
+                更新記錄
+              </button>
+              <button 
+                @click="activeTab = 'comments'"
+                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'comments'}"
+                class="border-b-2 py-4 px-1 text-sm font-medium">
+                留言討論
+              </button>
+            </nav>
+          </div>
+
+          <!-- 內容區域 -->
+          <div class="py-8">
+            <div x-show="activeTab === 'story'" class="prose max-w-none">
+              {{ project.story|safe }}
+            </div>
+            <div x-show="activeTab === 'faq'" class="space-y-6">
+              <!-- FAQ 內容使用 htmx 動態載入 -->
+              <div 
+                hx-get="{% url 'projects:faq_index' project.slug %}" 
+                hx-trigger="load"
+                hx-target="this"
+                hx-swap="innerHTML"
+              >
+                Loading FAQs...
+              </div>
+            </div>
+            <div x-show="activeTab === 'updates'" class="space-y-6">
+              <!-- 更新記錄使用 htmx 動態載入 -->
+              <div 
+                hx-get="{% url 'projects:update_records_index' project.slug %}" 
+                hx-trigger="load"
+                hx-target="this"
+                hx-swap="innerHTML"
+              >
+                Loading updates...
+              </div>
+            </div>
+            <div x-show="activeTab === 'comments'" class="space-y-6">
+              <!-- 留言區使用 htmx 動態載入 -->
+              <div 
+                hx-get="{% url 'projects:comment_index' project.slug %}" 
+                hx-trigger="load"
+                hx-target="this"
+                hx-swap="innerHTML"
+              >
+                Loading comments...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右側募資資訊 -->
+      <div class="lg:col-span-4">
+        <div class="sticky top-8 space-y-6">
+          <!-- 募資進度 -->
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="mb-4">
+              <div class="flex justify-between items-start mb-2">
+                <div class="flex flex-col items-start">
+                  <p class="text-sm text-gray-500 mb-1">剩餘天數</p>
+                  <p class="text-2xl font-bold text-gray-900 leading-none mb-1">{{ total_days }}</p>
+                  <p class="text-xs text-[#1EA29E]">
+                    <i class="fas fa-clock mr-1"></i>倒數中
+                  </p>
+                </div>
+                <div class="flex flex-col items-end">
+                  <p class="text-sm text-gray-500 mb-1">達成率</p>
+                  <p class="text-2xl font-bold text-gray-900 leading-none">{{ progress_percentage }}%</p>
+                </div>
+              </div>
+              <p class="text-3xl font-bold text-gray-900">NT$ {{ project.raised_amount|default:"0"|intcomma }}</p>
+              <p class="text-sm text-gray-500">目標 NT$ {{ project.goal_amount|default:"0"|intcomma }}</p>
+            </div>
+
+            <!-- 進度條 -->
+            <div class="relative pt-1">
+              <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                <div
+                  class="bg-[#1EA29E] h-2 rounded"
+                  style="width: {{ progress_percentage }}%"
+                ></div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4 mb-6">
+              <div class="text-center">
+                <p class="text-2xl font-bold text-gray-900">{{ project.backers_count }}</p>
+                <p class="text-sm text-gray-500">贊助人數</p>
+              </div>
+            </div>
+
+            <!-- 贊助按鈕 -->
+            <a href="{% url 'projects:sponsor' project.slug %}"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#1EA29E] hover:bg-[#198784] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1EA29E]">
+              立即贊助
+            </a>
+          </div>
+
+          <!-- 專案資訊 -->
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">專案資訊</h3>
+            <div class="space-y-4">
+              <div>
+                <p class="text-sm text-gray-500">提案人</p>
+                <p class="text-sm font-medium text-gray-900">{{ project.account.username }}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">募資時間</p>
+                <p class="text-sm font-medium text-gray-900">
+                  {{ project.start_at|date:"Y/m/d" }} - {{ project.end_at|date:"Y/m/d" }}
+                </p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">專案分類</p>
+                <p class="text-sm font-medium text-gray-900">{{ project.category.name }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

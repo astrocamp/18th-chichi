@@ -10,10 +10,12 @@ from .models import Faq
 from projects.models import Project
 
 
-@login_required
 def index(request, slug):
     project = get_object_or_404(Project, slug=slug)
     if request.POST:
+        if not request.user.is_authenticated:
+            messages.error(request, "請先登入")
+            return redirect("projects:faq_index", slug=project.slug)
         form = FaqForm(request.POST)
         if form.is_valid():
             faq = form.save(commit=False)
@@ -23,6 +25,11 @@ def index(request, slug):
             return redirect("projects:faq_index", slug=project.slug)
 
     faqs = Faq.objects.filter(project=project)
+
+    # 如果是htmx請求，返回projects下的內容模板
+    if request.headers.get("HX-Request"):
+        return render(request, "projects/partials/faq_content.html", {"faqs": faqs})
+
     return render(request, "faqs/index.html", {"faqs": faqs, "project": project})
 
 
@@ -87,10 +94,12 @@ def delete(request, slug):
         },
     )
 
+
 @csrf_exempt
 @require_POST
 def updated_faq_position(request):
     import json
+
     data = json.loads(request.body)
     position = data.get("position", [])
     for index, faq_id in enumerate(position):

@@ -1,0 +1,23 @@
+<div id="update-records-content" class="space-y-6">
+  {% for record in update_records %}
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <div class="flex justify-between items-start mb-4">
+      <div class="flex-1">
+        <h3 class="text-lg font-medium text-gray-800 mb-2">
+          {{ record.title }}
+        </h3>
+        <p class="text-gray-600">{{ record.description|truncatewords:50 }}</p>
+      </div>
+      <div class="ml-4 flex flex-col items-end">
+        <span class="text-sm text-gray-500">
+          {{ record.created_at|date:"Y/m/d H:i" }}
+        </span>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="text-center py-12">
+    <p class="text-gray-500">目前還沒有任何更新記錄</p>
+  </div>
+  {% endfor %}
+</div> 
