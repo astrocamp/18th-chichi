@@ -5,17 +5,23 @@
       <img src="/static/media/CHICHI_LOGO__1.png" alt="Bird Logo" class="w-14 h-14 rounded-full">
     </a>
     <!-- Mobile Menu Button -->
-    <button class="md:hidden bg-[#D78F32] p-2 rounded-lg h-14 w-14 flex items-center justify-center" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
-      <svg class="svg-inline--fa fa-bars text-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+    <button class="md:hidden bg-[#D78F32] hover:bg-[#52bdb9] transition-colors duration-300 p-2 rounded-lg h-14 w-14 flex items-center justify-center" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+      <svg class="svg-inline--fa fa-bars text-lg" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+        <path fill="currentColor" d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/>
+      </svg>
     </button>
   </div>
 
   <!-- Desktop Search Bar -->
   <div class="hidden md:flex w-2/4 justify-center items-start pt-2">
     <form action="#" method="GET" class="flex items-center bg-white rounded-full shadow-md relative w-full max-w-[800px]">
-      <input type="text" name="search" placeholder="請輸入搜尋內容..." class="bg-transparent text-gray-600 placeholder-gray-400 focus:outline-none flex-grow px-6 h-16 rounded-full">
-      <button type="submit" class="bg-[#D78F32] text-white rounded-full w-16 h-16 flex items-center justify-center shadow-md hover:shadow-lg mr-0">
-        <svg class="svg-inline--fa fa-magnifying-glass text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="magnifying-glass" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+      <input type="text" name="search" placeholder="請輸入搜尋內容..." 
+             class="bg-transparent text-gray-600 placeholder-gray-400 focus:outline-none flex-grow px-6 h-16 rounded-full">
+      <button type="submit" 
+              class="bg-[#D78F32] hover:bg-[#52bdb9] transition-colors duration-300 text-white rounded-full w-16 h-16 flex items-center justify-center -ml-16">
+        <svg class="svg-inline--fa fa-magnifying-glass text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="magnifying-glass" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+        </svg>
       </button>
     </form>
   </div>
@@ -24,17 +30,21 @@
   <div class="hidden md:flex w-1/4 justify-end items-start pt-2">
     <ul class="menu menu-horizontal px-1 flex items-center gap-4">
       <li class="flex items-center">
-        <a class="text-white text-lg font-medium">elaine</a>
+        <a class="text-white text-lg font-medium hover:text-[#52bdb9] transition-colors duration-300">elaine</a>
       </li>
       <li>
-        <a class="btn h-14 w-14 md:w-auto inline-flex items-center justify-center whitespace-nowrap bg-[#D78F32] text-white" href="/accounts/">
-          <svg class="svg-inline--fa fa-user md:mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"></path></svg>
+        <a class="btn h-14 w-14 md:w-auto inline-flex items-center justify-center whitespace-nowrap bg-[#D78F32] hover:bg-[#52bdb9] transition-colors duration-300 text-white" href="/accounts/">
+          <svg class="svg-inline--fa fa-user md:mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+          </svg>
           <span class="hidden md:inline">個人頁面</span>
         </a>
       </li>
       <li>
-        <a class="btn h-14 w-14 md:w-auto inline-flex items-center justify-center whitespace-nowrap bg-[#D78F32] text-white" hx-post="/accounts/logout/" hx-target="body" hx-swap="outerHTML" hx-headers='{"X-CSRFToken": "jYp6xOePpcaQ9PEy2ObvI2sV1C6Pax7hsDtqwVwMmXKgY9Vq0150H9S5Y21Kay0U"}' hx-on="click: this.disabled = true">
-          <svg class="svg-inline--fa fa-right-from-bracket md:mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-from-bracket" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
+        <a class="btn h-14 w-14 md:w-auto inline-flex items-center justify-center whitespace-nowrap bg-[#D78F32] hover:bg-[#52bdb9] transition-colors duration-300 text-white" hx-post="/accounts/logout/" hx-target="body" hx-swap="outerHTML" hx-headers='{"X-CSRFToken": "jYp6xOePpcaQ9PEy2ObvI2sV1C6Pax7hsDtqwVwMmXKgY9Vq0150H9S5Y21Kay0U"}' hx-on="click: this.disabled = true">
+          <svg class="svg-inline--fa fa-right-from-bracket md:mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-from-bracket" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path fill="currentColor" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
+          </svg>
           <span class="hidden md:inline">登出</span>
         </a>
       </li>
@@ -47,23 +57,29 @@
       <!-- Mobile Search Bar -->
       <div class="w-full px-4 flex justify-center">
         <form action="#" method="GET" class="flex items-center bg-white rounded-full shadow-md relative w-full max-w-[800px] mx-auto">
-          <input type="text" name="search" placeholder="請輸入搜尋內容..." class="bg-transparent text-gray-600 placeholder-gray-400 focus:outline-none flex-grow px-6 h-14 rounded-full">
-          <button type="submit" class="bg-[#D78F32] text-white rounded-full w-14 h-14 flex items-center justify-center shadow-md hover:shadow-lg mr-2">
-            <svg class="svg-inline--fa fa-magnifying-glass text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="magnifying-glass" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
+          <input type="text" name="search" placeholder="請輸入搜尋內容..." class="bg-transparent text-gray-600 placeholder-gray-400 focus:outline-none flex-grow px-6 h-14 rounded-l-full">
+          <button type="submit" class="bg-[#D78F32] hover:bg-[#52bdb9] transition-colors duration-300 text-white rounded-r-full w-14 h-14 flex items-center justify-center">
+            <svg class="svg-inline--fa fa-magnifying-glass text-xl" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="magnifying-glass" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path fill="currentColor" d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"/>
+            </svg>
           </button>
         </form>
       </div>
 
       <!-- Mobile Menu Items -->
       <div class="w-full flex flex-col items-center space-y-4">
-        <div class="text-white text-lg font-medium mb-2">elaine</div>
+        <div class="text-white text-lg font-medium mb-2 hover:text-[#52bdb9] transition-colors duration-300">elaine</div>
         <div class="flex flex-col items-center space-y-4 w-[200px]">
-          <a class="btn h-14 w-full inline-flex items-center justify-center bg-[#D78F32] text-white" href="/accounts/">
-            <svg class="svg-inline--fa fa-user mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"></path></svg>
+          <a class="btn h-14 w-full inline-flex items-center justify-center bg-[#D78F32] hover:bg-[#52bdb9] transition-colors duration-300 text-white" href="/accounts/">
+            <svg class="svg-inline--fa fa-user mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="user" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path fill="currentColor" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+            </svg>
             <span>個人頁面</span>
           </a>
-          <a class="btn h-14 w-full inline-flex items-center justify-center bg-[#D78F32] text-white" hx-post="/accounts/logout/" hx-target="body" hx-swap="outerHTML" hx-headers='{"X-CSRFToken": "jYp6xOePpcaQ9PEy2ObvI2sV1C6Pax7hsDtqwVwMmXKgY9Vq0150H9S5Y21Kay0U"}' hx-on="click: this.disabled = true">
-            <svg class="svg-inline--fa fa-right-from-bracket mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-from-bracket" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"></path></svg>
+          <a class="btn h-14 w-full inline-flex items-center justify-center bg-[#D78F32] hover:bg-[#52bdb9] transition-colors duration-300 text-white" hx-post="/accounts/logout/" hx-target="body" hx-swap="outerHTML" hx-headers='{"X-CSRFToken": "jYp6xOePpcaQ9PEy2ObvI2sV1C6Pax7hsDtqwVwMmXKgY9Vq0150H9S5Y21Kay0U"}' hx-on="click: this.disabled = true">
+            <svg class="svg-inline--fa fa-right-from-bracket mr-2 w-6 h-6" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="right-from-bracket" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path fill="currentColor" d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z"/>
+            </svg>
             <span>登出</span>
           </a>
         </div>

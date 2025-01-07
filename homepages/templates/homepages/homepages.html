@@ -1,308 +1,143 @@
-{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+{% extends "shared/layout.html" %} {% load static %} {% load humanize %}
+{% block "content" %}
+
 <div class="min-h-screen bg-white relative z-0">
   <!-- Hero Section -->
   <div
-    class="relative h-[600px]"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
-  >
-    <div class="container mx-auto px-4 h-full flex items-center">
-      <div class="w-1/2">
-        <h1 class="text-5xl font-bold mb-6 text-gray-800">實現夢想的起點</h1>
-        <p class="text-xl text-gray-600 mb-8">
-          在這裡，每個創意都能找到支持，每個夢想都值得被實現
-        </p>
-        <div class="space-x-4">
-          <a
-            href="{% url 'projects:new' %}"
-            class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-            style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
-            onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
-            onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
-            >提案募資</a
-          >
-          <a
-            href="{% url 'projects:index' %}"
-            class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-            style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
-            onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
-            onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
-            >瀏覽專案</a
-          >
-        </div>
-      </div>
-      <div class="w-1/2 flex justify-center items-center">
-        <img
-          src="https://images.unsplash.com/photo-1521898284481-a5ec348cb555?q=80&w=1200"
-          alt="Hero Image"
-          class="rounded-lg shadow-xl object-cover w-full h-[400px]"
-        />
+  class="relative h-[600px]"
+  style="background: linear-gradient(to right, #1ea29e20, #1ea29e40)"
+>
+  <div class="container mx-auto px-4 h-full flex items-center">
+    <div class="w-1/2 text-center">
+      <h1 class="text-5xl font-bold mb-6 text-[#1EA29E]">實現夢想的起點</h1>
+      <p class="text-xl text-[#d78f32] mb-8 font-medium font-serif">
+        在這裡，每個創意都能找到支持，每個夢想都值得被實現
+      </p>
+      <div class="space-x-4">
+        <a
+          href="{% url 'projects:new' %}"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-lg px-8"
+          style="background-color: #1ea29e20; color: #1EA29E; transition: all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
+          onmouseout="this.style.backgroundColor='#1ea29e20'; this.style.color='#1EA29E';"
+        >提案募資</a>
+        <a
+          href="{% url 'projects:index' %}"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-lg px-8"
+          style="background-color: #1ea29e20; color: #1EA29E; transition: all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
+          onmouseout="this.style.backgroundColor='#1ea29e20'; this.style.color='#1EA29E';"
+        >瀏覽專案</a>
       </div>
     </div>
+    <div class="w-1/2 flex justify-center items-center">
+      <img
+        src="static/svg/S5_Puzzle.jpg"
+        alt="puzzle"
+        class="rounded-lg shadow-xl object-cover w-full h-[400px]"
+      />
+    </div>
   </div>
+</div>
 
-  <!-- Categories Section -->
-  <div class="py-12 bg-white" x-data="{ activeTab: '全部' }">
+
+
+<!-- 其他現有的首頁內容 -->
+
+<!-- 專案卡片區域 -->
+<section class="py-12 bg-gray-50">
     <div class="container mx-auto px-4">
-      <!-- Category Tabs -->
-      <div class="flex justify-center mb-12">
-        <nav class="flex -space-x-4">
-          <button
-            @click="activeTab = '全部'"
-            :class="{ 
-              'bg-teal-50 text-teal-600 translate-y-0': activeTab === '全部',
-              'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '全部'
-            }"
-            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
-            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-          >
-            全部
-          </button>
-          <button
-            @click="activeTab = '科技'"
-            :class="{ 
-              'bg-teal-50 text-teal-600 translate-y-0': activeTab === '科技',
-              'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '科技'
-            }"
-            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
-            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-          >
-            科技
-          </button>
-          <button
-            @click="activeTab = '設計'"
-            :class="{ 
-              'bg-teal-50 text-teal-600 translate-y-0': activeTab === '設計',
-              'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '設計'
-            }"
-            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
-            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-          >
-            設計
-          </button>
-          <button
-            @click="activeTab = '飲食'"
-            :class="{ 
-              'bg-teal-50 text-teal-600 translate-y-0': activeTab === '飲食',
-              'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '飲食'
-            }"
-            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
-            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-          >
-            飲食
-          </button>
-          <button
-            @click="activeTab = '公益'"
-            :class="{ 
-              'bg-teal-50 text-teal-600 translate-y-0': activeTab === '公益',
-              'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '公益'
-            }"
-            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
-            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-          >
-            公益
-          </button>
-        </nav>
-      </div>
-
-      <!-- Content Container -->
-      <div class="bg-white rounded-lg shadow-lg">
-        <!-- Projects Grid -->
-        <div 
-          class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8"
-        >
-          <!-- 科技專案 -->
-          <div 
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200"
-            x-show="activeTab === '全部' || activeTab === '科技'"
-            x-cloak
-          >
-            <img
-              src="https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=400"
-              alt="智慧手錶"
-              class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105"
-            />
-            <div class="p-4">
-              <span class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2" style="background-color: #85cacc20; color: #85cacc">
-                科技
-              </span>
-              <h3 class="font-semibold mb-2">智慧健康手錶</h3>
-              <p class="text-gray-600 text-sm mb-4">結合AI技術的新一代健康監測智慧手錶，為您的健康把關。</p>
-              <div class="space-y-2">
-                <div class="w-full bg-gray-100 rounded-full h-2">
-                  <div
-                    class="h-2 rounded-full transition-all duration-700"
-                    style="width: 75%; background-color: #85cacc"
-                  ></div>
-                </div>
-                <div class="flex justify-between text-sm">
-                  <span class="font-medium" style="color: #85cacc">NT$ 1,500,000</span>
-                  <span class="text-gray-500">目標 2,000,000</span>
-                </div>
-                <div class="text-xs text-gray-500 text-right">
-                  剩餘 15 天
-                </div>
-              </div>
+        <!-- 分類標籤 -->
+        <div class="py-12 bg-white" x-data="{ activeTab: '全部' }">
+            <div class="flex justify-center mb-12">
+                <nav class="flex -space-x-4">
+                    <button @click="activeTab = '全部'" 
+                            :class="{ 
+                                'bg-teal-50 text-teal-600 translate-y-0': activeTab === '全部',
+                                'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '全部'
+                            }"
+                            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
+                            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
+                    >
+                        全部
+                    </button>
+                    <button @click="activeTab = '科技'" 
+                            :class="{ 
+                                'bg-teal-50 text-teal-600 translate-y-0': activeTab === '科技',
+                                'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '科技'
+                            }"
+                            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
+                            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
+                    >
+                        科技
+                    </button>
+                    <!-- 其他分類標籤 -->
+                </nav>
             </div>
-          </div>
 
-          <!-- 設計專案 -->
-          <div 
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200"
-            x-show="activeTab === '全部' || activeTab === '設計'"
-            x-cloak
-          >
-            <img
-              src="https://images.unsplash.com/photo-1511556820780-d912e42b4980?q=80&w=400"
-              alt="設計書籍"
-              class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105"
-            />
-            <div class="p-4">
-              <span class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2" style="background-color: #85cacc20; color: #85cacc">
-                設計
-              </span>
-              <h3 class="font-semibold mb-2">台灣設計選輯</h3>
-              <p class="text-gray-600 text-sm mb-4">收錄百位台灣設計師的創作集，展現在地設計力量。</p>
-              <div class="space-y-2">
-                <div class="w-full bg-gray-100 rounded-full h-2">
-                  <div
-                    class="h-2 rounded-full transition-all duration-700"
-                    style="width: 90%; background-color: #85cacc"
-                  ></div>
-                </div>
-                <div class="flex justify-between text-sm">
-                  <span class="font-medium" style="color: #85cacc">NT$ 450,000</span>
-                  <span class="text-gray-500">目標 500,000</span>
-                </div>
-                <div class="text-xs text-gray-500 text-right">
-                  剩餘 7 天
-                </div>
-              </div>
-            </div>
+            <!-- 專案卡片網格 -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8">
+              {% for project in projects %}
+              <a href="{% url 'projects:show' project.slug %}" 
+                 class="block"
+                 x-show="activeTab === '全部' || activeTab === '{{ project.category }}'"
+                 x-cloak>
+                  <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200">
+                      <div class="relative overflow-hidden">
+                          {% if project.cover_image %}
+                              <img src="{{ project.cover_image.url }}"
+                                   alt="{{ project.title }}" 
+                                   class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105">
+                          {% else %}
+                              <img src="{% static 'images/default-project.jpg' %}" 
+                                   alt="{{ project.title }}" 
+                                   class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105">
+                          {% endif %}
+                      </div>
+                      <div class="p-4">
+                          <span class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2 bg-[#1EA29E]/10 text-[#1EA29E]">
+                              {{ project.category }}
+                          </span>
+                          <h3 class="font-semibold mb-2 line-clamp-1">{{ project.title }}</h3>
+                          <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                              {{ project.subtitle }}
+                          </p>
+                          <div class="space-y-2">
+                              <!-- Progress Bar -->
+                              {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
+                              <div class="w-full bg-gray-100 rounded-full h-2">
+                                  <div class="h-2 rounded-full transition-all duration-700 bg-[#1EA29E]"
+                                       style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%">
+                                  </div>
+                              </div>
+                              <div class="flex justify-between text-sm">
+                                  <span class="font-medium text-[#1EA29E]">NT$ {{ project.raised_amount|floatformat:0 }}</span>
+                                  <span class="text-gray-500">目標 $ {{ project.goal_amount|floatformat:0 }}</span>
+                              </div>
+                              <div class="text-xs text-gray-500 text-right">
+                                  剩餘 {{ project.remaining_days }} 天
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </a>
+              {% endfor %}
           </div>
-
-          <!-- 飲食專案 -->
-          <div 
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200"
-            x-show="activeTab === '全部' || activeTab === '飲食'"
-            x-cloak
-          >
-            <img
-              src="https://images.unsplash.com/photo-1606787366850-de6330128bfc?q=80&w=400"
-              alt="咖啡專案"
-              class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105"
-            />
-            <div class="p-4">
-              <span class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2" style="background-color: #85cacc20; color: #85cacc">
-                飲食
-              </span>
-              <h3 class="font-semibold mb-2">山林咖啡計畫</h3>
-              <p class="text-gray-600 text-sm mb-4">支持台灣小農，打造永續環保的精品咖啡。</p>
-              <div class="space-y-2">
-                <div class="w-full bg-gray-100 rounded-full h-2">
-                  <div
-                    class="h-2 rounded-full transition-all duration-700"
-                    style="width: 60%; background-color: #85cacc"
-                  ></div>
-                </div>
-                <div class="flex justify-between text-sm">
-                  <span class="font-medium" style="color: #85cacc">NT$ 300,000</span>
-                  <span class="text-gray-500">目標 500,000</span>
-                </div>
-                <div class="text-xs text-gray-500 text-right">
-                  剩餘 20 天
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 公益專案 -->
-          <div 
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200"
-            x-show="activeTab === '全部' || activeTab === '公益'"
-            x-cloak
-          >
-            <img
-              src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=400"
-              alt="公益專案"
-              class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105"
-            />
-            <div class="p-4">
-              <span class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2" style="background-color: #85cacc20; color: #85cacc">
-                公益
-              </span>
-              <h3 class="font-semibold mb-2">偏鄉教育計畫</h3>
-              <p class="text-gray-600 text-sm mb-4">為偏鄉孩子打造數位學習環境，縮短教育資源差距。</p>
-              <div class="space-y-2">
-                <div class="w-full bg-gray-100 rounded-full h-2">
-                  <div
-                    class="h-2 rounded-full transition-all duration-700"
-                    style="width: 45%; background-color: #85cacc"
-                  ></div>
-                </div>
-                <div class="flex justify-between text-sm">
-                  <span class="font-medium" style="color: #85cacc">NT$ 450,000</span>
-                  <span class="text-gray-500">目標 1,000,000</span>
-                </div>
-                <div class="text-xs text-gray-500 text-right">
-                  剩餘 30 天
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {% for project in projects %}
-          <div 
-            class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200"
-            x-show="activeTab === '全部' || activeTab === '{{ project.category }}'"
-            x-cloak
-          >
-            <img
-              src="{{ project.image_url|default:'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=400' }}"
-              alt="{{ project.title }}"
-              class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105"
-            />
-            <div class="p-4">
-              <span 
-                class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2" 
-                style="background-color: #85cacc20; color: #85cacc"
-              >
-                {{ project.category }}
-              </span>
-              <h3 class="font-semibold mb-2">{{ project.title }}</h3>
-              <p class="text-gray-600 text-sm mb-4">{{ project.description|truncatechars:50 }}</p>
-              <div class="space-y-2">
-                <div class="w-full bg-gray-100 rounded-full h-2">
-                  <div
-                    class="h-2 rounded-full transition-all duration-700"
-                    style="width: {{ project.progress }}%; background-color: #85cacc"
-                  ></div>
-                </div>
-                <div class="flex justify-between text-sm">
-                  <span class="font-medium" style="color: #85cacc">NT$ {{ project.current_amount }}</span>
-                  <span class="text-gray-500">目標 {{ project.goal_amount }}</span>
-                </div>
-                <div class="text-xs text-gray-500 text-right">
-                  剩餘 {{ project.days_left }} 天
-                </div>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
         </div>
 
-        <!-- View More Button -->
-        <div class="text-center pb-8">
-          <a
-            href="{% url 'projects:index' %}"
-            class="inline-block px-8 py-3 rounded-lg text-white transition-all duration-200 hover:shadow-lg"
-            style="background-color: #85cacc"
-          >
-            查看更多專案
-          </a>
-        </div>
-      </div>
+            <div class="text-center pb-8">
+      <a
+        href="{% url 'projects:index' %}"
+        class="inline-block px-8 py-3 rounded-lg text-white transition-all duration-200 hover:shadow-lg"
+        style="background-color: #1EA29E"
+      >
+        查看更多專案
+      </a>
     </div>
-  </div>
+    </div>
+
+</section>
+
 
   <!-- Call to Action Section -->
   <div class="py-20 bg-white">

@@ -5,6 +5,7 @@ from autoslug import AutoSlugField
 from django.db.models import Sum
 import random
 import string
+from django.utils import timezone
 
 
 def generate_random_slug():
@@ -50,6 +51,12 @@ class Project(models.Model):
         through="CollectProject",
         through_fields=("project", "account"),
     )
+
+    def remaining_days(self):
+        now = timezone.now()
+        if now > self.end_at:
+            return 0
+        return (self.end_at - now).days
 
     def update_status(self):
         """

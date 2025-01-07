@@ -1,13 +1,12 @@
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.models import User
-from django.contrib.auth.models import AnonymousUser
-
-# Create your views here.
+from django.shortcuts import render
+from projects.models import Project
+from django.core.paginator import Paginator
 
 
 def homepages(request):
-    if isinstance(request.user, AnonymousUser):
-        account = None
-    else:
-        account = get_object_or_404(User, id=request.user.id)
-    return render(request, "homepages/homepages.html",{"account":account})
+    projects = Project.objects.all().order_by("-created_at")
+    paginator = Paginator(projects, 12)
+
+    page = request.GET.get("page")
+    projects = paginator.get_page(page)
+    return render(request, "homepages/homepages.html", {"projects": projects})
