@@ -75,11 +75,6 @@
           {% endif %} {% if favorited %}取消按讚{% else %}按讚{% endif %}
         </button>
       </form>
-
-      <a href="{% url 'projects:comment_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
-        <i class="fas fa-comments mr-2"></i>
-        留言討論
-      </a>
       <a href="{% url 'projects:faq_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
         <i class="fas fa-question-circle mr-2"></i>
         常見問題
