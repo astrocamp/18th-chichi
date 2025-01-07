@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login as login_user, logout as logout_user
@@ -11,6 +10,10 @@ from projects.models import Sponsor
 from users.models import Profile
 from chats.models import ChatRoom
 from anymail.message import AnymailMessage
+# from django.core.mail import send_mail
+
+# send_mail("It works!", "This will get sent through Mailgun",
+#           "Anymail Sender <postmaster@mg.chichii.com>", ["18thchichi2@gmail.com"])
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -120,10 +123,9 @@ def register(request):
                 from_email="postmaster@mg.chichii.com",
                 to=[account.email],
             )
-            message.template_id = "welcome_email"  # 替换为你的 Mailgun 模板 ID
+            message.template_id = "welcome_email"
             message.merge_global_data = {
                 "username": account.username,
-                # 添加其他你在模板中使用的变量
             }
             message.send()
 
