@@ -25,6 +25,7 @@ def index(request):
         else:
             return HttpResponse(f"輸入錯誤: {form.errors}")
     projects = Project.objects.filter(account=account)
+    media_type = None
 
     for project in projects:
         project.update_status()
