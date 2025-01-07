@@ -4,17 +4,33 @@ import { BoxPlotController, BoxAndWiskers } from "@sgratzl/chartjs-chart-boxplot
 
 Chart.register(...registerables, ChartDataLabels, BoxPlotController, BoxAndWiskers);
 
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("gender_proportion");
-  canvas.width = 400;
-  canvas.height = 400;
+function genderProportionChart() {
+  return {
+    canvas: null,
+    slug: null,
 
-  const slug = canvas.dataset.slug;
+    init() {
+      this.canvas = this.$refs.canvas;
+      this.slug = this.canvas.dataset.slug;
 
-  fetch(`/projects/${slug}/gender_proportion/`)
-    .then((response) => response.json())
-    .then((data) => {
-      const ctx = canvas.getContext("2d");
+      this.canvas.width = 400;
+      this.canvas.height = 400;
+
+      this.fetchChartData();
+    },
+
+    async fetchChartData() {
+      try {
+        const response = await fetch(`/projects/${this.slug}/gender_proportion/`);
+        const data = await response.json();
+        this.renderChart(data);
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    },
+
+    renderChart(data) {
+      const ctx = this.canvas.getContext("2d");
       if (ctx) {
         const total = data.datasets[0].data.reduce((a, b) => a + b, 0);
 
@@ -63,21 +79,38 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         });
       }
-    })
-    .catch((error) => console.error("Error fetching chart data:", error));
-});
+    },
+  };
+}
+window.genderProportionChart = genderProportionChart;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("daily_sponsorship_amount");
-  canvas.width = 600;
-  canvas.height = 400;
+function dailySponsorshipChart() {
+  return {
+    canvas: null,
+    slug: null,
 
-  const slug = canvas.dataset.slug;
+    init() {
+      this.canvas = this.$refs.canvas;
+      this.slug = this.canvas.dataset.slug;
 
-  fetch(`/projects/${slug}/daily_sponsorship_amount/`)
-    .then((response) => response.json())
-    .then((data) => {
-      const ctx = canvas.getContext("2d");
+      this.canvas.width = 600;
+      this.canvas.height = 400;
+
+      this.fetchChartData();
+    },
+
+    async fetchChartData() {
+      try {
+        const response = await fetch(`/projects/${this.slug}/daily_sponsorship_amount/`);
+        const data = await response.json();
+        this.renderChart(data);
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    },
+
+    renderChart(data) {
+      const ctx = this.canvas.getContext("2d");
       if (ctx) {
         const maxAmount = Math.max(...data.datasets[0].data);
 
@@ -135,21 +168,38 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         });
       }
-    })
-    .catch((error) => console.error("Error fetching chart data:", error));
-});
+    },
+  };
+}
+window.dailySponsorshipChart = dailySponsorshipChart;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("gender_amount_boxplot");
-  canvas.width = 400;
-  canvas.height = 400;
+function genderAmountBoxplotChart() {
+  return {
+    canvas: null,
+    slug: null,
 
-  const slug = canvas.dataset.slug;
+    init() {
+      this.canvas = this.$refs.canvas;
+      this.slug = this.canvas.dataset.slug;
 
-  fetch(`/projects/${slug}/gender_amount_boxplot/`)
-    .then((response) => response.json())
-    .then((data) => {
-      const ctx = canvas.getContext("2d");
+      this.canvas.width = 400;
+      this.canvas.height = 400;
+
+      this.fetchChartData();
+    },
+
+    async fetchChartData() {
+      try {
+        const response = await fetch(`/projects/${this.slug}/gender_amount_boxplot/`);
+        const data = await response.json();
+        this.renderChart(data);
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    },
+
+    renderChart(data) {
+      const ctx = this.canvas.getContext("2d");
 
       if (ctx) {
         new Chart(ctx, {
@@ -204,24 +254,40 @@ document.addEventListener("DOMContentLoaded", () => {
               },
             },
           },
-          plugins: [],
         });
       }
-    })
-    .catch((error) => console.error("Error fetching chart data:", error));
-});
+    },
+  };
+}
+window.genderAmountBoxplotChart = genderAmountBoxplotChart;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const canvas = document.getElementById("reward_grouped_bar_chart");
-  canvas.width = 400;
-  canvas.height = 400;
+function rewardGroupedBarChart() {
+  return {
+    canvas: null,
+    slug: null,
 
-  const slug = canvas.dataset.slug;
+    init() {
+      this.canvas = this.$refs.canvas;
+      this.slug = this.canvas.dataset.slug;
 
-  fetch(`/projects/${slug}/reward_grouped_bar_chart/`)
-    .then((response) => response.json())
-    .then((data) => {
-      const ctx = canvas.getContext("2d");
+      this.canvas.width = 400;
+      this.canvas.height = 400;
+
+      this.fetchChartData();
+    },
+
+    async fetchChartData() {
+      try {
+        const response = await fetch(`/projects/${this.slug}/reward_grouped_bar_chart/`);
+        const data = await response.json();
+        this.renderChart(data);
+      } catch (error) {
+        console.error("Error fetching chart data:", error);
+      }
+    },
+
+    renderChart(data) {
+      const ctx = this.canvas.getContext("2d");
 
       if (ctx) {
         new Chart(ctx, {
@@ -277,6 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
           },
         });
       }
-    })
-    .catch((error) => console.error("Error fetching chart data:", error));
-});
+    },
+  };
+}
+window.rewardGroupedBarChart = rewardGroupedBarChart;

@@ -1,8 +1,15 @@
 {% extends "shared/layout.html"%} {% block "content" %}
 
-<canvas id="gender_amount_boxplot" data-slug="{{ slug }}"></canvas>
-<canvas id="gender_proportion" data-slug="{{ slug }}"></canvas>
-<canvas id="daily_sponsorship_amount" data-slug="{{ slug }}"></canvas>
-<canvas id="reward_grouped_bar_chart" data-slug="{{ slug }}"></canvas>
-
+<div x-data="genderProportionChart()" x-init="init()" class="chart-container">
+  <canvas id="gender_proportion" x-ref="canvas" data-slug="{{slug}}"></canvas>
+</div>
+<div x-data="dailySponsorshipChart()" x-init="init()" class="chart-container">
+  <canvas id="daily_sponsorship_amount" x-ref="canvas" data-slug="{{slug}}"></canvas>
+</div>
+<div x-data="genderAmountBoxplotChart()" x-init="init()" class="chart-container">
+  <canvas id="gender_amount_boxplot" x-ref="canvas" data-slug="{{slug}}"></canvas>
+</div>
+<div x-data="rewardGroupedBarChart()" x-init="init()" class="chart-container">
+  <canvas id="reward_grouped_bar_chart" x-ref="canvas" data-slug="{{slug}}"></canvas>
+</div>
 {% endblock %}
