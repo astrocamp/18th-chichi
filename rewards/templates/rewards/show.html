@@ -1,153 +1,83 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <div
-    class="relative py-16"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
-  >
+
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">回饋方案詳情</h1>
-        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          查看回饋方案的完整內容
-        </p>
+        <h1 class="text-3xl font-bold mb-3 text-gray-800">回饋方案詳情</h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto">查看回饋方案的完整內容</p>
       </div>
     </div>
   </div>
 
-<div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
-  <!-- Reward Header -->
-  <div class="flex justify-between items-center border-b pb-4 mb-6">
-    <div>
-      <h1 class="text-2xl font-bold">{{ reward.title }}</h1>
-      <p class="text-sm text-gray-500">預計交貨：{{ reward.estimated_delivery|date:"F Y" }}</p>
+  <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <!-- Reward Header -->
+    <div class="flex justify-between items-center border-b pb-4 mb-6">
+      <div>
+        <h1 class="text-2xl font-bold">{{ reward.title }}</h1>
+        <p class="text-sm text-gray-500">預計交貨：{{ reward.estimated_delivery|date:"F Y" }}</p>
+      </div>
+      <div>
+        <span class="text-lg font-semibold text-green-600">NTD {{ reward.price }}</span>
+        <p class="text-sm text-gray-400">約 {{ reward.price }} 台幣</p>
+      </div>
     </div>
-    <div>
-      <span class="text-lg font-semibold text-green-600">NTD {{ reward.price }}</span>
-      <p class="text-sm text-gray-400">約 {{ reward.price }} 台幣</p>
+
+    <!-- Reward Details -->
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold mb-2">內容說明</h2>
+      <p class="text-gray-700">{{ reward.description }}</p>
     </div>
+
+    <!-- Included Items -->
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold mb-2">包含項目</h2>
+      <ul class="space-y-2">
+        {% for product in reward.rewardproduct_set.all %}
+        <li class="p-4 bg-gray-50 border rounded-md">
+          <p class="font-medium">{{ product.name }}</p>
+        </li>
+        {% empty %}
+        <li class="text-gray-500">無商品</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Optional Add-Ons -->
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold mb-2">選用附加回報</h2>
+      <ul class="space-y-2">
+        {% for add_on in reward.optionaladd_set.all %}
+        <li class="p-4 bg-gray-50 border rounded-md">
+          <p class="font-medium">{{ add_on.name }}</p>
+          <p class="text-sm text-gray-500">+NTD {{ add_on.price }}</p>
+        </li>
+        {% empty %}
+        <li class="text-gray-500">無附加選項</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Footer Actions -->
+    <footer class="flex justify-end space-x-4">
+      <a href="{% url 'rewards:edit' reward.id %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #1EA29E; color: white">
+        <i class="fas fa-edit mr-2"></i>
+        <span>編輯</span>
+      </a>
+      <a href="{% url 'rewards:delete' reward.id %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #ff6b6b; color: white">
+        <i class="fas fa-trash mr-2"></i>
+        <span>刪除</span>
+      </a>
+      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #1EA29E">
+        <i class="fas fa-arrow-left mr-2"></i>
+        <span>回到回饋列表</span>
+      </a>
+    </footer>
   </div>
 
-  <!-- Reward Details -->
-  <div class="mb-6">
-    <h2 class="text-lg font-semibold mb-2">內容說明</h2>
-    <p class="text-gray-700">{{ reward.description }}</p>
-  </div>
 
-  <!-- Included Items -->
-  <div class="mb-6">
-    <h2 class="text-lg font-semibold mb-2">包含項目</h2>
-    <ul class="space-y-2">
-      {% for product in reward.rewardproduct_set.all %}
-      <li class="p-4 bg-gray-50 border rounded-md">
-        <p class="font-medium">{{ product.name }}</p>
-        <p class="text-sm text-gray-500">數量：{{ product.quantity }}</p>
-      </li>
-      {% empty %}
-      <li class="text-gray-500">無商品</li>
-      {% endfor %}
-    </ul>
-  </div>
 
-  <!-- Optional Add-Ons -->
-  <div class="mb-6">
-    <h2 class="text-lg font-semibold mb-2">選用附加回報</h2>
-    <ul class="space-y-2">
-      {% for add_on in reward.optionaladd_set.all %}
-      <li class="p-4 bg-gray-50 border rounded-md">
-        <p class="font-medium">{{ add_on.name }}</p>
-        <p class="text-sm text-gray-500">+NTD {{ add_on.price }}</p>
-      </li>
-      {% empty %}
-      <li class="text-gray-500">無附加選項</li>
-      {% endfor %}
-    </ul>
+    {% endblock %}
   </div>
-
-  <!-- Footer Actions -->
-  <footer class="flex justify-end space-x-4">
-    <a href="{% url 'rewards:edit' reward.id %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc; color: white;">
-      <i class="fas fa-edit mr-2"></i>
-      <span>編輯</span>
-    </a>
-    <a href="{% url 'rewards:delete' reward.id %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #ff6b6b; color: white;">
-      <i class="fas fa-trash mr-2"></i>
-      <span>刪除</span>
-    </a>
-    <a href="{% url 'projects:rewards_index' project.slug %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #85cacc">
-      <i class="fas fa-arrow-left mr-2"></i>
-      <span>回首頁</span>
-    </a>
-  </footer>
 </div>
-
-<!-- 詳細內容區塊 -->
-<div class="max-w-4xl mx-auto mt-8 bg-white shadow-md rounded-lg overflow-hidden">
-  <!-- 描述 -->
-  <div class="border-b border-gray-200">
-    <div class="p-6">
-      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-        <i class="fas fa-file-alt mr-3 text-gray-600"></i>
-        方案內容
-      </h3>
-      <div class="prose max-w-none text-gray-600 bg-gray-50 rounded-lg p-6">
-        {{ reward.description|linebreaks }}
-      </div>
-    </div>
-  </div>
-
-  <!-- 運送資訊 -->
-  <div class="border-b border-gray-200">
-    <div class="p-6">
-      <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-        <i class="fas fa-shipping-fast mr-3 text-gray-600"></i>
-        運送資訊
-      </h3>
-      <div class="space-y-4">
-        <div class="bg-gray-50 rounded-lg p-6">
-          <p class="font-semibold text-gray-700 mb-3 flex items-center">
-            <i class="fas fa-map-marker-alt mr-2 text-gray-500"></i>
-            運送地區
-          </p>
-          <p class="text-gray-600 ml-6">{{ reward.ship_to|linebreaks }}</p>
-        </div>
-        {% if reward.shipping_detail %}
-        <div class="bg-gray-50 rounded-lg p-6">
-          <p class="font-semibold text-gray-700 mb-3 flex items-center">
-            <i class="fas fa-info-circle mr-2 text-gray-500"></i>
-            運送說明
-          </p>
-          <p class="text-gray-600 ml-6">
-            {{ reward.shipping_detail|linebreaks }}
-          </p>
-        </div>
-        {% endif %}
-        <div class="bg-gray-50 rounded-lg p-6">
-          <p class="font-semibold text-gray-700 mb-3 flex items-center">
-            <i class="fas fa-calendar-alt mr-2 text-gray-500"></i>
-            預計出貨日期
-          </p>
-          <p class="text-gray-600 ml-6">
-            {{ reward.estimated_delivery|date:"Y/m/d" }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 加購項目 -->
-  {% if reward.optional_adds_on %}
-  <div class="p-6">
-    <h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-      <i class="fas fa-plus-circle mr-3 text-gray-600"></i>
-      加購項目
-    </h3>
-    <div class="bg-gray-50 rounded-lg p-6">
-      <div class="prose max-w-none text-gray-600">
-        {{ reward.optional_adds_on|linebreaks }}
-      </div>
-    </div>
-  </div>
-  {% endif %}
-</div>
-{% endblock %}

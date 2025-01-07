@@ -1,4 +1,12 @@
 {% extends "shared/layout.html" %} {% block "content" %}
+<div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  <div class="container mx-auto px-4">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold mb-3 text-gray-800">新增及附加商品</h1>
+      <p class="text-lg text-gray-600 max-w-xl mx-auto">管理專案中的商品與附加選項</p>
+    </div>
+  </div>
+</div>
 
 <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6">
   <h1 class="text-2xl font-bold mb-4">新增及附加商品</h1>
@@ -18,7 +26,7 @@
         {% endfor %}
       </ul>
     </div>
-  
+
     <!-- 右側：已存在的附加選項 -->
     <div>
       <h2 class="text-xl font-semibold mb-4">已存在的附加選項</h2>
@@ -52,23 +60,27 @@
                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
-            <button type="button" @click="removeProduct(index)" class="btn" style="background-color: #ff6b6b; color: white;">
-              <i class="fas fa-trash mr-2"></i>刪除
+            <button type="button" @click="removeProduct(index)" class="btn" style="background-color: #ff6b6b; color: white">
+              <i class="fas fa-trash mr-2"></i>
+              刪除
             </button>
           </div>
         </template>
 
-        <button type="button" @click="addProduct" class="btn w-full" style="background-color: #85cacc; color: white;">
-          <i class="fas fa-plus mr-2"></i>新增商品
+        <button type="button" @click="addProduct" class="btn w-full" style="background-color: #1ea29e; color: white">
+          <i class="fas fa-plus mr-2"></i>
+          新增商品
         </button>
       </div>
 
       <div class="flex justify-between mt-6">
-        <button type="reset" @click="resetForm" class="btn" style="background-color: #85cacc20; color: #85cacc">
-          <i class="fas fa-undo mr-2"></i>重置
+        <button type="reset" @click="resetForm" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+          <i class="fas fa-undo mr-2"></i>
+          重置
         </button>
-        <button name="save_products" type="submit" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
-          <i class="fas fa-save mr-2"></i>儲存
+        <button name="save_products" type="submit" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-save mr-2"></i>
+          儲存
         </button>
       </div>
     </form>
@@ -100,23 +112,27 @@
                 />
               </div>
             </div>
-            <button type="button" @click="removeOption(index)" class="btn" style="background-color: #ff6b6b; color: white;">
-              <i class="fas fa-trash mr-2"></i>刪除
+            <button type="button" @click="removeOption(index)" class="btn" style="background-color: #ff6b6b; color: white">
+              <i class="fas fa-trash mr-2"></i>
+              刪除
             </button>
           </div>
         </template>
 
-        <button type="button" @click="addOption" class="btn w-full" style="background-color: #85cacc; color: white;">
-          <i class="fas fa-plus mr-2"></i>新增選項
+        <button type="button" @click="addOption" class="btn w-full" style="background-color: #1ea29e; color: white">
+          <i class="fas fa-plus mr-2"></i>
+          新增選項
         </button>
       </div>
 
       <div class="flex justify-between mt-6">
-        <button type="reset" @click="resetOptions" class="btn" style="background-color: #85cacc20; color: #85cacc">
-          <i class="fas fa-undo mr-2"></i>重置
+        <button type="reset" @click="resetOptions" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+          <i class="fas fa-undo mr-2"></i>
+          重置
         </button>
-        <button name="save_options" type="submit" class="btn" style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
-          <i class="fas fa-save mr-2"></i>儲存
+        <button name="save_options" type="submit" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-save mr-2"></i>
+          儲存
         </button>
       </div>
     </form>
@@ -124,8 +140,9 @@
 </div>
 
 <div class="max-w-5xl mx-auto mt-6">
-  <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #85cacc">
-    <i class="fas fa-arrow-left mr-2"></i>回 reward
+  <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+    <i class="fas fa-arrow-left mr-2"></i>
+    回到回饋列表
   </a>
 </div>
 

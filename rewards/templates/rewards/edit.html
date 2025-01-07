@@ -1,14 +1,18 @@
 {% extends "shared/layout.html" %} {% block "content" %}
+<div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  <div class="container mx-auto px-4">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold mb-3 text-gray-800">回饋方案編輯</h1>
+      <p class="text-lg text-gray-600 max-w-xl mx-auto">編輯回饋方案的完整內容</p>
+    </div>
+  </div>
+</div>
 <div class="max-w-4xl mx-auto py-8">
   <div class="flex justify-between items-center mb-6">
-    <h1 class="text-3xl font-bold text-gray-800">編輯回報</h1>
-    <a
-      href="{% url 'projects:rewards_index' reward.project.slug %}"
-      class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-      style="background-color: #85cacc20; color: #85cacc"
-    >
+    <h1 class="text-3xl font-bold text-gray-800">編輯回饋內容</h1>
+    <a href="{% url 'rewards:show' reward.id %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #1ea29e">
       <i class="fas fa-arrow-left mr-2"></i>
-      <span>回首頁</span>
+      <span>回到回饋方案</span>
     </a>
   </div>
 
@@ -18,40 +22,20 @@
       <div class="grid grid-cols-1 md:grid-cols-10 gap-6">
         <!-- 左側：Reward Details -->
         <div class="col-span-5">
-          <h2 class="text-xl font-semibold mb-4">回報內容</h2>
+          <h2 class="text-xl font-semibold mb-4">回饋內容</h2>
           <div class="grid grid-cols-1 gap-4 mb-6">
             <div>
-              <label for="title" class="block text-sm font-medium text-gray-700"
-                >標題</label
-              >
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value="{{ reward.title }}"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
+              <label for="title" class="block text-sm font-medium text-gray-700">標題</label>
+              <input type="text" id="title" name="title" value="{{ reward.title }}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500" />
             </div>
             <div>
-              <label
-                for="description"
-                class="block text-sm font-medium text-gray-700"
-                >內容</label
-              >
-              <textarea
-                id="description"
-                name="description"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              >
+              <label for="description" class="block text-sm font-medium text-gray-700">內容</label>
+              <textarea id="description" name="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
 {{ reward.description }}</textarea
               >
             </div>
             <div>
-              <label
-                for="quantity"
-                class="block text-sm font-medium text-gray-700"
-                >數量</label
-              >
+              <label for="quantity" class="block text-sm font-medium text-gray-700">數量</label>
               <input
                 type="number"
                 id="quantity"
@@ -61,9 +45,7 @@
               />
             </div>
             <div>
-              <label for="price" class="block text-sm font-medium text-gray-700"
-                >價格</label
-              >
+              <label for="price" class="block text-sm font-medium text-gray-700">價格</label>
               <input
                 type="number"
                 id="price"
@@ -74,11 +56,7 @@
               />
             </div>
             <div>
-              <label
-                for="estimated_delivery"
-                class="block text-sm font-medium text-gray-700"
-                >預計交貨時間</label
-              >
+              <label for="estimated_delivery" class="block text-sm font-medium text-gray-700">預計交貨時間</label>
               <input
                 type="date"
                 id="estimated_delivery"
@@ -98,19 +76,7 @@
             <div class="space-y-2">
               {% for product in products %}
               <label class="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="products"
-                  value="{{ product.id }}"
-                  {%
-                  if
-                  product
-                  in
-                  reward.rewardproduct_set.all
-                  %}checked{%
-                  endif
-                  %}
-                />
+                <input type="checkbox" name="products" value="{{ product.id }}" {% if product in reward.rewardproduct_set.all %}checked{% endif %} />
                 <span class="text-gray-700">{{ product.name }}</span>
               </label>
               {% endfor %}
@@ -122,19 +88,7 @@
             <div class="space-y-2">
               {% for option in options %}
               <label class="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  name="options"
-                  value="{{ option.id }}"
-                  {%
-                  if
-                  option
-                  in
-                  reward.optionaladd_set.all
-                  %}checked{%
-                  endif
-                  %}
-                />
+                <input type="checkbox" name="options" value="{{ option.id }}" {% if option in reward.optionaladd_set.all %}checked{% endif %} />
                 <span class="text-gray-700">{{ option.name }}</span>
               </label>
               {% endfor %}
@@ -144,20 +98,11 @@
       </div>
 
       <div class="flex justify-between mt-6">
-        <button
-          type="reset"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-          style="background-color: #85cacc20; color: #85cacc"
-        >
+        <button type="reset" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #1ea29e">
           <i class="fas fa-undo mr-2"></i>
           <span>重置</span>
         </button>
-        <button
-          type="submit"
-          name="reward"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-12"
-          style="background-color: #85cacc; color: white"
-        >
+        <button type="submit" name="reward" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #1ea29e; color: white">
           <i class="fas fa-save mr-2"></i>
           <span>儲存</span>
         </button>
