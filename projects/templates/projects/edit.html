@@ -125,39 +125,10 @@
               </div>
             </div>
           <!-- 時間設定 -->
-          <div class="space-y-4 pt-6">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-6">時間設定</h2>
-
-            <div>
-              <label
-                for="start_at"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >預計開始時間</label
-              >
-              <input
-                type="datetime-local"
-                id="start_at"
-                name="start_at"
-                class="input input-bordered w-full"
-                value="{{ format_time_start }}"
-              />
-            </div>
-
-            <div>
-              <label
-                for="end_at"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >預計結束時間</label
-              >
-              <input
-                type="datetime-local"
-                id="end_at"
-                name="end_at"
-                required
-                class="input input-bordered w-full"
-                value="{{ format_time_end }}"
-              />
-            </div>
+          募款時間:
+          <div class="flex gap-2">
+            <input type="text" id="start-date" name="start_at" value="{{ project.start_at|date:"Y-m-d" }}" class="p-2 border rounded-lg"  placeholder="開始日期">
+            <input type="text" id="end-date"  name="end_at" value="{{ project.end_at|date:"Y-m-d" }}"  class="p-2 border rounded-lg" placeholder="結束日期">
           </div>
 
           <!-- 專案內容 -->
