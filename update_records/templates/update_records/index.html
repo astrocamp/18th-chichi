@@ -1,19 +1,12 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
-<div class="min-h-screen bg-white">
-  <!-- Hero Section -->
-  <div
-    class="relative py-16"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)"
-  >
-    <div class="container mx-auto px-4">
-      <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">更新記錄</h1>
-        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          查看專案的最新進度與更新內容
-        </p>
-      </div>
+<div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  <div class="container mx-auto px-4">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold mb-3 text-gray-800">更新記錄</h1>
+      <p class="text-lg text-gray-600 max-w-xl mx-auto">查看專案的最新進度與更新內容</p>
     </div>
   </div>
+</div>
 
   <!-- Content Section -->
   <div class="py-16">
@@ -24,7 +17,7 @@
           <a
             href="{% url 'projects:show' project.slug %}"
             class="btn"
-            style="background-color: #85cacc20; color: #85cacc"
+            style="background-color: #85cacc20; color: #1EA29E"
           >
             <i class="fas fa-arrow-left mr-2"></i>
             回到專案
@@ -32,7 +25,7 @@
           <a
             href="{% url 'projects:update_records_new' project.slug %}"
             class="btn text-white"
-            style="background-color: #85cacc; border: none"
+            style="background-color: #1EA29E; border: none"
           >
             <i class="fas fa-plus mr-2"></i>
             新增更新
@@ -58,7 +51,7 @@
                 <a
                   href="{% url 'update_records:show' record.slug %}"
                   class="text-sm mb-2"
-                  style="color: #85cacc"
+                  style="color: #1EA29E"
                 >
                   查看詳情
                 </a>
@@ -71,13 +64,6 @@
           {% endfor %} {% else %}
           <div class="text-center py-12">
             <p class="text-gray-500 mb-4">目前還沒有任何更新記錄</p>
-            <a
-              href="{% url 'projects:update_records_new' project.slug %}"
-              class="btn text-white"
-              style="background-color: #85cacc; border: none"
-            >
-              立即新增更新
-            </a>
           </div>
           {% endif %}
         </div>
