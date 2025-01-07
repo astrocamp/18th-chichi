@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "payments",
     "channels",
     "chats",
+    "anymail"
 ]
 
 SITE_ID = 1
@@ -233,3 +234,11 @@ CHANNEL_LAYERS = {
         },
     },
 }
+
+ANYMAIL = {
+    "MAILGUN_API_KEY": os.getenv("MAILGUN_API_KEY"),
+    "MAILGUN_SENDER_DOMAIN": os.getenv("MAILGUN_SENDER_DOMAIN"),
+}
+
+EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
+DEFAULT_FROM_EMAIL = "postmaster@mg.chichii.com"

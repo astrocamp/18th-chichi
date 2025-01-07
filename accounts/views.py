@@ -10,6 +10,7 @@ from django import forms
 from projects.models import Sponsor
 from users.models import Profile
 from chats.models import ChatRoom
+from anymail.message import AnymailMessage
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -114,13 +115,20 @@ def register(request):
                 birthday=None,
                 website="",
             )
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password1")
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login_user(request, user)
-                messages.success(request, "註冊成功並已登入")
-                return redirect("profile:index")
+            message = AnymailMessage(
+                subject="Welcome to Chichii",
+                from_email="postmaster@mg.chichii.com",
+                to=[account.email],
+            )
+            message.template_id = "welcome_email"  # 替换为你的 Mailgun 模板 ID
+            message.merge_global_data = {
+                "username": account.username,
+                # 添加其他你在模板中使用的变量
+            }
+            message.send()
+
+            messages.success(request, "註冊成功")
+            return redirect("homepages:homepages")
         else:
             for field, errors in form.errors.items():
                 for error in errors:
