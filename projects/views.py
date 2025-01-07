@@ -214,7 +214,7 @@ def like_projects(request, slug):
 def chart_page(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
-    return render(request, "projects/chart_page.html", {"slug": slug})
+    return render(request, "projects/chart_page.html", {"slug": slug, "project": project})
 
 
 @login_required
