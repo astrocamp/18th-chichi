@@ -16,23 +16,6 @@
     </div>
   </div>
 
-  <!-- Filter Section -->
-  <div class="py-8">
-    <div class="container mx-auto px-4">
-      <form method="GET" action="" class="flex items-center justify-center space-x-4">
-        <select name="category" id="category" class="input input-bordered w-full max-w-xs">
-          <option value="">所有分類</option>
-          {% for category in categories %}
-          <option value="{{ category.id }}">
-            {{ category.title }}
-          </option>
-          {% endfor %}
-        </select>
-        <button type="submit" class="btn text-white" style="background-color: #85cacc; border: none">篩選</button>
-      </form>
-    </div>
-  </div>
-
   <!-- Projects Grid -->
   <div class="py-16">
     <div class="container mx-auto px-4">
