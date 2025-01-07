@@ -25,8 +25,7 @@ SECRET_KEY = env("SECRET_KEY", default="your-default-secret-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG", default=True)
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "2796-61-220-182-115.ngrok-free.app"]
-
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 # Application definition
 
 INSTALLED_APPS = [
