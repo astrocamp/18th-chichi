@@ -37,3 +37,28 @@ function rewardForm(basePrice) {
 
 window.rewardForm = rewardForm;
 window.formHandler = formHandler;
+
+function fileUploadHandler() {
+  return {
+    fileName: "尚未選擇檔案",
+    previewUrl: null,
+
+    handleFile(event) {
+      const file = event.target.files[0];
+
+      if (file) {
+        this.fileName = file.name;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewUrl = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.fileName = "尚未選擇檔案";
+        this.previewUrl = null;
+      }
+    },
+  };
+}
+window.fileUploadHandler = fileUploadHandler;

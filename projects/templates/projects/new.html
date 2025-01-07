@@ -1,11 +1,11 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <div class="relative py-16" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
-        <h1 class="text-4xl font-bold mb-4 text-gray-800">建立新專案</h1>
-        <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">分享你的創意，開始你的募資之旅</p>
+        <h1 class="text-3xl font-bold mb-3 text-gray-800">建立新專案</h1>
+        <p class="text-lg text-gray-600 max-w-xl mx-auto">分享你的創意，開始你的募資之旅</p>
       </div>
     </div>
   </div>
@@ -26,22 +26,25 @@
               <input type="text" id="title" name="title" required class="input input-bordered w-full" placeholder="為你的專案取個好標題" />
             </div>
 
-            <div>
-              <label for="subtitle" class="block text-sm font-medium text-gray-700 mb-1">副標題</label>
-              <input type="text" id="subtitle" name="subtitle" class="input input-bordered w-full" placeholder="簡短描述你的專案特色" />
-            </div>
-            <div>
+            <div class="max-w-xl" x-data="fileUploadHandler()">
               <label for="cover_image" class="block text-sm font-medium text-gray-700 mb-1">封面圖片</label>
               <div class="relative">
-                <input type="file" id="cover_image" name="cover_image" class="sr-only" />
+                <input type="file" id="cover_image" name="cover_image" accept="image/*" required class="sr-only" @change="handleFile($event)" />
                 <label
                   for="cover_image"
                   class="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-lg shadow-sm cursor-pointer hover:opacity-90"
-                  style="background-color: #85cacc"
+                  style="background-color: #1ea29e"
                 >
                   選擇檔案
                 </label>
-                <span id="file_name" class="ml-4 text-gray-600 text-sm">尚未選擇檔案</span>
+                <span class="ml-4 text-gray-600 text-sm" x-text="fileName"></span>
+
+                <!-- 預覽圖片區域 -->
+                <div class="mt-4 flex justify-center items-center" x-show="previewUrl" x-transition>
+                  <div class="relative bg-gray-100 rounded-lg overflow-hidden" style="width: 300px; height: 300px">
+                    <img :src="previewUrl" alt="預覽圖片" class="absolute inset-0 w-full h-full object-contain" />
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -57,7 +60,7 @@
 
             <div>
               <label for="start_at" class="block text-sm font-medium text-gray-700 mb-1">預計開始時間</label>
-              <input type="datetime-local" id="start_at" name="start_at" class="input input-bordered w-full" />
+              <input type="datetime-local" id="start_at" name="start_at" required class="input input-bordered w-full" />
             </div>
 
             <div>
@@ -77,14 +80,43 @@
 
             <div>
               <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點</label>
-              <input type="text" id="location" name="location" class="input input-bordered w-full" placeholder="專案執行或團隊所在地點" />
+              <select
+                id="location"
+                name="location"
+                required
+                class="border border-gray-300 rounded-lg w-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="" disabled selected>請選擇專案地點</option>
+                <option value="基隆市">基隆市</option>
+                <option value="台北市">台北市</option>
+                <option value="新北市">新北市</option>
+                <option value="桃園市">桃園市</option>
+                <option value="新竹市">新竹市</option>
+                <option value="新竹縣">新竹縣</option>
+                <option value="苗栗縣">苗栗縣</option>
+                <option value="台中市">台中市</option>
+                <option value="彰化縣">彰化縣</option>
+                <option value="南投縣">南投縣</option>
+                <option value="雲林縣">雲林縣</option>
+                <option value="嘉義市">嘉義市</option>
+                <option value="嘉義縣">嘉義縣</option>
+                <option value="台南市">台南市</option>
+                <option value="高雄市">高雄市</option>
+                <option value="屏東縣">屏東縣</option>
+                <option value="宜蘭縣">宜蘭縣</option>
+                <option value="花蓮縣">花蓮縣</option>
+                <option value="台東縣">台東縣</option>
+                <option value="澎湖縣">澎湖縣</option>
+                <option value="金門縣">金門縣</option>
+                <option value="連江縣">連江縣</option>
+              </select>
             </div>
           </div>
 
           <!-- 按鈕區 -->
           <div class="flex justify-end space-x-4 pt-8">
             <a href="{% url 'projects:index' %}" class="btn" style="background-color: #85cacc20; color: #85cacc">取消</a>
-            <button type="submit" class="btn text-white" style="background-color: #85cacc; border: none">建立專案</button>
+            <button type="submit" class="btn text-white" style="background-color: #1ea29e; border: none">建立專案</button>
           </div>
         </form>
       </div>
