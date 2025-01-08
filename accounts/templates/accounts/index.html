@@ -19,10 +19,14 @@
         <div class="bg-white rounded-lg shadow-md p-8 mb-8">
           <div class="flex items-center space-x-4 mb-6">
             <div class="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
+              {% if profile.profile_picture %}
+              <img src="{{ profile.profile_picture.url }}" alt="avatar" class="w-full h-full object-cover rounded-full">
+              {% else %}
               <i class="fas fa-user text-3xl text-gray-400"></i>
+              {% endif %}
             </div>
             <div>
-              <h2 class="text-2xl font-semibold text-gray-800">{{ user.username }}</h2>
+              <h2 class="text-2xl font-semibold text-gray-800">{{ profile.name|default:user.username }}</h2>
               <p class="text-gray-600">{{ user.email }}</p>
             </div>
           </div>
@@ -39,7 +43,40 @@
                   <span class="font-medium">上次登入：</span>
                   {{ user.last_login|date:"Y/m/d H:i" }}
                 </p>
+                {% if profile.gender %}
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">性別：</span>
+                  {% if profile.gender == 'M' %}男
+                  {% elif profile.gender == 'F' %}女
+                  {% else %}其他
+                  {% endif %}
+                </p>
+                {% endif %}
+                {% if profile.location %}
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">所在地：</span>
+                  {{ profile.location }}
+                </p>
+                {% endif %}
+                {% if profile.birthday %}
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">生日：</span>
+                  {{ profile.birthday|date:"Y/m/d" }}
+                </p>
+                {% endif %}
+                {% if profile.website %}
+                <p class="text-sm text-gray-600">
+                  <span class="font-medium">個人網站：</span>
+                  <a href="{{ profile.website }}" target="_blank" class="text-teal-600 hover:underline">{{ profile.website }}</a>
+                </p>
+                {% endif %}
               </div>
+              {% if profile.bio %}
+              <div class="mt-4">
+                <h4 class="text-sm font-medium text-gray-800 mb-2">個人簡介</h4>
+                <p class="text-sm text-gray-600">{{ profile.bio }}</p>
+              </div>
+              {% endif %}
             </div>
 
             <div>

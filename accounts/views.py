@@ -5,10 +5,10 @@ from django.contrib.auth import authenticate, login as login_user, logout as log
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-from users.views import Profile
 from django.contrib.auth.models import User
 from django import forms
 from projects.models import Sponsor
+from users.models import Profile
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -42,17 +42,33 @@ class CustomUserCreationForm(UserCreationForm):
 @login_required
 def index(request):
     account = request.user
+    # 獲取用戶的 profile
+    try:
+        profile = Profile.objects.get(account=account)
+    except Profile.DoesNotExist:
+        # 如果找不到 profile，創建一個新的
+        profile = Profile.objects.create(
+            account=account,
+            name=account.username,
+            location="",
+            bio="",
+            birthday=None,
+            website="",
+        )
+
     # 獲取用戶贊助的專案，包含贈品資訊
     sponsored_projects = (
         Sponsor.objects.filter(account=account, status="paid")
-        .select_related("project", "reward")  # 加入 reward 關聯
+        .select_related("project", "reward")
         .order_by("-created_at")
     )
+
     return render(
         request,
         "accounts/index.html",
         {
-            "account": account,
+            "user": account,
+            "profile": profile,
             "sponsored_projects": sponsored_projects,
         },
     )
