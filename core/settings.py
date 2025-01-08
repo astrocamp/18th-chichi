@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     "rewards",
     "update_records",
     "payments",
-    "django.contrib.humanize",
 ]
 
 SITE_ID = 1

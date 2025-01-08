@@ -26,59 +26,65 @@
   </div>
 
   <!-- Menu Section -->
-  <div class="w-full md:w-1/5 flex flex-col md:flex-row items-center md:justify-end gap-2 lg:gap-3 pt-2">
-      <div class="w-full flex flex-col md:flex-row items-center gap-2 lg:gap-3">
-          <!-- User Menu -->
-          <div class="w-full flex flex-col md:flex-row items-center gap-2 lg:gap-3">
+  <div class="w-full md:w-1/5 flex flex-col items-center md:items-end gap-2 xl:gap-3 pt-2">
+      <!-- 所有按鈕的容器 -->
+      <div class="w-full flex flex-col md:flex-col xl:flex-row items-center gap-2 xl:gap-3">
+          <!-- 功能按鈕群組 -->
+          <div class="w-full flex flex-col md:flex-row xl:flex-row items-center gap-2 xl:gap-3">
               {% if user.is_authenticated %}
                   <span class="text-white text-lg font-medium">{{ user.username }}</span>
                   <a 
                       href="{% url 'accounts:index' %}"
                       style="background-color: #52bdb9"
-                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 lg:px-4 rounded text-sm md:text-base whitespace-nowrap"
+                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 xl:px-4 rounded text-sm md:text-base whitespace-nowrap"
                   >
                       <i class="fas fa-user"></i>
-                      <span class="ml-2 md:hidden lg:inline">個人頁面</span>
+                      <span class="ml-2 md:hidden xl:inline">個人頁面</span>
                   </a>
+              {% else %}
+                  <a 
+                      href="{% url 'accounts:login' %}"
+                      style="background-color: #52bdb9"
+                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 xl:px-4 rounded text-sm md:text-base whitespace-nowrap"
+                  >
+                      <i class="fas fa-sign-in-alt"></i>
+                      <span class="ml-2 md:hidden xl:inline">登入</span>
+                  </a>
+                  <a 
+                      href="{% url 'accounts:register' %}"
+                      style="background-color: #52bdb9"
+                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 xl:px-4 rounded text-sm md:text-base whitespace-nowrap"
+                  >
+                      <i class="fas fa-user-plus"></i>
+                      <span class="ml-2 md:hidden xl:inline">註冊</span>
+                  </a>
+              {% endif %}
+          </div>
+
+          <!-- 額外按鈕群組 (登出和發起專案) -->
+          <div class="w-full flex flex-col md:flex-row xl:flex-row items-center gap-2 xl:gap-3 md:mt-2 xl:mt-0">
+              {% if user.is_authenticated %}
                   <button
                       style="background-color: #52bdb9"
-                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 lg:px-4 rounded text-sm md:text-base whitespace-nowrap"
+                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 xl:px-4 rounded text-sm md:text-base whitespace-nowrap"
                       hx-post="{% url 'accounts:logout' %}"
                       hx-target="body"
                       hx-swap="outerHTML"
                       hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
                   >
                       <i class="fas fa-sign-out-alt"></i>
-                      <span class="ml-2 md:hidden lg:inline">登出</span>
+                      <span class="ml-2 md:hidden xl:inline">登出</span>
                   </button>
-              {% else %}
-                  <a 
-                      href="{% url 'accounts:login' %}"
-                      style="background-color: #52bdb9"
-                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 lg:px-4 rounded text-sm md:text-base whitespace-nowrap"
-                  >
-                      <i class="fas fa-sign-in-alt"></i>
-                      <span class="ml-2 md:hidden lg:inline">登入</span>
-                  </a>
-                  <a 
-                      href="{% url 'accounts:register' %}"
-                      style="background-color: #52bdb9"
-                      class="w-full md:w-auto inline-flex items-center justify-center h-12 text-white hover:bg-teal-400 transition-colors duration-300 px-2 md:px-3 lg:px-4 rounded text-sm md:text-base whitespace-nowrap"
-                  >
-                      <i class="fas fa-user-plus"></i>
-                      <span class="ml-2 md:hidden lg:inline">註冊</span>
-                  </a>
               {% endif %}
+              <!-- Project Button -->
+              <a 
+                  href="{%url 'projects:new'%}"
+                  class="w-full md:w-auto inline-flex items-center justify-center h-12 bg-white hover:bg-gray-50 transition-colors duration-300 px-2 md:px-3 xl:px-4 rounded text-sm md:text-base whitespace-nowrap"
+                  style="color: #1EA29E;"
+              >
+                  發起專案
+              </a>
           </div>
-
-          <!-- Project Button -->
-          <a 
-              href="{%url 'projects:new'%}"
-              class="w-full md:w-auto inline-flex items-center justify-center h-12 bg-white hover:bg-gray-50 transition-colors duration-300 px-2 md:px-3 lg:px-4 rounded text-sm md:text-base whitespace-nowrap"
-              style="color: #1EA29E;"
-          >
-              發起專案
-          </a>
       </div>
   </div>
 
