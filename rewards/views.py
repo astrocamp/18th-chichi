@@ -367,8 +367,14 @@ def reward_sponsor_confirm(request, slug):
         if additional_products:
             description += " (含加購商品)"
 
+        # 建立訂單時加入 user 和 reward
         order = Order.objects.create(
-            order_id=order_id, amount=total_amount, description=description
+            order_id=order_id,
+            amount=total_amount,
+            description=description,
+            user=request.user,
+            reward=sponsor.reward,
+            quantity=1,  # 預設數量為 1
         )
 
         ecpay = ECPayPayment()
@@ -417,8 +423,14 @@ def free_sponsor_confirm(request, slug):
             order_id = f"FS{datetime.now().strftime('%Y%m%d%H%M%S')}"
             description = f"{project.title} - 自由贊助"
 
+            # 建立訂單時加入 user，reward 設為 null=True
             order = Order.objects.create(
-                order_id=order_id, amount=amount, description=description
+                order_id=order_id,
+                amount=amount,
+                description=description,
+                user=request.user,
+                reward=None,  # 自由贊助沒有回饋項目
+                quantity=1,
             )
 
             ecpay = ECPayPayment()

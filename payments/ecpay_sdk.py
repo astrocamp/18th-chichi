@@ -29,7 +29,7 @@ class ECPayPayment:
             "ItemName": description,
             "ReturnURL": f"{self.base_url}/payments/notify/",
             "ClientBackURL": f"{self.base_url}/payments/complete/",
-            "ChoosePayment": "ALL",
+            "ChoosePayment": "Credit",
             "EncryptType": "1",
             "NeedExtraPaidInfo": "Y",
             "Language": "ZH-TW",

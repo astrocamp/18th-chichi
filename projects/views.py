@@ -512,6 +512,11 @@ def public(request, slug):
         project.raised_amount, project.goal_amount
     )
 
+    # �算贊助人數
+    from .models import Sponsor
+
+    backers_count = Sponsor.objects.filter(project=project, status="paid").count()
+
     # 如果用戶已登入，檢查是否已收藏和按讚
     collected = None
     favorited = None
@@ -525,10 +530,11 @@ def public(request, slug):
 
     context = {
         "project": project,
-        "collected": collected,
-        "favorited": favorited,
         "total_days": total_days,
         "progress_percentage": progress_percentage,
+        "collected": collected,
+        "favorited": favorited,
+        "backers_count": backers_count,
     }
 
     return render(request, "projects/public.html", context)
