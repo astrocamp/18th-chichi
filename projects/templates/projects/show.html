@@ -6,17 +6,15 @@
     {% if project.subtitle %}
     <p class="text-xl text-gray-600 mb-6">{{ project.subtitle }}</p>
     {% endif %}
+
     <!-- 封面區 -->
     <div>
       <h2 class="text-lg font-semibold text-gray-600 mb-4">封面圖片</h2>
-      <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center"
-        style="max-height: 400px">
+      <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center" style="max-height: 400px">
         {% if media_type == "image" %}
-        <img src="{{ project.cover_image.url }}" alt="cover_image"
-          class="w-auto h-auto max-w-full max-h-full object-contain" />
+        <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-auto h-auto max-w-full max-h-full object-contain" />
         {% elif media_type == "video" %}
-        <video src="{{ project.cover_image.url }}" controls
-          class="w-auto h-auto max-w-full max-h-full object-contain rounded-lg">您的瀏覽器不支援影片播放。</video>
+        <video src="{{ project.cover_image.url }}" controls class="w-auto h-auto max-w-full max-h-full object-contain rounded-lg">您的瀏覽器不支援影片播放。</video>
         {% else %}
         <p class="text-gray-600">不支援的媒體格式。</p>
         {% endif %}
@@ -36,10 +34,7 @@
         </div>
         <div class="flex justify-between text-sm text-gray-600 mt-1">
           <p>目標金額：NT$ {{ project.goal_amount|default:"0" }}</p>
-          <p>
-            達成率：
-            {{ progress_percentage }}%
-          </p>
+          <p>達成率： {{ progress_percentage }}%</p>
         </div>
       </div>
 
@@ -59,106 +54,27 @@
           </div>
         </div>
 
+        <!-- 募資地點 -->
         <div>
-          <h3>分類</h3>
-          {% if categories %}
-          <ul>
-            {% for category in categories %}
-            <li>
-              {% if category.parent %}
-              {{ category.parent.title }} > {{ category.title }}
-              {% else %}
-              {{ category.title }}
-              {% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p>無分類</p>
-          {% endif %}
-        </div>
+          <p class="text-lg mb-1">募資地點</p>
+          <p class="text-gray-600">{{ project.location }}</p>
 
-        <!-- 功能按鈕 -->
-        <div class="flex flex-wrap gap-4 mb-8">
-          <form action="{% url 'projects:collect' project.slug %}" method="post">
-            {% csrf_token %}
-            <button class="btn" style="background-color: #85cacc20; color: #85cacc">
-              <i class="fas fa-bookmark mr-2"></i>
-              {% if collected %}取消收藏{% else %}收藏{% endif %}
-            </button>
-          </form>
-
-          <form action="{% url 'projects:like' project.slug %}" method="post">
-            {% csrf_token %}
-            <button class="btn" style="background-color: #85cacc20; color: #85cacc">
-              {% if favorited %}
-              <img src="{% static 'svg/like-on.svg' %}" alt="取消按讚" class="w-4 h-4 mr-2" />
-              {% else %}
-              <img src="{% static 'svg/like-off.svg' %}" alt="按讚" class="w-4 h-4 mr-2" />
-              {% endif %} {% if favorited %}取消按讚{% else %}按讚{% endif %}
-            </button>
-          </form>
-
-
-          <a href="{% url 'projects:faq_index' project.slug %}" class="btn"
-            style="background-color: #85cacc20; color: #85cacc">
-            <i class="fas fa-question-circle mr-2"></i>常見問題
-          </a>
-          <a href="{% url 'projects:update_records_index' project.slug %}" class="btn"
-            style="background-color: #85cacc20; color: #85cacc">
-            <i class="fas fa-newspaper mr-2"></i>更新記錄
-          </a>
-          <a href="{% url 'projects:rewards_index' project.slug %}" class="btn"
-            style="background-color: #85cacc20; color: #85cacc">
-            <i class="fas fa-gift mr-2"></i>回饋方案
-          </a>
-        </div>
-
-        <!-- 專案說明 -->
-        <div class="mb-8">
-          <h2 class="text-2xl font-bold mb-4">專案說明</h2>
-          <div class="prose max-w-none text-gray-600">
-            {{ project.story|linebreaks }}
+          <!-- 分類區塊 -->
+          <div class="mt-4">
+            <h3 class="text-lg font-semibold mb-2">分類</h3>
+            {% if categories %}
+            <ul class="list-none">
+              {% for category in categories %}
+              <li class="text-gray-600">{% if category.parent %} {{ category.parent.title }} > {{ category.title }} {% else %} {{ category.title }} {% endif %}</li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-gray-600">無分類</p>
+            {% endif %}
           </div>
-        </div>
-
-        <!-- 贊助按鈕 -->
-        <div class="text-center">
-          {% if user == project.account %} {% if project.status == 'pending' %}
-          <form action="" method="post" class="inline-block">
-            {% csrf_token %}
-            <button type="submit" name="publish" class="btn"
-              style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
-              <i class="fas fa-rocket mr-2"></i>上架專案
-            </button>
-          </form>
-          {% elif project.status == 'live' %}
-          <form action="" method="post" class="inline-block">
-            {% csrf_token %}
-            <button type="submit" name="unpublish" class="btn"
-              style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
-              <i class="fas fa-stop-circle mr-2"></i>下架專案
-            </button>
-          </form>
-          {% endif %} {% else %}
-          <a href="{% url 'projects:sponsor' project.slug %}" class="btn"
-            style="background-color: #85cacc; color: white; padding: 0.75rem 2rem">
-            <i class="fas fa-hand-holding-heart mr-2"></i>立即贊助
-          </a>
-          {% endif %}
-          <a href="{% url 'projects:index' %}" class="btn ml-4" style="background-color: #85cacc20; color: #85cacc">
-            <i class="fas fa-arrow-left mr-2"></i>返回列表
-          </a>
         </div>
       </div>
     </div>
-    {% endblock %} {% block "extra_js" %}
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        // 更新進度條
-        function updateProgress() {
-          const progressBar = document.getElementById("progress-bar");
-          const progressPercentage = document.getElementById("progress-percentage");
 
     <!-- 功能按鈕 -->
     <div class="flex flex-wrap gap-4 mb-8">
@@ -166,120 +82,112 @@
         <i class="fas fa-edit mr-2"></i>
         編輯專案
       </a>
-      <a href="{% url 'projects:comment' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:comment' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-comments mr-2"></i>
         留言板
       </a>
-      <a href="{% url 'projects:faq_index' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:faq_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-question-circle mr-2"></i>
         常見問題
       </a>
-      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-newspaper mr-2"></i>
         更新記錄
       </a>
-      <a href="{% url 'projects:chart_page' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:chart_page' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-chart-bar mr-2"></i>
         數據分析
       </a>
-      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-gift mr-2"></i>
         回饋方案
       </a>
     </div>
 
-    <!--專案說明 -->
+    <!-- 專案說明 -->
     <div class="mb-8">
       <h2 class="text-2xl font-bold mb-4">專案說明</h2>
       <div class="prose max-w-none text-gray-600">{{ project.story|linebreaks }}</div>
     </div>
 
-    <!--贊助按鈕 -->
-            <div class="text-center">
-              {% if user == project.account %} {% if project.status == 'pending' %}
-              <form action="" method="post" class="inline-block">
-                {% csrf_token %}
-                <button type="submit" name="publish" class="btn"
-                  style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
-                  <i class="fas fa-rocket mr-2"></i>
-                  上架專案
-                </button>
-              </form>
-              {% elif project.status == 'live' %}
-              <form action="" method="post" class="inline-block">
-                {% csrf_token %}
-                <button type="submit" name="unpublish" class="btn"
-                  style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
-                  <i class="fas fa-stop-circle mr-2"></i>
-                  下架專案
-                </button>
-              </form>
-              {% endif %} {% endif %}
-              <a href="{% url 'projects:index' %}" class="btn ml-4" style="background-color: #85cacc20; color: #1ea29e">
-                <i class="fas fa-arrow-left mr-2"></i>
-                返回列表
-              </a>
-              <a href="{% url 'projects:public' slug=project.slug %}" class="btn ml-4"
-                style="background-color: #85cacc20; color: #1ea29e">
-                <i class="fas fa-arrow-right mr-2"></i>
-                前往商品頁面
-              </a>
-            </div>
-  </div >
-</div >
+    <!-- 贊助按鈕 -->
+    <div class="text-center">
+      {% if user == project.account %} {% if project.status == 'pending' %}
+      <form action="" method="post" class="inline-block">
+        {% csrf_token %}
+        <button type="submit" name="publish" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-rocket mr-2"></i>
+          上架專案
+        </button>
+      </form>
+      {% elif project.status == 'live' %}
+      <form action="" method="post" class="inline-block">
+        {% csrf_token %}
+        <button type="submit" name="unpublish" class="btn" style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
+          <i class="fas fa-stop-circle mr-2"></i>
+          下架專案
+        </button>
+      </form>
+      {% endif %} {% endif %}
+      <a href="{% url 'projects:index' %}" class="btn ml-4" style="background-color: #85cacc20; color: #1ea29e">
+        <i class="fas fa-arrow-left mr-2"></i>
+        返回列表
+      </a>
+      <a href="{% url 'projects:public' slug=project.slug %}" class="btn ml-4" style="background-color: #85cacc20; color: #1ea29e">
+        <i class="fas fa-arrow-right mr-2"></i>
+        前往商品頁面
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block "extra_js" %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // 更新進度條
+    function updateProgress() {
+      const progressBar = document.getElementById("progress-bar");
+      const progressPercentage = document.getElementById("progress-percentage");
 
-            {% endblock %} {% block "extra_js" %}
-        <script>
-          document.addEventListener("DOMContentLoaded", function () {
-            // 更新進度條
-            function updateProgress() {
-              const progressBar = document.getElementById("progress-bar");
-              const progressPercentage = document.getElementById("progress-percentage");
-              if (!progressBar || !progressPercentage) return;
+      if (!progressBar || !progressPercentage) return;
 
-              const startDate = new Date(progressBar.dataset.start);
-              const now = new Date();
-              const raised = parseFloat(progressBar.dataset.raised) || 0;
-              const goal = parseFloat(progressBar.dataset.goal) || 0;
+      const startDate = new Date(progressBar.dataset.start);
+      const now = new Date();
+      const raised = parseFloat(progressBar.dataset.raised) || 0;
+      const goal = parseFloat(progressBar.dataset.goal) || 0;
 
-              if (now >= startDate && goal > 0) {
-                const percentage = Math.min(100, Math.floor((raised / goal) * 100));
-                progressBar.style.width = percentage + "%";
-                progressPercentage.textContent = percentage;
-              }
-            }
+      if (now >= startDate && goal > 0) {
+        const percentage = Math.min(100, Math.floor((raised / goal) * 100));
+        progressBar.style.width = percentage + "%";
+        progressPercentage.textContent = percentage;
+      }
+    }
 
-        // 更新倒數計時
-        function updateCountdown() {
-          const countdownElement = document.getElementById("countdown");
-          const daysElement = document.getElementById("countdown-days");
+    // 更新倒數計時
+    function updateCountdown() {
+      const countdownElement = document.getElementById("countdown");
+      const daysElement = document.getElementById("countdown-days");
 
-          if (!countdownElement || !daysElement) return;
+      if (!countdownElement || !daysElement) return;
 
-          const endDate = new Date(countdownElement.dataset.end);
-          const now = new Date();
+      const endDate = new Date(countdownElement.dataset.end);
+      const now = new Date();
 
-          // 計算剩餘天數（不考慮時分秒）
-          const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
-          const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      // 計算剩餘天數（不考慮時分秒）
+      const endDateOnly = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate());
+      const nowDateOnly = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 
-          const diffTime = endDateOnly - nowDateOnly;
-          const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const diffTime = endDateOnly - nowDateOnly;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
-          // 如果時間已過或無效，顯示 0
-          daysElement.textContent = diffDays > 0 ? diffDays : 0;
-        }
+      // 如果時間已過或無效，顯示 0
+      daysElement.textContent = diffDays > 0 ? diffDays : 0;
+    }
 
-          updateProgress();
-          updateCountdown();
+    updateProgress();
+    updateCountdown();
 
-          // 每分鐘更新一次倒數
-          setInterval(updateCountdown, 60 * 1000);
-      });
-    </script>
-    {% endblock %}
+    // 每分鐘更新一次倒數
+    setInterval(updateCountdown, 60 * 1000);
+  });
+</script>
+{% endblock %}

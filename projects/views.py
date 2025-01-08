@@ -17,8 +17,6 @@ import random
 from datetime import date, timedelta
 from django.db.models import Min, Max, Avg, Q
 from decimal import Decimal
-
-
 from datetime import datetime
 
 
