@@ -100,7 +100,7 @@
             <!-- 專案卡片網格 -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8">
               {% for project in projects %}
-              <a href="{% url 'projects:show' project.slug %}" 
+              <a href="{%url 'projects:public' project.slug %}"
                  class="block"
                  x-show="activeTab === '全部' || activeTab === '{{ project.category }}'"
                  x-cloak>
