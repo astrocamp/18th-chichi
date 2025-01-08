@@ -39,6 +39,10 @@ import {
   faArrowRight,
   faComment,
   faExclamationTriangle,
+  faSearch,
+  faBars,
+
+
 } from "@fortawesome/free-solid-svg-icons";
 
 // 添加圖示到庫中
@@ -80,7 +84,10 @@ library.add(
   faHeart,
   faArrowRight,
   faComment,
-  faExclamationTriangle
+  faExclamationTriangle,
+  faBars,
+  faSearch,
+
 );
 
 // 自動掃描 DOM 並渲染圖標
