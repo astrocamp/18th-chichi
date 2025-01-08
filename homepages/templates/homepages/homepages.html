@@ -1,4 +1,4 @@
- {% extends "shared/layout.html" %}  {% load static %}
+{% extends "shared/layout.html" %}  {% load static %}
 {% block "content" %}
 
 <div class="min-h-screen bg-white relative z-0">
@@ -56,33 +56,22 @@
                           'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
                           'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
                         }"
-                        class="px-8 py-3 text-[24px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
+                        class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
                         style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
                         >
                     全部
                 </button>
-                
-                <button @click="activeTab = '科技'" 
+                {% for category in categories %}
+                <button @click="activeTab = '{{ category.title }}'" 
                         :class="{ 
-                          'bg-[#1EA29E] text-white -translate-y-1': activeTab === '科技',
-                          'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '科技'
+                            'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
+                            'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
                         }"
-                        class="px-8 py-3 text-[24px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
-                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-                >
-                    科技
-                </button>
-                <button @click="activeTab = '科技'" 
-                :class="{ 
-                  'bg-[#1EA29E] text-white -translate-y-1': activeTab === '科技',
-                  'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '科技'
-                }"
-                class="px-8 py-3 text-[24px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
-                style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-        >
-            科技
-        </button>
-            </nav>            
+                        class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
+                >{{ category.title }}</button>
+                {% endfor %}
+              
+              </nav>            
           </div>
 
             <!-- 專案卡片網格 -->
@@ -90,7 +79,7 @@
               {% for project in projects %}
               <a href="{%url 'projects:public' project.slug %}"
                  class="block"
-                 x-show="activeTab === '全部' || activeTab === '{{ project.category }}'"
+                 x-show="activeTab === '全部' || '{{ project.category }}' === activeTab"
                  x-cloak>
                   <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200">
                       <div class="relative overflow-hidden">
