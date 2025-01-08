@@ -13,11 +13,11 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.db.models import Count
 from django.utils.timezone import make_aware
-import datetime
 import random
-from datetime import date
+from datetime import date,timedelta
 from django.db.models import Min, Max, Avg, Q
 from decimal import Decimal
+
 
 
 from datetime import datetime
@@ -306,7 +306,7 @@ def daily_sponsorship_amount(request, slug):
         daily_amount = daily_totals.get(current_date, 0)
         cumulative_total += daily_amount
         cumulative_amount.append(cumulative_total)
-        current_date += datetime.timedelta(days=1)
+        current_date += timedelta(days=1)
 
     data = {
         "labels": [date.strftime("%Y-%m-%d") for date in date_range],
