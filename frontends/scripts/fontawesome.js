@@ -44,6 +44,7 @@ import {
 
 
 } from "@fortawesome/free-solid-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
 // 添加圖示到庫中
 library.add(
@@ -87,7 +88,7 @@ library.add(
   faExclamationTriangle,
   faBars,
   faSearch,
-
+  faGoogle
 );
 
 // 自動掃描 DOM 並渲染圖標

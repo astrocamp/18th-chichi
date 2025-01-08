@@ -18,12 +18,13 @@
     "tailwindcss": "^3.4.16"
   },
   "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.7.2",
     "@sgratzl/chartjs-chart-boxplot": "^4.4.4",
     "alpinejs": "^3.14.7",
-    "htmx.org": "^1.9.12",
-    "sortablejs": "^1.15.6",
     "chart.js": "^4.4.7",
-    "chartjs-plugin-datalabels": "^2.2.0"
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "htmx.org": "^1.9.12",
+    "sortablejs": "^1.15.6"
   },
   "config": {
     "commitizen": {
