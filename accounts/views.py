@@ -8,6 +8,7 @@ from django.views.decorators.http import require_POST
 from users.views import Profile
 from django.contrib.auth.models import User
 from django import forms
+from projects.models import Sponsor
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -38,11 +39,23 @@ class CustomUserCreationForm(UserCreationForm):
         return user
 
 
-
 @login_required
 def index(request):
     account = request.user
-    return render(request, "accounts/index.html", {"account": account})
+    # 獲取用戶贊助的專案，包含贈品資訊
+    sponsored_projects = (
+        Sponsor.objects.filter(account=account, status="paid")
+        .select_related("project", "reward")  # 加入 reward 關聯
+        .order_by("-created_at")
+    )
+    return render(
+        request,
+        "accounts/index.html",
+        {
+            "account": account,
+            "sponsored_projects": sponsored_projects,
+        },
+    )
 
 
 def login(request):
