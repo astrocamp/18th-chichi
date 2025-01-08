@@ -161,10 +161,39 @@
 
             <div class="grid grid-cols-1 gap-4">
               <div class="text-center">
-                <p class="text-2xl font-bold text-gray-900">{{ project.backers_count }}</p>
+                <p class="text-2xl font-bold text-gray-900">{{ backers_count }}</p>
                 <p class="text-sm text-gray-500">贊助人數</p>
               </div>
             </div>
+
+            <!-- 收藏和按讚按鈕 -->
+            {% if user.is_authenticated %}
+            <div class="flex justify-center space-x-4 mt-4">
+              <form action="{% url 'projects:collect' project.slug %}" method="post" class="inline-block">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="background-color: {% if collected %}#85cacc{% else %}#85cacc20{% endif %}; color: {% if collected %}white{% else %}#1ea29e{% endif %}">
+                  <i class="fas fa-bookmark mr-2"></i>
+                  {% if collected %}
+                  已收藏
+                  {% else %}
+                  收藏
+                  {% endif %}
+                </button>
+              </form>
+
+              <form action="{% url 'projects:like' project.slug %}" method="post" class="inline-block">
+                {% csrf_token %}
+                <button type="submit" class="btn" style="background-color: {% if favorited %}#85cacc{% else %}#85cacc20{% endif %}; color: {% if favorited %}white{% else %}#1ea29e{% endif %}">
+                  <i class="fas fa-heart mr-2"></i>
+                  {% if favorited %}
+                  已按讚
+                  {% else %}
+                  按讚
+                  {% endif %}
+                </button>
+              </form>
+            </div>
+            {% endif %}
           </div>
 
           <!-- 專案資訊 -->

@@ -34,13 +34,6 @@ class Order(models.Model):
                 project = Project.objects.filter(title=project_title).first()
 
             if project:
-                total_amount = Decimal(str(self.amount))
-                if project.raised_amount is None:
-                    project.raised_amount = total_amount
-                else:
-                    project.raised_amount += total_amount
-                project.save()
-
                 # 建立或更新 Sponsor 記錄
                 from projects.models import Sponsor
 
@@ -48,12 +41,15 @@ class Order(models.Model):
                     account=self.user,
                     project=project,
                     reward=self.reward,
-                    defaults={"amount": total_amount, "status": "paid"},
+                    defaults={"amount": self.amount, "status": "paid"},
                 )
                 if not created:
-                    sponsor.amount += total_amount
+                    sponsor.amount += self.amount
                     sponsor.status = "paid"
                     sponsor.save()
+
+                # 更新專案的已籌金額
+                project.update_raised_amount()
 
     class Meta:
         ordering = ["-created_at"]

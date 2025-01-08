@@ -1,5 +1,21 @@
 from django.urls import path
-from .views import index, new, show, edit, delete, collect_projects, like_projects,gender_proportion,chart_page,daily_sponsorship_amount,gender_amount_boxplot,reward_grouped_bar_chart,comment,public,comments_index
+from .views import (
+    index,
+    new,
+    show,
+    edit,
+    delete,
+    collect_projects,
+    like_projects,
+    gender_proportion,
+    chart_page,
+    daily_sponsorship_amount,
+    gender_amount_boxplot,
+    reward_grouped_bar_chart,
+    comment,
+    public,
+    comments_index,
+)
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
     index as update_records_index,

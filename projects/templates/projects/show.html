@@ -31,19 +31,14 @@
           <!-- 進度條 -->
           <div
             class="bg-teal-500 h-4 rounded-full"
-            id="progress-bar"
-            data-start="{{ project.start_at|date:'Y-m-d H:i:s' }}"
-            data-raised="{{ project.raised_amount|default:0 }}"
-            data-goal="{{ project.goal_amount|default:0 }}"
-            style="width: 0%"
+            style="width: {{ progress_percentage }}%"
           ></div>
         </div>
         <div class="flex justify-between text-sm text-gray-600 mt-1">
           <p>目標金額：NT$ {{ project.goal_amount|default:"0" }}</p>
           <p>
             達成率：
-            <span id="progress-percentage">0</span>
-            %
+            {{ progress_percentage }}%
           </p>
         </div>
       </div>

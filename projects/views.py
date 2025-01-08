@@ -39,7 +39,8 @@ def calculate_progress_percentage(raised_amount, goal_amount):
     if not goal_amount or goal_amount == 0:
         return 0
     percentage = (raised_amount or 0) / goal_amount * 100
-    return round(percentage, 1)  # 四捨五入到小數點第一位
+    # 確保百分比不超過 100%
+    return min(round(percentage, 1), 100)  # 四捨五入到小數點第一位，並限制最大值為 100
 
 
 @login_required
@@ -59,8 +60,16 @@ def index(request):
 
     for project in projects:
         project.update_status()
+        project.update_raised_amount()  # 更新已籌金額
+        # 計算並限制進度百分比
+        if project.goal_amount and project.goal_amount > 0:
+            project.progress_percentage = min(
+                (project.raised_amount or 0) / project.goal_amount * 100, 100
+            )
+        else:
+            project.progress_percentage = 0
         media_type = get_media_type(project.cover_image.name)
-    # 更新專案的上下架狀態
+
     return render(
         request,
         "projects/index.html",
@@ -79,6 +88,11 @@ def show(request, slug):
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
     comments = project.comments.filter(parent__isnull=True).order_by("-id")
+
+    # 計算達成率
+    progress_percentage = calculate_progress_percentage(
+        project.raised_amount, project.goal_amount
+    )
 
     if request.POST:
         # 處理上架邏輯
@@ -127,14 +141,20 @@ def show(request, slug):
             "favorited": favorited,
             "comments": comments,
             "media_type": media_type,
+            "progress_percentage": progress_percentage,  # 加入達成率
         },
     )
+
 
 def comment(request, slug):
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
     comments = project.comments.filter(parent__isnull=True).order_by("-id")
-    return render(request, "projects/comment.html", {"project": project, "account": account, "comments": comments})
+    return render(
+        request,
+        "projects/comment.html",
+        {"project": project, "account": account, "comments": comments},
+    )
 
 
 def get_media_type(file_name):
@@ -193,6 +213,10 @@ def collect_projects(request, slug):
     if not created:
         collect.delete()
 
+    # 根據來源頁面決定重定向目標
+    referer = request.META.get("HTTP_REFERER", "")
+    if "public" in referer:
+        return redirect("projects:public", slug=project.slug)
     return redirect("projects:show", slug=project.slug)
 
 
@@ -208,13 +232,19 @@ def like_projects(request, slug):
     if not created:
         favorite.delete()
 
+    # 根據來源頁面決定重定向目標
+    referer = request.META.get("HTTP_REFERER", "")
+    if "public" in referer:
+        return redirect("projects:public", slug=project.slug)
     return redirect("projects:show", slug=project.slug)
 
 
 def chart_page(request, slug):
     project = get_object_or_404(Project, slug=slug)
 
-    return render(request, "projects/chart_page.html", {"slug": slug, "project": project})
+    return render(
+        request, "projects/chart_page.html", {"slug": slug, "project": project}
+    )
 
 
 @login_required
@@ -503,6 +533,7 @@ def public(request, slug):
 
     # 計算專案相關數據
     project.update_status()  # 更新專案狀態
+    project.update_raised_amount()  # 更新已籌金額
 
     # 計算總剩餘天數
     total_days = calculate_total_days(project.end_at)
@@ -512,10 +543,18 @@ def public(request, slug):
         project.raised_amount, project.goal_amount
     )
 
-    # �算贊助人數
-    from .models import Sponsor
+    # 算贊助人數
+    try:
+        backers_count = project.get_backers_count()
+    except:
+        from .models import Sponsor
 
-    backers_count = Sponsor.objects.filter(project=project, status="paid").count()
+        backers_count = (
+            Sponsor.objects.filter(project=project, status="paid")
+            .values("account")
+            .distinct()
+            .count()
+        )
 
     # 如果用戶已登入，檢查是否已收藏和按讚
     collected = None

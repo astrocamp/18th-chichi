@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils.timezone import now
 from autoslug import AutoSlugField
+from django.db.models import Sum
 import random
 import string
 
@@ -10,7 +11,6 @@ def generate_random_slug():
     # 生成 8 位隨機字母數字組合
     letters_and_digits = string.ascii_lowercase + string.digits
     return "".join(random.choice(letters_and_digits) for i in range(8))
-
 
 
 class Project(models.Model):
@@ -63,6 +63,46 @@ class Project(models.Model):
             self.status = "ended"
             self.save()
 
+    def update_raised_amount(self):
+        """
+        更新已籌金額：從已付款的訂單中計算
+        """
+        from payments.models import Order
+        from rewards.models import Reward
+
+        # 計算來自回饋方案的訂單金額
+        reward_orders_amount = (
+            Order.objects.filter(reward__project=self, paid=True).aggregate(
+                total=Sum("amount")
+            )["total"]
+            or 0
+        )
+
+        # 計算來自自由贊助的訂單金額（通過訂單描述判斷）
+        free_orders_amount = (
+            Order.objects.filter(
+                description__startswith=f"{self.title} - 自由贊助", paid=True
+            ).aggregate(total=Sum("amount"))["total"]
+            or 0
+        )
+
+        # 更新總金額
+        self.raised_amount = reward_orders_amount + free_orders_amount
+        self.save()
+
+    def get_backers_count(self):
+        """
+        獲取贊助人數：計算已付款的不重複贊助者數量
+        """
+        from .models import Sponsor
+
+        return (
+            Sponsor.objects.filter(project=self, status="paid")
+            .values("account")
+            .distinct()
+            .count()
+        )
+
     favorite_users = models.ManyToManyField(
         User,
         related_name="favorite_users",
@@ -70,40 +110,44 @@ class Project(models.Model):
         through_fields=("project", "account"),
     )
 
-
     sponsor_account = models.ManyToManyField(
         User,
         related_name="sponsor_project",
         through="Sponsor",
-        through_fields=("project","account"),
+        through_fields=("project", "account"),
     )
+
+    def __str__(self):
+        return self.title
+
 
 class CollectProject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
+
+
 class FavoritePrject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
     create_at = models.DateTimeField(auto_now_add=True)
 
+
 class Sponsor(models.Model):
     from rewards.models import Reward
+
     account = models.ForeignKey(User, on_delete=models.CASCADE)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    reward = models.ForeignKey(Reward, on_delete=models.CASCADE,null=True)
-    amount = models.DecimalField(max_digits=10,decimal_places=0)
+    reward = models.ForeignKey(Reward, on_delete=models.CASCADE, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=0)
     created_at = models.DateTimeField(auto_now_add=True)
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('paid', 'Paid'),
-        ('failed', 'Failed'),
+        ("pending", "Pending"),
+        ("paid", "Paid"),
+        ("failed", "Failed"),
     ]
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default='pending',
+        default="pending",
     )
-
-
-

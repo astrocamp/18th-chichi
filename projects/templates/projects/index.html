@@ -51,7 +51,7 @@
               <div class="w-full bg-gray-200 rounded-full h-2">
                 <div
                   class="h-2 rounded-full"
-                  style="width: {% if project.raised_amount %}{{ project.raised_amount|floatformat:0|default:'0' }}{% else %}0{% endif %}%; background-color: #85cacc"
+                  style="width: {{ project.progress_percentage }}%; background-color: #85cacc"
                 ></div>
               </div>
               <div class="flex justify-between text-sm">
