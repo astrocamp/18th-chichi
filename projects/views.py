@@ -546,57 +546,58 @@ def reward_grouped_bar_chart(request, slug):
 
 
 def public(request, slug):
-    """
-    公開的專案頁面，不需要登入即可查看
-    """
+    from .models import ProjectCategory, Sponsor
+
     project = get_object_or_404(Project, slug=slug)
-
-    # 計算專案相關數據
-    project.update_status()  # 更新專案狀態
-    project.update_raised_amount()  # 更新已籌金額
-
-    # 計算總剩餘天數
-    total_days = calculate_total_days(project.end_at)
+    project.update_status()
+    project.update_raised_amount()
 
     # 計算達成率
     progress_percentage = calculate_progress_percentage(
         project.raised_amount, project.goal_amount
     )
 
-    # 算贊助人數
-    try:
-        backers_count = project.get_backers_count()
-    except:
-        from .models import Sponsor
+    # 計算剩餘天數
+    total_days = calculate_total_days(project.end_at)
 
-        backers_count = (
-            Sponsor.objects.filter(project=project, status="paid")
-            .values("account")
-            .distinct()
-            .count()
-        )
+    # 計算贊助人數
+    backers_count = project.get_backers_count()
 
-    # 如果用戶已登入，檢查是否已收藏和按讚
+    # 檢查用戶是否已收藏和按讚
     collected = None
     favorited = None
     if request.user.is_authenticated:
         collected = CollectProject.objects.filter(
             account=request.user, project=project
-        ).exists()
+        ).first()
         favorited = FavoritePrject.objects.filter(
             account=request.user, project=project
-        ).exists()
+        ).first()
 
-    context = {
-        "project": project,
-        "total_days": total_days,
-        "progress_percentage": progress_percentage,
-        "collected": collected,
-        "favorited": favorited,
-        "backers_count": backers_count,
-    }
+    # 獲取專案分類
+    categories = Category.objects.filter(
+        id__in=ProjectCategory.objects.filter(project_id=project.id).values_list(
+            "category_id", flat=True
+        )
+    )
 
-    return render(request, "projects/public.html", context)
+    parent_ids = [category.parent_id for category in categories if category.parent_id]
+    parent_categories = Category.objects.filter(id__in=parent_ids)
+
+    return render(
+        request,
+        "projects/public.html",
+        {
+            "project": project,
+            "progress_percentage": progress_percentage,
+            "total_days": total_days,
+            "backers_count": backers_count,
+            "collected": collected,
+            "favorited": favorited,
+            "categories": categories,
+            "parent_categories": parent_categories,
+        },
+    )
 
 
 def comments_index(request, slug):

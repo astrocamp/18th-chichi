@@ -159,10 +159,18 @@
               </div>
             </div>
 
-            <div class="grid grid-cols-1 gap-4">
+            <div class="grid grid-cols-3 gap-4">
               <div class="text-center">
                 <p class="text-2xl font-bold text-gray-900">{{ backers_count }}</p>
                 <p class="text-sm text-gray-500">贊助人數</p>
+              </div>
+              <div class="text-center">
+                <p class="text-2xl font-bold text-gray-900">{{ project.get_collect_count }}</p>
+                <p class="text-sm text-gray-500">收藏人數</p>
+              </div>
+              <div class="text-center">
+                <p class="text-2xl font-bold text-gray-900">{{ project.get_like_count }}</p>
+                <p class="text-sm text-gray-500">按讚人數</p>
               </div>
             </div>
 
@@ -212,7 +220,21 @@
               </div>
               <div>
                 <p class="text-sm text-gray-500">專案分類</p>
-                <p class="text-sm font-medium text-gray-900">{{ project.category.name }}</p>
+                {% if categories %}
+                <ul class="list-none">
+                  {% for category in categories %}
+                  <li class="text-sm font-medium text-gray-900">
+                    {% if category.parent %}
+                      {{ category.parent.title }} > {{ category.title }}
+                    {% else %}
+                      {{ category.title }}
+                    {% endif %}
+                  </li>
+                  {% endfor %}
+                </ul>
+                {% else %}
+                <p class="text-sm font-medium text-gray-900">無分類</p>
+                {% endif %}
               </div>
               <div>
                 <p class="text-sm text-gray-500">專案地點</p>

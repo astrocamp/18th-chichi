@@ -115,6 +115,18 @@ class Project(models.Model):
             .count()
         )
 
+    def get_collect_count(self):
+        """
+        獲取收藏數量
+        """
+        return self.collect_account.count()
+
+    def get_like_count(self):
+        """
+        獲取按讚數量
+        """
+        return self.favorite_users.count()
+
     favorite_users = models.ManyToManyField(
         User,
         related_name="favorite_users",
