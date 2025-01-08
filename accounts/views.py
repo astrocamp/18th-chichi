@@ -76,8 +76,13 @@ def register(request):
                 birthday=None,
                 website="",
             )
-            messages.success(request, "註冊成功")
-            return redirect("homepages:homepages")
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login_user(request, user)  
+                messages.success(request, "註冊成功並已登入")
+                return redirect("homepages:homepages")
         else:
             for field, errors in form.errors.items():
                 for error in errors:
