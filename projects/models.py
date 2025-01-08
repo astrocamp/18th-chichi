@@ -50,6 +50,14 @@ class Project(models.Model):
         through_fields=("project", "account"),
     )
 
+    class Meta:
+        permissions = [
+            ("view_project", "Can view project"),
+            ("add_project", "Can add project"),
+            ("change_project", "Can change project"),
+            ("delete_project", "Can delete project"),
+        ]
+
     def update_status(self):
         """
         更新專案狀態：根據時間設定自動上架或下架
@@ -76,14 +84,6 @@ class Project(models.Model):
         through_fields=("project", "account"),
     )
 
-    class Meta:
-        permissions = [
-            ("view_custom_project", "Can view custom project"),
-            ("add_custom_project", "Can add custom project"),
-            ("change_custom_project", "Can change custom project"),
-            ("delete_custom_project", "Can delete custom project"),
-        ]
-
 
 class CollectProject(models.Model):
     account = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -92,10 +92,10 @@ class CollectProject(models.Model):
 
     class Meta:
         permissions = [
-            ("view_custom_collectproject", "Can view custom collect project"),
-            ("add_custom_collectproject", "Can add custom collect project"),
-            ("change_custom_collectproject", "Can change custom collect project"),
-            ("delete_custom_collectproject", "Can delete custom collect project"),
+            ("view_collectproject", "Can view collect project"),
+            ("add_collectproject", "Can add collect project"),
+            ("change_collectproject", "Can change collect project"),
+            ("delete_collectproject", "Can delete collect project"),
         ]
 
 
@@ -106,10 +106,10 @@ class FavoritePrject(models.Model):
 
     class Meta:
         permissions = [
-            ("view_custom_favoriteproject", "Can view custom favorite project"),
-            ("add_custom_favoriteproject", "Can add custom favorite project"),
-            ("change_custom_favoriteproject", "Can change custom favorite project"),
-            ("delete_custom_favoriteproject", "Can delete custom favorite project"),
+            ("view_favoriteproject", "Can view favorite project"),
+            ("add_favoriteproject", "Can add favorite project"),
+            ("change_favoriteproject", "Can change favorite project"),
+            ("delete_favoriteproject", "Can delete favorite project"),
         ]
 
 
@@ -134,8 +134,8 @@ class Sponsor(models.Model):
 
     class Meta:
         permissions = [
-            ("view_custom_sponsor", "Can view custom sponsor"),
-            ("add_custom_sponsor", "Can add custom sponsor"),
-            ("change_custom_sponsor", "Can change custom sponsor"),
-            ("delete_custom_sponsor", "Can delete custom sponsor"),
+            ("view_sponsor", "Can view sponsor"),
+            ("add_sponsor", "Can add sponsor"),
+            ("change_sponsor", "Can change sponsor"),
+            ("delete_sponsor", "Can delete sponsor"),
         ]

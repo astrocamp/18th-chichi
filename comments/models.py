@@ -35,8 +35,8 @@ class Comment(models.Model):
 
     class Meta:
         permissions = [
-            ("view_custom_comment", "Can view custom comment"),
-            ("add_custom_comment", "Can add custom comment"),
-            ("change_custom_comment", "Can change custom comment"),
-            ("delete_custom_comment", "Can delete custom comment"),
+            ("view_comment", "Can view comment"),
+            ("add_comment", "Can add comment"),
+            ("change_comment", "Can change comment"),
+            ("delete_comment", "Can delete comment"),
         ]

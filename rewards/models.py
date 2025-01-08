@@ -28,10 +28,10 @@ class Reward(models.Model):
 
     class Meta:
         permissions = [
-            ("view_custom_reward", "Can view custom reward"),
-            ("add_custom_reward", "Can add custom reward"),
-            ("change_custom_reward", "Can change custom reward"),
-            ("delete_custom_reward", "Can delete custom reward"),
+            ("view_reward", "Can view reward"),
+            ("add_reward", "Can add reward"),
+            ("change_reward", "Can change reward"),
+            ("delete_reward", "Can delete reward"),
         ]
 
     def __str__(self):
@@ -45,10 +45,10 @@ class RewardProduct(models.Model):
 
     class Meta:
         permissions = [
-            ("view_custom_rewardproduct", "Can view custom reward product"),
-            ("add_custom_rewardproduct", "Can add custom reward product"),
-            ("change_custom_rewardproduct", "Can change custom reward product"),
-            ("delete_custom_rewardproduct", "Can delete custom reward product"),
+            ("view_rewardproduct", "Can view reward product"),
+            ("add_rewardproduct", "Can add reward product"),
+            ("change_rewardproduct", "Can change reward product"),
+            ("delete_rewardproduct", "Can delete reward product"),
         ]
 
     def __str__(self):
@@ -63,10 +63,10 @@ class OptionalAdd(models.Model):
 
     class Meta:
         permissions = [
-            ("view_custom_optionaladd", "Can view custom optional add"),
-            ("add_custom_optionaladd", "Can add custom optional add"),
-            ("change_custom_optionaladd", "Can change custom optional add"),
-            ("delete_custom_optionaladd", "Can delete custom optional add"),
+            ("view_optionaladd", "Can view optional add"),
+            ("add_optionaladd", "Can add optional add"),
+            ("change_optionaladd", "Can change optional add"),
+            ("delete_optionaladd", "Can delete optional add"),
         ]
 
     def __str__(self):
