@@ -121,7 +121,7 @@ function dailySponsorshipChart() {
             responsive: false,
             plugins: {
               legend: {
-                display: true,
+                display: true, // 顯示圖例
               },
               title: {
                 display: true,
@@ -132,13 +132,17 @@ function dailySponsorshipChart() {
                 },
               },
               tooltip: {
+                enabled: true, // 滑動時顯示數據
                 callbacks: {
-                  label: (tooltipItem) => {
-                    const dataset = tooltipItem.dataset;
-                    const currentValue = dataset.data[tooltipItem.dataIndex];
-                    return `日期: ${tooltipItem.label} - 金額: $${currentValue}`;
+                  label: (context) => {
+                    const value = context.raw;
+                    const label = context.label;
+                    return `日期: ${label} - 金額: $${value}`;
                   },
                 },
+              },
+              datalabels: {
+                display: false, // 禁止數據標籤的預設顯示
               },
             },
             scales: {
@@ -163,6 +167,17 @@ function dailySponsorshipChart() {
                 },
                 suggestedMax: maxAmount + 1000,
                 beginAtZero: true,
+              },
+            },
+            elements: {
+              line: {
+                borderColor: "rgba(75, 192, 192, 1)", // 線條顏色
+                borderWidth: 2, // 線條寬度
+                fill: false, // 禁止塗色
+              },
+              point: {
+                radius: 0, // 禁止預設顯示數據點
+                hoverRadius: 5, // 滑動時顯示的數據點大小
               },
             },
           },
