@@ -9,24 +9,24 @@
 >
   <div class="container mx-auto px-4 h-full flex items-center">
     <div class="w-1/2 text-center">
-      <h1 class="text-5xl font-bold mb-6 text-[#1EA29E]">實現夢想的起點</h1>
-      <p class="text-xl text-[#d78f32] mb-8 font-medium font-serif">
+      <h1 class="text-4xl font-bold mb-6 text-[#006F6B]">實現夢想的起點</h1>
+      <p class="text-xl text-[#d78f32] mb-8 font-normal font-serif">
         在這裡，每個創意都能找到支持，每個夢想都值得被實現
       </p>
       <div class="space-x-4">
         <a
           href="{% url 'projects:new' %}"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-lg px-8"
-          style="background-color: #1ea29e20; color: #1EA29E; transition: all 0.3s ease;"
-          onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
-          onmouseout="this.style.backgroundColor='#1ea29e20'; this.style.color='#1EA29E';"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-[20px] px-10   rounded-t-lg shadow-md transition-all duration-200 relative"
+          style="background-color: #1ea29e20; color: #006F6B; transition: all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#006F6B'; this.style.color='white';"
+          onmouseout="this.style.backgroundColor='#1ea29e20'; this.style.color='#006F6B';"
         >提案募資</a>
         <a
           href="{% url 'projects:index' %}"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-lg px-8"
-          style="background-color: #1ea29e20; color: #1EA29E; transition: all 0.3s ease;"
-          onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
-          onmouseout="this.style.backgroundColor='#1ea29e20'; this.style.color='#1EA29E';"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-[20px] px-10"
+          style="background-color: #1ea29e20; color: #006F6B; transition: all 0.3s ease;"
+          onmouseover="this.style.backgroundColor='#006F6B'; this.style.color='white';"
+          onmouseout="this.style.backgroundColor='#1ea29e20'; this.style.color='#006F6B';"
         >瀏覽專案</a>
       </div>
     </div>
@@ -50,52 +50,40 @@
         <!-- 分類標籤 -->
         <div class="py-12 bg-white" x-data="{ activeTab: '全部' }">
             <div class="flex justify-center mb-12">
-                <nav class="flex -space-x-4">
-                    <button @click="activeTab = '全部'" 
-                            :class="{ 
-                                'bg-teal-50 text-teal-600 translate-y-0': activeTab === '全部',
-                                'bg-gray-50 text-gray-600 hover:text-gray-800 translate-y-2': activeTab !== '全部'
-                            }"
-                            class="px-8 py-3 text-sm font-medium rounded-t-lg shadow-md transition-all duration-200 relative"
-                            style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
-                    >
-                        全部
-                    </button>
-                    <!-- 其他分類標籤 -->    
-                     
-                    <button @click="activeTab = '科技'" 
-                            :class="{ 
-                                'bg-teal-500 text-white': activeTab === '科技',
-                                'bg-gray-200 text-gray-700 hover:bg-teal-400 hover:text-white': activeTab !== '科技'
-                            }"
-                            class="px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-                    >
-                        科技
-                    </button>
-
-                    <!-- 藝術分類按鈕 -->
-                    <button @click="activeTab = '藝術'" 
-                            :class="{ 
-                                'bg-teal-500 text-white': activeTab === '藝術',
-                                'bg-gray-200 text-gray-700 hover:bg-teal-400 hover:text-white': activeTab !== '藝術'
-                            }"
-                            class="px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-                    >
-                        藝術
-                    </button>
-
-                    <!-- 教育分類按鈕 -->
-                    <button @click="activeTab = '教育'" 
-                            :class="{ 
-                                'bg-teal-500 text-white': activeTab === '教育',
-                                'bg-gray-200 text-gray-700 hover:bg-teal-400 hover:text-white': activeTab !== '教育'
-                            }"
-                            class="px-4 py-2 rounded-lg font-medium transition-colors duration-200"
-                    >
-                        教育
-                    </button>
-                </nav>
-            </div>
+              <nav class="flex -space-x-4">
+                <button @click="activeTab = '全部'" 
+                        :class="{ 
+                          'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
+                          'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
+                        }"
+                        class="px-8 py-3 text-[24px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
+                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
+                        >
+                    全部
+                </button>
+                
+                <button @click="activeTab = '科技'" 
+                        :class="{ 
+                          'bg-[#1EA29E] text-white -translate-y-1': activeTab === '科技',
+                          'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '科技'
+                        }"
+                        class="px-8 py-3 text-[24px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
+                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
+                >
+                    科技
+                </button>
+                <button @click="activeTab = '科技'" 
+                :class="{ 
+                  'bg-[#1EA29E] text-white -translate-y-1': activeTab === '科技',
+                  'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '科技'
+                }"
+                class="px-8 py-3 text-[24px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
+                style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
+        >
+            科技
+        </button>
+            </nav>            
+          </div>
 
             <!-- 專案卡片網格 -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8">
