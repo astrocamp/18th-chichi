@@ -179,7 +179,12 @@
             <div class="flex justify-center space-x-4 mt-4">
               <form action="{% url 'projects:collect' project.slug %}" method="post" class="inline-block">
                 {% csrf_token %}
-                <button type="submit" class="btn" style="background-color: {% if collected %}#85cacc{% else %}#85cacc20{% endif %}; color: {% if collected %}white{% else %}#1ea29e{% endif %}">
+                <button type="submit" 
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
+                  style="background-color: {% if collected %}#1EA29E{% else %}#1ea29e20{% endif %}; color: {% if collected %}white{% else %}#1EA29E{% endif %}; transition: all 0.3s ease;"
+                  onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
+                  onmouseout="this.style.backgroundColor='{% if collected %}#1EA29E{% else %}#1ea29e20{% endif %}'; this.style.color='{% if collected %}white{% else %}#1EA29E{% endif %}';"
+                >
                   <i class="fas fa-bookmark mr-2"></i>
                   {% if collected %}
                   已收藏
@@ -191,7 +196,12 @@
 
               <form action="{% url 'projects:like' project.slug %}" method="post" class="inline-block">
                 {% csrf_token %}
-                <button type="submit" class="btn" style="background-color: {% if favorited %}#85cacc{% else %}#85cacc20{% endif %}; color: {% if favorited %}white{% else %}#1ea29e{% endif %}">
+                <button type="submit" 
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
+                  style="background-color: {% if favorited %}#1EA29E{% else %}#1ea29e20{% endif %}; color: {% if favorited %}white{% else %}#1EA29E{% endif %}; transition: all 0.3s ease;"
+                  onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
+                  onmouseout="this.style.backgroundColor='{% if favorited %}#1EA29E{% else %}#1ea29e20{% endif %}'; this.style.color='{% if favorited %}white{% else %}#1EA29E{% endif %}';"
+                >
                   <i class="fas fa-heart mr-2"></i>
                   {% if favorited %}
                   已按讚
