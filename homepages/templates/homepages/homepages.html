@@ -9,14 +9,14 @@
 >
   <div class="container mx-auto px-4 h-full flex items-center">
     <div class="w-1/2 text-center">
-      <h1 class="text-4xl font-bold mb-6 text-[#006F6B]">實現夢想的起點</h1>
-      <p class="text-xl text-[#d78f32] mb-8 font-normal font-serif">
+      <h1 class="text-[75px] font-bold mb-6 text-[#006F6B]">實現夢想的起點</h1>
+      <p class="text-xl font-medium text-[#d78f32] mb-8">
         在這裡，每個創意都能找到支持，每個夢想都值得被實現
       </p>
       <div class="space-x-4">
         <a
           href="{% url 'projects:new' %}"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-[20px] px-10   rounded-t-lg shadow-md transition-all duration-200 relative"
+          class="btn inline-flex items-center justify-center whitespace-nowrap h-16 text-[20px] px-10"
           style="background-color: #1ea29e20; color: #006F6B; transition: all 0.3s ease;"
           onmouseover="this.style.backgroundColor='#006F6B'; this.style.color='white';"
           onmouseout="this.style.backgroundColor='#1ea29e20'; this.style.color='#006F6B';"
@@ -48,10 +48,26 @@
 <section class="py-12 bg-gray-50">
     <div class="container mx-auto px-4">
         <!-- 分類標籤 -->
-        <div class="py-12 bg-white" x-data="{ activeTab: '全部' }">
-            <div class="flex justify-center mb-12">
+        <div class="py-12 bg-white" x-data="{
+          activeTab: '全部',
+          filterProjects(category) {
+              this.activeTab = category;
+              const projects = document.querySelectorAll('[data-project]');
+              projects.forEach(project => {
+                  const categories = project.dataset.categories.split(', ');
+                  if (category === '全部' || categories.includes(category)) {
+                      project.style.display = '';
+                  } else {
+                      project.style.display = 'none';
+                  }
+              });
+
+          }
+      }">
+      
+      <div class="flex justify-center mb-12">
               <nav class="flex -space-x-4">
-                <button @click="activeTab = '全部'" 
+                <button @click="filterProjects('全部')" 
                         :class="{ 
                           'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
                           'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
@@ -59,16 +75,18 @@
                         class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
                         style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)"
                         >
+
                     全部
                 </button>
                 {% for category in categories %}
-                <button @click="activeTab = '{{ category.title }}'" 
+                <button @click="filterProjects('{{ category.title }}')"
                         :class="{ 
                             'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
                             'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
                         }"
                         class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
-                >{{ category.title }}</button>
+                        >
+                        {{ category.title }}</button>
                 {% endfor %}
               
               </nav>            
@@ -76,9 +94,10 @@
 
             <!-- 專案卡片網格 -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8">
-              {% for project in projects %}
+              {% for project in page_obj %} 
               <a href="{%url 'projects:public' project.slug %}"
                  class="block"
+                 data-project
                  data-categories="{% for cat in project.categories.all %}{{ cat.parent.title }}{% if not forloop.last %}, {% endif %}{% endfor %}"
                  x-show="activeTab === '全部' || $el.dataset.categories.includes(activeTab)"
                  x-cloak>
@@ -87,38 +106,49 @@
                           {% if project.cover_image %}
                               <img src="{{ project.cover_image.url }}"
                                    alt="{{ project.title }}" 
-                                   class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105">
+                                   class="w-full h-52 object-cover transition-transform duration-200 hover:scale-105">
                           {% else %}
                               <img src="{% static 'images/default-project.jpg' %}" 
                                    alt="{{ project.title }}" 
-                                   class="w-full h-48 object-cover transition-transform duration-200 hover:scale-105">
+                                   class="w-full h-52 object-cover transition-transform duration-200 hover:scale-105">
                           {% endif %}
                       </div>
-                      <div class="p-4">
-                        <span class="inline-block px-2 py-1 text-xs font-medium rounded-full mb-2 bg-[#1EA29E]/10 text-[#1EA29E]">
-                          {% for main_cat in project.get_main_categories %}
-                              {{ main_cat.title }}{% if not forloop.last %}, {% endif %}
+                      <div class="p-5" space-y-3>
+
+                        <span class="inline-block px-4 py-1 text-l font-medium rounded-full mb-2 bg-[#1EA29E]/10 text-[#1EA29E]">
+                          {% for categories in project.categories.all %}
+                              {{ categories.parent}}{% if not forloop.last %}, {% endif %}
                           {% endfor %}
-                      </span>                  
-                      <h3 class="font-semibold mb-2 line-clamp-1">{{ project.title }}</h3>
-                          <p class="text-gray-600 text-sm mb-4 line-clamp-2">
+                      </span>
+                      <span class="inline-block px-4 py-1 text-l font-medium rounded-full mb-2 bg-[#1EA29E]/10 text-[#1EA29E]">
+                        {% for categories in project.categories.all %}
+                            {{ categories.title}}{% if not forloop.last %}, {% endif %}
+                        {% endfor %}
+                    </span>        
+                    <h3 class="text-2xl font-bold  line-clamp-1">{{ project.title }}</h3>
+                    <p class="text-gray-600 text-[20px] mb-4 line-clamp-2">
                               {{ project.subtitle }}
                           </p>
-                          <div class="space-y-2">
+
+                          <div class="space-y-3 pt-2">
                               <!-- Progress Bar -->
                               {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
-                              <div class="w-full bg-gray-100 rounded-full h-2">
-                                  <div class="h-2 rounded-full transition-all duration-700 bg-[#1EA29E]"
+                              <div class="w-full bg-gray-100 rounded-full h-2.5">
+                                  <div class="h-2.5 rounded-full transition-all duration-700 bg-[#1EA29E]"
                                        style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%">
                                   </div>
                               </div>
                               <div class="flex justify-between text-sm">
-                                  <span class="font-medium text-[#1EA29E]">NT$ {{ project.raised_amount|floatformat:0 }}</span>
-                                  <span class="text-gray-500">目標 $ {{ project.goal_amount|floatformat:0 }}</span>
-                              </div>
-                              <div class="text-xs text-gray-500 text-right">
-                                  剩餘 {{ project.remaining_days }} 天
-                              </div>
+                                  <span class="font-medium  text-[16px] text-gray-600">NT$ {{ project.raised_amount|floatformat:0 }}</span>
+                                  <span class="font-medium  text-[18px] text-[#1EA29E]">{{ percentage }}%</span>
+
+                                </div>
+                              <div class="flex justify-between items-center mt-4 ">
+                                <span class="text-2xl font-bold text-[#1EA29E]">目標 $ {{ project.goal_amount|floatformat:0 }}</span>
+                                <div class="text-xl text-[#1EA29E]">
+                                    剩餘 {{ project.remaining_days }} 天
+                                </div>
+                            </div>                          
                           </div>
                       </div>
                   </div>
@@ -127,54 +157,81 @@
           </div>
         </div>
 
-
-
-
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="flex justify-center items-center space-x-2 py-8">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" 
+              class="px-4 py-2 text-xl  rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+                上一頁
+            </a>
+            {% endif %}
         
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <span class="px-4 py-2 text-xl  rounded-lg bg-[#1EA29E] text-white">
+                        {{ num }}
+                    </span>
+                {% else %}
+                    {% if num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                        <a href="?page={{ num }}"
+                           class="px-4 py-2 text-xl  rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+                            {{ num }}
+                        </a>
+                    {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                        <span class="px-4 py-2text-xl ">...</span>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        
+            {% if page_obj.has_next %}
+              <a href="`?page={{ page_obj.next_page_number }}&category=${activeTab}`"
+                class="px-4 py-2 text-xl rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+                  下一頁
+              </a>
+            {% endif %}
+        </div>
+        {% endif %}        
 
       <div class="text-center pb-8">
         <a
         href="{% url 'projects:index' %}"
-        class="inline-block px-8 py-3 rounded-lg text-white transition-all duration-200 hover:shadow-lg"
+        class="inline-block px-10 py-2 text-[20px] font-bold rounded-lg text-white transition-all duration-200 hover:shadow-lg"
         style="background-color: #1EA29E"
         >
         查看更多專案
         </a>
     </div>
     </div>
-
 </section>
 
-
-  <!-- Call to Action Section -->
-  <div class="py-20 bg-white">
-    <div class="container mx-auto px-4 text-center">
-      <h2 class="text-3xl font-bold mb-6">開始你的募資計畫</h2>
-      <p class="text-gray-600 mb-8 max-w-2xl mx-auto">
+<div class="bg-[#1EA29E] py-6">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="space-y-3 text-center">
+      <h2 class="text-2xl font-bold text-white">開始你的募資計畫</h2>
+      
+      <p class="text-white/80 text-base mx-auto">
         無論是創新科技、文創藝術、或是社會公益，
         我們都歡迎有理想、有熱情的你加入。現在就開始你的集資之旅！
       </p>
-      <div class="flex justify-center gap-6">
+      
+      <div class="flex justify-center gap-4 pt-1">
         <a
           href="{% url 'projects:new' %}"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
-          style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
-          onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
-          onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
+          class="px-5 py-2 font-bold bg-white/10 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
         >
           立即提案
         </a>
+        
         <a
           href="#"
-          class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
-          style="background-color: #85cacc20; color: #85cacc; transition: all 0.3s ease;"
-          onmouseover="this.style.backgroundColor='#85cacc'; this.style.color='white';"
-          onmouseout="this.style.backgroundColor='#85cacc20'; this.style.color='#85cacc';"
+          class="px-5 py-2 font-bold bg-white/10 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
+          class="px-5 py-2 font-bold bg-white/10 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
         >
           了解更多
         </a>
       </div>
     </div>
   </div>
+</div>
 </div>
 {% endblock %}
