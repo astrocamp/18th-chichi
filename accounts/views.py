@@ -105,11 +105,11 @@ def register(request):
                 birthday=None,
                 website="",
             )
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
             user = authenticate(username=username, password=password)
             if user is not None:
-                login_user(request, user)  
+                login_user(request, user)
                 messages.success(request, "註冊成功並已登入")
                 return redirect("profile:index")
         else:
@@ -127,3 +127,11 @@ def logout(request):
     logout_user(request)
     messages.success(request, "已登出")
     return redirect("homepages:homepages")
+
+
+def terms(request):
+    return render(request, "accounts/terms.html")
+
+
+def privacy(request):
+    return render(request, "accounts/privacy.html")
