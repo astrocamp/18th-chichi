@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from users.views import Profile
+from projects.permissions import assign_view_project_permission
 
 
 @login_required
@@ -38,6 +39,7 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             account = form.save()
+            assign_view_project_permission(user)  # 為新註冊使用者分配權限
             Profile.objects.get_or_create(
                 name=account.username,
                 account=account,

@@ -18,9 +18,9 @@ class Profile(models.Model):
 
     class Meta:
         permissions = [
-            ("view_userprofile", "Can view user profile"),
-            ("change_userprofile", "Can change user profile"),
-            ("delete_userprofile", "Can delete user profile"),
+            ("can_view_userprofile", "Can view user profile"),
+            ("can_change_userprofile", "Can change user profile"),
+            ("can_delete_userprofile", "Can delete user profile"),
         ]
 
     def __str__(self):

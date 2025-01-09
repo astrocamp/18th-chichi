@@ -28,8 +28,8 @@ class Faq(models.Model):
 
     class Meta:
         permissions = [
-            ("view_faq", "Can view FAQ"),
-            ("add_faq", "Can add FAQ"),
-            ("change_faq", "Can change FAQ"),
-            ("delete_faq", "Can delete FAQ"),
+            ("can_view_faq", "Can view FAQ"),
+            ("can_add_faq", "Can add FAQ"),
+            ("can_change_faq", "Can change FAQ"),
+            ("can_delete_faq", "Can delete FAQ"),
         ]

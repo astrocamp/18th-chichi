@@ -30,8 +30,8 @@ class UpdateRecord(models.Model):
 
     class Meta:
         permissions = [
-            ("view_updaterecord", "Can view update record"),
-            ("add_updaterecord", "Can add update record"),
-            ("change_updaterecord", "Can change update record"),
-            ("delete_updaterecord", "Can delete update record"),
+            ("can_view_updaterecord", "Can view update record"),
+            ("can_add_updaterecord", "Can add update record"),
+            ("can_change_updaterecord", "Can change update record"),
+            ("can_delete_updaterecord", "Can delete update record"),
         ]

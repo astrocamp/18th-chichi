@@ -12,8 +12,8 @@ class Category(models.Model):
 
     class Meta:
         permissions = [
-            ("view_category", "Can view category"),
-            ("add_category", "Can add category"),
-            ("change_category", "Can change category"),
-            ("delete_category", "Can delete category"),
+            ("can_view_category", "Can view category"),
+            ("can_add_category", "Can add category"),
+            ("can_change_category", "Can change category"),
+            ("can_delete_category", "Can delete category"),
         ]

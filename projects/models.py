@@ -52,10 +52,10 @@ class Project(models.Model):
 
     class Meta:
         permissions = [
-            ("view_project", "Can view project"),
-            ("add_project", "Can add project"),
-            ("change_project", "Can change project"),
-            ("delete_project", "Can delete project"),
+            ("can_view_project", "Can view project"),
+            ("can_add_project", "Can add project"),
+            ("can_change_project", "Can change project"),
+            ("can_delete_project", "Can delete project"),
         ]
 
     def update_status(self):
@@ -92,10 +92,10 @@ class CollectProject(models.Model):
 
     class Meta:
         permissions = [
-            ("view_collectproject", "Can view collect project"),
-            ("add_collectproject", "Can add collect project"),
-            ("change_collectproject", "Can change collect project"),
-            ("delete_collectproject", "Can delete collect project"),
+            ("can_view_collectproject", "Can view collect project"),
+            ("can_add_collectproject", "Can add collect project"),
+            ("can_change_collectproject", "Can change collect project"),
+            ("can_delete_collectproject", "Can delete collect project"),
         ]
 
 
@@ -106,10 +106,10 @@ class FavoritePrject(models.Model):
 
     class Meta:
         permissions = [
-            ("view_favoriteproject", "Can view favorite project"),
-            ("add_favoriteproject", "Can add favorite project"),
-            ("change_favoriteproject", "Can change favorite project"),
-            ("delete_favoriteproject", "Can delete favorite project"),
+            ("can_view_favoriteproject", "Can view favorite project"),
+            ("can_add_favoriteproject", "Can add favorite project"),
+            ("can_change_favoriteproject", "Can change favorite project"),
+            ("can_delete_favoriteproject", "Can delete favorite project"),
         ]
 
 
@@ -134,8 +134,8 @@ class Sponsor(models.Model):
 
     class Meta:
         permissions = [
-            ("view_sponsor", "Can view sponsor"),
-            ("add_sponsor", "Can add sponsor"),
-            ("change_sponsor", "Can change sponsor"),
-            ("delete_sponsor", "Can delete sponsor"),
+            ("can_view_sponsor", "Can view sponsor"),
+            ("can_add_sponsor", "Can add sponsor"),
+            ("can_change_sponsor", "Can change sponsor"),
+            ("can_delete_sponsor", "Can delete sponsor"),
         ]

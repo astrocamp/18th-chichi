@@ -11,7 +11,6 @@ from django.contrib.auth.models import User
 
 
 @login_required
-@permission_required("projects.view_project", raise_exception=True)
 def index(request):
     account = request.user
     if request.POST:
