@@ -16,6 +16,7 @@ from .views import (
     public,
     comments_index,
     get_subcategories,
+    projects_all,
 )
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
@@ -41,6 +42,7 @@ urlpatterns = [
     path("new/", new, name="new"),
     path("<slug:slug>", show, name="show"),
     path("<slug:slug>/public", public, name="public"),
+    path("projects_all/", projects_all, name="projects_all"),
     path("<slug:slug>/edit", edit, name="edit"),
     path("<slug:slug>/delete", delete, name="delete"),
     path("<slug:slug>/collect", collect_projects, name="collect"),

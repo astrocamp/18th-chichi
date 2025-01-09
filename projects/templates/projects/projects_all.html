@@ -1,0 +1,158 @@
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<div class="flex items-center justify-center h-[200px] bg-gray-100">
+    <h1 class="text-[50px] font-bold text-[#1EA29E]">
+        查看全部專案
+    </h1>
+</div>
+<!-- 專案卡片區域 -->
+<section class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <!-- 分類標籤 -->
+        <div class="py-12 bg-white" x-data="{
+          activeTab: '全部',
+          filterProjects(category) {
+              this.activeTab = category;
+              const projects = document.querySelectorAll('[data-project]');
+              projects.forEach(project => {
+                  const categories = project.dataset.categories.split(', ');
+                  if (category === '全部' || categories.includes(category)) {
+                      project.style.display = '';
+                  } else {
+                      project.style.display = 'none';
+                  }
+              });
+
+          }
+      }">
+      
+      <div class="flex justify-center mb-12">
+        <nav class="flex -space-x-4">
+            <button @click="filterProjects('全部')" 
+                    :class="{ 
+                        'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
+                        'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
+                    }"
+                    class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
+                    style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
+                全部
+            </button>
+    
+            {% for category in categories %}
+            <button @click="filterProjects('{{ category.title }}')"
+                    :class="{ 
+                        'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
+                        'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
+                    }"
+                    class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]">
+                {{ category.title }}
+            </button>
+            {% endfor %}
+        </nav>            
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8">
+        {% for project in page_obj %}
+        <a href="{% url 'projects:public' project.slug %}"
+           class="block h-full"
+           data-project
+           data-categories="{% for cat in project.categories.all %}{{ cat.parent.title }}{% if not forloop.last %}, {% endif %}{% endfor %}"
+           x-show="activeTab === '全部' || $el.dataset.categories.includes(activeTab)"
+           x-cloak>
+            <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200 h-full ">
+                <!-- 圖片部分 -->
+                <div class="relative w-full h-64  overflow-hidden">
+                    {% if project.cover_image %}
+                    <img src="{{ project.cover_image.url }}"
+                         alt="{{ project.title }}" 
+                         class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
+                    {% else %}
+                    <img src="{% static 'images/default-project.jpg' %}" 
+                         alt="{{ project.title }}" 
+                         class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
+                    {% endif %}
+                </div>
+                
+                <!-- 內容部分 -->
+                <div class="p-5 flex flex-col flex-grow">
+                    <!-- 標籤部分 -->
+                    <div class="flex flex-wrap gap-2 mb-3">
+                        <span class="inline-block px-4 py-1 text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
+                            {% for categories in project.categories.all %}
+                            {{ categories.parent }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </span>
+                        <span class="inline-block px-4 py-1 text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
+                            {% for categories in project.categories.all %}
+                            {{ categories.title }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </span>
+                    </div>
+    
+                    <!-- 標題和副標題 -->
+                    <h3 class="text-2xl font-bold line-clamp-1 mb-2">{{ project.title }}</h3>
+                    <div class="min-h-[7rem]">
+                        <p class="text-xl text-gray-600 line-clamp-2 font-sans">{{ project.subtitle }}</p>
+                    </div>
+    
+                    <!-- 進度條和資訊部分 -->
+                    <div class="mt-6 space-y-3">
+                        {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
+                        <div class="w-full bg-gray-100 rounded-full h-2.5">
+                            <div class="h-2.5 rounded-full transition-all duration-700 bg-[#1EA29E]"
+                                 style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%">
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-sm">
+                            <span class="font-medium text-[16px] text-gray-600">NT$ {{ project.raised_amount|floatformat:0 }}</span>
+                            <span class="font-medium text-[18px] text-[#1EA29E]">{{ percentage }}%</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-2xl font-bold text-[#1EA29E]">目標 $ {{ project.goal_amount|floatformat:0 }}</span>
+                            <div class="text-xl text-[#1EA29E]">
+                                剩餘 {{ project.remaining_days }} 天
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>   
+    
+    <div>
+        {% if page_obj.paginator.num_pages > 1 %}
+        <div class="flex justify-center items-center space-x-2 py-8">
+            {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}" 
+              class="px-4 py-2 text-xl  rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+                上一頁
+            </a>
+            {% endif %}
+        
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <span class="px-4 py-2 text-xl  rounded-lg bg-[#1EA29E] text-white">
+                        {{ num }}
+                    </span>
+                {% else %}
+                    {% if num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                        <a href="?page={{ num }}"
+                           class="px-4 py-2 text-xl  rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+                            {{ num }}
+                        </a>
+                    {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                        <span class="px-4 py-2text-xl ">...</span>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        
+            {% if page_obj.has_next %}
+              <a href="`?page={{ page_obj.next_page_number }}&category=${activeTab}`"
+                class="px-4 py-2 text-xl rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+                  下一頁
+              </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+{%endblock%}

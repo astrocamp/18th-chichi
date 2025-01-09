@@ -30,7 +30,7 @@
 
         <!-- 專案標題和描述 -->
         <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ project.title }}</h1>
-        <p class="text-xl text-gray-600 mb-8">{{ project.subtitle }}</p>
+        <p class="text-xl text-gray-600 mb-8  line-clamp-2 overflow-hidden">{{ project.subtitle }}</p>
 
         <!-- 專案內容標籤頁 -->
         <div x-data="{ activeTab: 'story' }" class="mb-8">

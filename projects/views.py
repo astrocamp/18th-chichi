@@ -18,6 +18,8 @@ from datetime import date, timedelta
 from django.db.models import Min, Max, Avg, Q
 from decimal import Decimal
 from datetime import datetime
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from categories.models import Category
 
 
 def calculate_total_days(end_date):
@@ -38,9 +40,6 @@ def calculate_progress_percentage(raised_amount, goal_amount):
     percentage = (raised_amount or 0) / goal_amount * 100
     # 確保百分比不超過 100%
     return min(round(percentage, 1), 100)  # 四捨五入到小數點第一位，並限制最大值為 100
-
-
-from categories.models import Category
 
 
 @login_required
@@ -678,3 +677,27 @@ def get_subcategories(request):
         )
         return JsonResponse(list(subcategories), safe=False)
     return JsonResponse([], safe=False)
+
+
+def projects_all(request):
+    categories = Category.objects.filter(parent__isnull=True)
+    projects = (
+        Project.objects.prefetch_related("categories__parent")
+        .filter(status="live")
+        .order_by("-created_at")
+    )
+
+    paginator = Paginator(projects, 12)
+    page_number = request.GET.get("page", 1)
+
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    return render(
+        request,
+        "projects/projects_all.html",
+        {"page_obj": page_obj, "categories": categories},
+    )
