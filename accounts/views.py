@@ -82,7 +82,7 @@ def register(request):
             if user is not None:
                 login_user(request, user)  
                 messages.success(request, "註冊成功並已登入")
-                return redirect("homepages:homepages")
+                return redirect("profile:index")
         else:
             for field, errors in form.errors.items():
                 for error in errors:
