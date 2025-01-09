@@ -183,3 +183,7 @@ class ProjectCategory(models.Model):
 
     class Meta:
         unique_together = ("project", "category")
+
+
+def get_main_categories(self):
+    return list(set(cat.parent for cat in self.categories.all() if cat.parent))
