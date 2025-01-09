@@ -62,3 +62,25 @@ function fileUploadHandler() {
   };
 }
 window.fileUploadHandler = fileUploadHandler;
+
+function initBackToTopButton() {
+  return {
+    isVisible: false, // 狀態控制按鈕是否顯示
+
+    init() {
+      // 監聽滾動事件
+      window.addEventListener("scroll", () => {
+        this.isVisible = window.scrollY > 300; // 滾動超過 300px 顯示按鈕
+      });
+    },
+
+    scrollToTop() {
+      // 平滑滾動到頁面頂部
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+    },
+  };
+}
+window.initBackToTopButton = initBackToTopButton;

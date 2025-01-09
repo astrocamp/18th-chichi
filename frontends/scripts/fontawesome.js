@@ -41,8 +41,7 @@ import {
   faExclamationTriangle,
   faSearch,
   faBars,
-
-
+  faArrowUp,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
@@ -88,7 +87,8 @@ library.add(
   faExclamationTriangle,
   faBars,
   faSearch,
-  faGoogle
+  faGoogle,
+  faArrowUp
 );
 
 // 自動掃描 DOM 並渲染圖標

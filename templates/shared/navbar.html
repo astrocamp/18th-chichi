@@ -1,80 +1,76 @@
 {% load static %}
-    <nav class="bg-[#1EA29E] text-white">
-      <!-- 主導航容器 -->
-      <div class="px-6 py-6">
-        <div class="flex items-center justify-between">
-          <!-- 左側：Logo -->
-          <div class="flex-shrink-0">
-            <a href="/" class="block">
-              <img src="{% static 'media/CHICHI_LOGO__1.png' %}" alt="Bird Logo" class="w-20 h-20 md:w-20 md:h-20 rounded-full transform transition duration-500 hover:scale-125">
-            </a>
-          </div>
-          
-          <!-- 中間：搜尋欄 -->
-          <div class="flex-1 max-w-2xl mx-4">
-            <form class="flex items-center">
-              <div class="relative w-full">
-                <input type="text" 
-                       placeholder="請輸入搜尋內容..." 
-                       class="w-full px-4 py-2 rounded-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none">
-                <button type="submit" 
-                        class="absolute right-0 top-0 h-full px-4 flex items-center justify-center text-gray-500 hover:text-gray-700">
-                  <i class="fas fa-search text-lg"></i>
-                </button>
-              </div>
-            </form>
-          </div>
-          
-          <!-- 右側：漢堡選單 -->
-          <div class="flex-shrink-0 relative">
-            <button id="hamburger-btn" 
-                    class="p-3 hover:bg-teal-600 rounded transition-colors duration-300"
-                    aria-expanded="false"
-                    aria-controls="mobile-menu"
-                    aria-label="Toggle navigation">
-              <i class="fas fa-bars text-3xl"></i>
+<nav class="bg-[#1EA29E] text-white">
+  <!-- 主導航容器 -->
+  <div class="px-6 py-6">
+    <div class="flex items-center justify-between">
+      <!-- 左側：Logo -->
+      <div class="flex-shrink-0">
+        <a href="/" class="block">
+          <img src="{% static 'media/CHICHI_LOGO__1.png' %}" alt="Bird Logo" class="w-20 h-20 md:w-20 md:h-20 rounded-full transform transition duration-500 hover:scale-125" />
+        </a>
+      </div>
+
+      <!-- 中間：搜尋欄 -->
+      <div class="flex-1 max-w-2xl mx-4">
+        <form class="flex items-center">
+          <div class="relative w-full">
+            <input type="text" placeholder="請輸入搜尋內容..." class="w-full px-4 py-2 rounded-full bg-white text-gray-900 placeholder-gray-500 focus:outline-none" />
+            <button type="submit" class="absolute right-0 top-0 h-full px-4 flex items-center justify-center text-gray-500 hover:text-gray-700">
+              <i class="fas fa-search text-lg"></i>
             </button>
-  
-            <!-- 下拉選單 -->
-            <div id="mobile-menu" 
-                 class="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-lg hidden opacity-0 transform origin-top-right transition-opacity duration-200 ease-in-out"
-                 style="z-index: 1000;">
-              <div class="py-2">
-                {% if user.is_authenticated %}
-                  <div class="px-4 py-2 text-center">
-                    <span class="text-lg font-medium text-gray-900">{{ user.username }}</span>
-                  </div>
-                  <a href="{% url 'accounts:index' %}" 
-                     class="block px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
-                    <i class="fas fa-user mr-2"></i>
-                    個人頁面
-                  </a>
-                  <button class="w-full text-left px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200"
-                          data-logout-url="{% url 'accounts:logout' %}"
-                          data-csrf="{{ csrf_token }}">
-                    <i class="fas fa-sign-out-alt mr-2"></i>
-                    登出
-                  </button>
-                {% else %}
-                  <a href="{% url 'accounts:login' %}" 
-                     class="block px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
-                    <i class="fas fa-sign-in-alt mr-2"></i>
-                    登入
-                  </a>
-                  <a href="{% url 'accounts:register' %}" 
-                     class="block px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
-                    <i class="fas fa-user-plus mr-2"></i>
-                    註冊
-                  </a>
-                {% endif %}
-                <div class="border-t border-gray-200 my-2"></div>
-                <a href="{% url 'projects:new' %}" 
-                   class="block px-4 py-2 text-teal-600 hover:bg-teal-500 hover:text-white transition-colors duration-200">
-                  發起專案
-                </a>
-              </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- 右側：漢堡選單 -->
+      <div class="flex-shrink-0 relative">
+        <button id="hamburger-btn" class="p-3 hover:bg-teal-600 rounded transition-colors duration-300" aria-expanded="false" aria-controls="mobile-menu" aria-label="Toggle navigation">
+          <i class="fas fa-bars text-3xl"></i>
+        </button>
+
+        <!-- 下拉選單 -->
+        <div
+          id="mobile-menu"
+          class="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-lg hidden opacity-0 transform origin-top-right transition-opacity duration-200 ease-in-out"
+          style="z-index: 1000"
+        >
+          <div class="py-2">
+            {% if user.is_authenticated %}
+            <div class="px-4 py-2 text-center">
+              <span class="text-lg font-medium text-gray-900">{{ user.username }}</span>
             </div>
+            <a href="{% url 'accounts:index' %}" class="block px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
+              <i class="fas fa-user mr-2"></i>
+              個人頁面
+            </a>
+            <button
+              class="w-full text-left px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200"
+              data-logout-url="{% url 'accounts:logout' %}"
+              data-csrf="{{ csrf_token }}"
+            >
+              <i class="fas fa-sign-out-alt mr-2"></i>
+              登出
+            </button>
+            {% else %}
+            <a href="{% url 'accounts:login' %}" class="block px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
+              <i class="fas fa-sign-in-alt mr-2"></i>
+              登入
+            </a>
+            <a href="{% url 'accounts:register' %}" class="block px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
+              <i class="fas fa-user-plus mr-2"></i>
+              註冊
+            </a>
+            {% endif %}
+            <div class="border-t border-gray-200 my-2"></div>
+            <a href="{% url 'projects:new' %}" class="block px-4 py-2 text-teal-600 hover:bg-teal-500 hover:text-white transition-colors duration-200">發起專案</a>
           </div>
         </div>
       </div>
-    </nav>
+    </div>
+  </div>
+</nav>
+<div x-data="initBackToTopButton()" x-init="init()" x-show="isVisible" class="fixed bottom-8 right-8 z-50" style="display: none">
+  <button @click="scrollToTop" class="p-3 bg-teal-600 text-white rounded-full shadow-lg hover:bg-teal-700 transition duration-300" aria-label="回到頂部">
+    <i class="fas fa-arrow-up text-xl"></i>
+  </button>
+</div>
