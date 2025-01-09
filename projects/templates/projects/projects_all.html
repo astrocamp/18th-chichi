@@ -1,54 +1,69 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
-<div class="flex items-center justify-center h-[200px] bg-gray-100">
-    <h1 class="text-[50px] font-bold text-[#1EA29E]">
+<div class="flex items-center justify-center h-[200px] ">
+    <h1 class="text-[50px] font-bold text-[#006F6B]">
         查看全部專案
     </h1>
 </div>
 <!-- 專案卡片區域 -->
-<section class="py-12 bg-gray-50">
-    <div class="container mx-auto px-4">
-        <!-- 分類標籤 -->
-        <div class="py-12 bg-white" x-data="{
-          activeTab: '全部',
-          filterProjects(category) {
-              this.activeTab = category;
-              const projects = document.querySelectorAll('[data-project]');
-              projects.forEach(project => {
-                  const categories = project.dataset.categories.split(', ');
-                  if (category === '全部' || categories.includes(category)) {
-                      project.style.display = '';
-                  } else {
-                      project.style.display = 'none';
-                  }
-              });
-
-          }
-      }">
-      
-      <div class="flex justify-center mb-12">
-        <nav class="flex -space-x-4">
+  <!-- 分類和卡片區域 -->
+  <div class="py-4 sm:py-6 lg:py-8 bg-white" x-data="{
+    activeTab: '全部',
+    filterProjects(category) {
+        this.activeTab = category;
+        const projects = document.querySelectorAll('[data-project]');
+        projects.forEach(project => {
+            const categories = project.dataset.categories.split(', ');
+            if (category === '全部' || categories.includes(category)) {
+                project.style.display = '';
+            } else {
+                project.style.display = 'none';
+            }
+        });
+    }
+  }">
+  <div class="py-6 sm:py-8 lg:py-12 bg-white" x-data="{
+    activeTab: '全部',
+    filterProjects(category) {
+        this.activeTab = category;
+        const projects = document.querySelectorAll('[data-project]');
+        projects.forEach(project => {
+            const categories = project.dataset.categories.split(', ');
+            if (category === '全部' || categories.includes(category)) {
+                project.style.display = '';
+            } else {
+                project.style.display = 'none';
+            }
+        });
+    }
+  }">
+    <!-- 分類按鈕導航 -->
+    <div class="mb- sm:mb-6 lg:mb-8">
+        <nav class="flex flex-wrap justify-center gap-3 sm:gap-4">
+            <!-- 全部按鈕 -->
             <button @click="filterProjects('全部')" 
                     :class="{ 
                         'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
                         'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
                     }"
-                    class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]"
+                    class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px]"
                     style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
                 全部
             </button>
-    
+
+          <!-- 動態分類按鈕 -->
             {% for category in categories %}
             <button @click="filterProjects('{{ category.title }}')"
                     :class="{ 
                         'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
                         'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
                     }"
-                    class="px-6 py-2 text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E]">
+                    class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px]"
+                    style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
                 {{ category.title }}
             </button>
             {% endfor %}
-        </nav>            
-    </div>
+      </nav>
+  </div>
     
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 p-8">
         {% for project in page_obj %}
