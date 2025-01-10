@@ -250,11 +250,42 @@
                 <p class="text-sm text-gray-500">專案地點</p>
                 <p class="text-sm font-medium text-gray-900">{{ project.location }}</p>
               </div>
+
+              <div
+              x-data="{
+                copyText: 'https://chichii.com/projects/{{ project.slug }}',
+                copyToClipboard() {
+                  navigator.clipboard.writeText(this.copyText)
+                    .then(() => {
+                      alert(`複製成功 :${this.copyText}`)
+                    })
+                    .catch((error) => {
+                      alert('複製失敗:', error);
+                    });
+                }
+              }"
+              >
+              <h1 >一鍵複製專案</h1>
+              <div class="pt-20 space-y-4">
+                <input
+                    type="text"
+                    x-model="copyText"
+                    class="border border-gray-300 rounded px-4 py-2 w-full sm:w-[400px] md:w-[450px] lg:w-[500px] text-gray-700"
+                    readonly>
+                <button
+                    @click="copyToClipboard"
+                    class="ml-4 px-4 py-2 bg-[#1EA29E] text-white rounded hover:bg-[#179d8e] transition-all duration-200">
+                    複製到剪貼板
+                </button>
+            </div>
+
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+
 </div>
 {% endblock %} 
