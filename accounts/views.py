@@ -92,9 +92,10 @@ def login(request):
     return render(request, "accounts/login.html")
 
 
+
 def register(request):
-    if request.POST:
-        form = UserCreationForm(request.POST)
+    if request.method == "POST":
+        form = CustomUserCreationForm(request.POST)  # 使用自定義表單
         if form.is_valid():
             account = form.save()
             Profile.objects.get_or_create(
@@ -105,8 +106,8 @@ def register(request):
                 birthday=None,
                 website="",
             )
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password1')
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
             user = authenticate(username=username, password=password)
             if user is not None:
                 login_user(request, user)  
@@ -116,9 +117,10 @@ def register(request):
             for field, errors in form.errors.items():
                 for error in errors:
                     messages.error(request, f"{field}: {error}")
-            return render(request, "accounts/register.html")
+    else:
+        form = CustomUserCreationForm()  # 初始化表單
 
-    return render(request, "accounts/register.html")
+    return render(request, "accounts/register.html", {"form": form})
 
 
 @require_POST
