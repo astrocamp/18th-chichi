@@ -5,7 +5,7 @@ import "./sortable.js";
 import "./fontawesome.js";
 import "./navbar.js";
 import "./register.js";
-
+import "./calendar.js"
 window.htmx = htmx;
 
 Alpine.start();
