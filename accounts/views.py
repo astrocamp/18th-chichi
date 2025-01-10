@@ -106,8 +106,8 @@ def login(request):
 
 
 def register(request):
-    if request.method == "POST":
-        form = CustomUserCreationForm(request.POST)  # 使用自定義表單
+    if request.POST:
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             account = form.save()
             Profile.objects.get_or_create(
@@ -123,7 +123,7 @@ def register(request):
                 from_email="postmaster@mg.chichii.com",
                 to=[account.email],
             )
-            message.template_id = "welcome_email"
+            message.template_id = "welcome_mail" 
             message.merge_global_data = {
                 "username": account.username,
             }
