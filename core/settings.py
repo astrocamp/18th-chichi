@@ -241,4 +241,4 @@ ANYMAIL = {
 }
 
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
-DEFAULT_FROM_EMAIL = "postmaster@mg.chichii.com"
+DEFAULT_FROM_EMAIL = "吱吱Chichi@mg.chichii.com"

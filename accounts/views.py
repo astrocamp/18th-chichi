@@ -10,10 +10,7 @@ from projects.models import Sponsor
 from users.models import Profile
 from chats.models import ChatRoom
 from anymail.message import AnymailMessage
-# from django.core.mail import send_mail
 
-# send_mail("It works!", "This will get sent through Mailgun",
-#           "Anymail Sender <postmaster@mg.chichii.com>", ["18thchichi2@gmail.com"])
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -120,7 +117,7 @@ def register(request):
             )
             message = AnymailMessage(
                 subject="Welcome to Chichii",
-                from_email="postmaster@mg.chichii.com",
+                from_email="吱吱Chichi@mg.chichii.com",
                 to=[account.email],
             )
             message.template_id = "welcome_mail" 
