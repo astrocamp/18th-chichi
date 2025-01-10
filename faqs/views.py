@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.utils import timezone
 
 from .forms import FaqForm
 from .models import Faq
@@ -24,7 +25,7 @@ def index(request, slug):
             messages.success(request, "新增成功")
             return redirect("projects:faq_index", slug=project.slug)
 
-    faqs = Faq.objects.filter(project=project)
+    faqs = Faq.objects.filter(project=project, deleted_at__isnull=True)
 
     # 如果是htmx請求，返回projects下的內容模板
     if request.headers.get("HX-Request"):
@@ -45,7 +46,10 @@ def show(request, slug):
     faq = get_object_or_404(Faq, slug=slug)
     project = faq.project
     if request.POST:
-        form = FaqForm(request.POST, instance=faq)
+        form = FaqForm(
+            request.POST,
+            instance=faq,
+        )
         form.save()
         messages.success(request, "更新成功")
         return redirect("projects:faq_index", slug=project.slug)
@@ -81,7 +85,8 @@ def delete(request, slug):
     faq = get_object_or_404(Faq, slug=slug)
     project = faq.project
     if request.POST:
-        faq.delete()
+        faq.deleted_at = timezone.now()
+        faq.save()
         messages.success(request, "刪除成功")
         return redirect("projects:faq_index", slug=project.slug)
 

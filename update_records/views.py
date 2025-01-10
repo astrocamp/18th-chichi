@@ -21,7 +21,9 @@ def index(request, slug):
         )
         return redirect("projects:update_records_index", slug=project.slug)
 
-    update_records = UpdateRecord.objects.filter(project=project)
+    update_records = UpdateRecord.objects.filter(
+        project=project, deleted_at__isnull=True
+    )
 
     # 如果是htmx請求，返回projects下的內容模板
     if request.headers.get("HX-Request"):
@@ -81,7 +83,8 @@ def delete(request, slug):
     project = update_record.project
 
     if request.POST:
-        update_record.delete()
+        update_record.deleted_at = timezone.now()
+        update_record.save()
         return redirect("projects:update_records_index", slug=project.slug)
 
     return render(

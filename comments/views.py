@@ -22,7 +22,7 @@ def index(request, slug):
         return redirect("projects:comment_index", slug=project.slug)
 
     comments = (
-        Comment.objects.filter(parent__isnull=True, project=project, deleted_at=None)
+        Comment.objects.filter(parent__isnull=True, project=project)
         .order_by("-created_at")
         .select_related("account", "project")
     )
@@ -53,7 +53,7 @@ def index(request, slug):
 @login_required
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    comments = project.comments.order_by("-id").filter(deleted_at=None)
+    comments = project.comments.order_by("-id")
 
     if request.method == "POST":
         content = request.POST.get("content")

@@ -43,9 +43,11 @@ def index(request, slug):
             return redirect("projects:rewards_index", slug=project.slug)
         else:
             messages.error(request, "Reward 表單有誤，請檢查後再提交")
-    rewards = Reward.objects.filter(project_id=project.id)
-    products = RewardProduct.objects.filter(project_id=project.id)
-    options = OptionalAdd.objects.filter(project_id=project.id)
+    rewards = Reward.objects.filter(project_id=project.id, deleted_at__isnull=True)
+    products = RewardProduct.objects.filter(
+        project_id=project.id, deleted_at__isnull=True
+    )
+    options = OptionalAdd.objects.filter(project_id=project.id, deleted_at__isnull=True)
 
     return render(
         request,
@@ -123,7 +125,9 @@ def reward_items(request, slug):
                 messages.success(request, f"成功新增 {len(options)} 個選項")
             else:
                 messages.error(request, "沒有有效的選項提交")
-    products = RewardProduct.objects.filter(project_id=project.id)
+    products = RewardProduct.objects.filter(
+        project_id=project.id,
+    )
     options = OptionalAdd.objects.filter(project_id=project.id)
 
     return render(
@@ -150,13 +154,17 @@ def show(request, id):
             reward.rewardproduct_set.clear()
             product_ids = request.POST.getlist("products")
             if product_ids:
-                products = RewardProduct.objects.filter(id__in=product_ids)
+                products = RewardProduct.objects.filter(
+                    id__in=product_ids, deleted_at__isnull=True
+                )
                 reward.rewardproduct_set.add(*products)
 
             reward.optionaladd_set.clear()
             option_ids = request.POST.getlist("options")
             if option_ids:
-                options = OptionalAdd.objects.filter(id__in=option_ids)
+                options = OptionalAdd.objects.filter(
+                    id__in=option_ids, deleted_at__isnull=True
+                )
                 reward.optionaladd_set.add(*options)
 
             messages.success(request, "Reward 更新成功")
@@ -180,8 +188,12 @@ def edit(request, id):
     form = RewardForm(instance=reward)
     products = RewardProduct.objects.filter(project=project)
     options = OptionalAdd.objects.filter(project=project)
-    related_products = RewardProduct.objects.filter(rewards=reward)
-    related_options = OptionalAdd.objects.filter(rewards=reward)
+    related_products = RewardProduct.objects.filter(
+        rewards=reward, deleted_at__isnull=True
+    )
+    related_options = OptionalAdd.objects.filter(
+        rewards=reward, deleted_at__isnull=True
+    )
     return render(
         request,
         "rewards/edit.html",
@@ -200,7 +212,8 @@ def delete(request, id):
     reward = get_object_or_404(Reward, id=id)
     project = reward.project
     if request.POST:
-        reward.delete()
+        reward.deleted_at = timezone.now()
+        reward.save()
         messages.success(request, "刪除成功")
         return redirect("projects:rewards_index", slug=project.slug)
 
@@ -291,8 +304,12 @@ def reward_sponsor_options(request, slug):
         return redirect("projects:sponsor", slug=project.slug)
 
     reward = sponsor.reward
-    reward_products = RewardProduct.objects.filter(project=project, rewards=reward)
-    optional_adds = OptionalAdd.objects.filter(project=project, rewards=reward)
+    reward_products = RewardProduct.objects.filter(
+        project=project, rewards=reward, deleted_at__isnull=True
+    )
+    optional_adds = OptionalAdd.objects.filter(
+        project=project, rewards=reward, deleted_at__isnull=True
+    )
 
     if request.POST:
         if "delete_sponsor" in request.POST:

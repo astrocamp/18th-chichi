@@ -55,7 +55,7 @@ def index(request):
             return redirect("projects:show", slug=project.slug)
         else:
             return HttpResponse(f"輸入錯誤: {form.errors}")
-    projects = Project.objects.filter(account=account)
+    projects = Project.objects.filter(account=account, deleted_at__isnull=True)
     media_type = None
 
     for project in projects:
@@ -90,9 +90,12 @@ def new(request):
 def show(request, slug):
     from .models import ProjectCategory
 
-    project = get_object_or_404(Project, slug=slug)
+    project = get_object_or_404(Project, slug=slug, deleted_at__isnull=True)
     account = get_object_or_404(User, id=request.user.id)
-    comments = project.comments.filter(parent__isnull=True).order_by("-id")
+    comments = project.comments.filter(
+        parent__isnull=True,
+        deleted_at__isnull=True,
+    ).order_by("-id")
 
     # 計算達成率
     progress_percentage = calculate_progress_percentage(
@@ -164,7 +167,9 @@ def show(request, slug):
 def comment(request, slug):
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
-    comments = project.comments.filter(parent__isnull=True).order_by("-id")
+    comments = project.comments.filter(
+        parent__isnull=True, deleted_at__isnull=True
+    ).order_by("-id")
     return render(
         request,
         "projects/comment.html",
@@ -213,7 +218,8 @@ def delete(request, slug):
     project = get_object_or_404(Project, slug=slug, account=request.user)
 
     if request.POST:
-        project.delete()
+        project.deleted_at = timezone.now()
+        project.save()
         messages.success(request, "專案已成功刪除")
         return redirect("projects:index")
 
@@ -547,7 +553,7 @@ def reward_grouped_bar_chart(request, slug):
 def public(request, slug):
     from .models import ProjectCategory, Sponsor
 
-    project = get_object_or_404(Project, slug=slug)
+    project = get_object_or_404(Project, slug=slug, deleted_at__isnull=True)
     project.update_status()
     project.update_raised_amount()
 
@@ -607,7 +613,9 @@ def comments_index(request, slug):
 
     # 獲取主留言（沒有父留言的留言）
     comments = (
-        Comment.objects.filter(project=project, parent__isnull=True)
+        Comment.objects.filter(
+            project=project, parent__isnull=True, deleted_at__isnull=True
+        )
         .order_by("-created_at")
         .select_related("account")
         .prefetch_related("replies", "replies__account")
@@ -619,9 +627,15 @@ def comments_index(request, slug):
 
         comment_id = request.GET.get("comment_id")
         if comment_id:
-            comment = get_object_or_404(Comment, id=comment_id, project=project)
+            comment = get_object_or_404(
+                Comment,
+                id=comment_id,
+                project=project,
+                deleted_at__isnull=True,
+            )
             if request.user == comment.account:
-                comment.delete()
+                comment.deleted_at = timezone.now()
+                comment.save()
                 messages.success(request, "留言已刪除")
             else:
                 return HttpResponse("您沒有權限刪除這則留言", status=403)
@@ -638,19 +652,26 @@ def comments_index(request, slug):
             # 如果有 parent_id，表示這是一個回覆
             if parent_id:
                 parent_comment = get_object_or_404(
-                    Comment, id=parent_id, project=project
+                    Comment,
+                    id=parent_id,
+                    project=project,
+                    deleted_at__isnull=True,
                 )
                 Comment.objects.create(
                     project=project,
                     content=content,
                     account=request.user,
                     parent=parent_comment,
+                    deleted_at__isnull=True,
                 )
                 messages.success(request, "回覆成功")
             else:
                 # 這是一個主留言
                 Comment.objects.create(
-                    project=project, content=content, account=request.user
+                    project=project,
+                    content=content,
+                    account=request.user,
+                    deleted_at__isnull=True,
                 )
                 messages.success(request, "留言成功")
 
