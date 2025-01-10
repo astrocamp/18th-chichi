@@ -10,7 +10,8 @@ from projects.models import Sponsor
 from users.models import Profile
 from chats.models import ChatRoom
 from anymail.message import AnymailMessage
-
+from allauth.account.signals import user_signed_up
+from django.dispatch import receiver
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -152,3 +153,16 @@ def terms(request):
 
 def privacy(request):
     return render(request, "accounts/privacy.html")
+
+@receiver(user_signed_up)
+def send_welcome_email(request, user, **kwargs):
+    message = AnymailMessage(
+        subject="Welcome to Chichii",
+        from_email="吱吱Chichi@mg.chichii.com",
+        to=[user.email],
+    )
+    message.template_id = "welcome_mail"
+    message.merge_global_data = {
+        "username": user.username,
+    }
+    message.send()
