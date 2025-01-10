@@ -167,9 +167,7 @@ def show(request, slug):
 def comment(request, slug):
     project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
-    comments = project.comments.filter(
-        parent__isnull=True, deleted_at__isnull=True
-    ).order_by("-id")
+    comments = project.comments.filter(parent__isnull=True).order_by("-id")
     return render(
         request,
         "projects/comment.html",
@@ -613,9 +611,7 @@ def comments_index(request, slug):
 
     # 獲取主留言（沒有父留言的留言）
     comments = (
-        Comment.objects.filter(
-            project=project, parent__isnull=True, deleted_at__isnull=True
-        )
+        Comment.objects.filter(project=project, parent__isnull=True)
         .order_by("-created_at")
         .select_related("account")
         .prefetch_related("replies", "replies__account")
@@ -627,15 +623,9 @@ def comments_index(request, slug):
 
         comment_id = request.GET.get("comment_id")
         if comment_id:
-            comment = get_object_or_404(
-                Comment,
-                id=comment_id,
-                project=project,
-                deleted_at__isnull=True,
-            )
+            comment = get_object_or_404(Comment, id=comment_id, project=project)
             if request.user == comment.account:
-                comment.deleted_at = timezone.now()
-                comment.save()
+                comment.delete()
                 messages.success(request, "留言已刪除")
             else:
                 return HttpResponse("您沒有權限刪除這則留言", status=403)
@@ -652,26 +642,19 @@ def comments_index(request, slug):
             # 如果有 parent_id，表示這是一個回覆
             if parent_id:
                 parent_comment = get_object_or_404(
-                    Comment,
-                    id=parent_id,
-                    project=project,
-                    deleted_at__isnull=True,
+                    Comment, id=parent_id, project=project
                 )
                 Comment.objects.create(
                     project=project,
                     content=content,
                     account=request.user,
                     parent=parent_comment,
-                    deleted_at__isnull=True,
                 )
                 messages.success(request, "回覆成功")
             else:
                 # 這是一個主留言
                 Comment.objects.create(
-                    project=project,
-                    content=content,
-                    account=request.user,
-                    deleted_at__isnull=True,
+                    project=project, content=content, account=request.user
                 )
                 messages.success(request, "留言成功")
 

@@ -32,5 +32,3 @@ class Comment(models.Model):
     parent = models.ForeignKey(
         "self", null=True, related_name="replies", on_delete=models.CASCADE
     )
-
-    deleted_at = models.DateTimeField(null=True, db_index=True)

@@ -109,7 +109,7 @@ def delete(request, slug, comment_slug):
     comment = get_object_or_404(Comment, slug=comment_slug, project=project)
 
     if request.user == comment.account:
-        comment.save()
+        comment.delete()
         return HttpResponse("")
     return redirect("projects:show", slug=project.slug)
 
@@ -117,9 +117,7 @@ def delete(request, slug, comment_slug):
 @login_required
 def reply_form(request, slug, comment_slug):
     project = get_object_or_404(Project, slug=slug)
-    parent_comment = get_object_or_404(
-        Comment, slug=comment_slug, project=project, deleted_at=None
-    )
+    parent_comment = get_object_or_404(Comment, slug=comment_slug, project=project)
     return render(
         request,
         "comments/reply_form.html",
