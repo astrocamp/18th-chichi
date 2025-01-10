@@ -22,7 +22,7 @@ def index(request, slug):
         return redirect("projects:comment_index", slug=project.slug)
 
     comments = (
-        Comment.objects.filter(parent__isnull=True, project=project)
+        Comment.objects.filter(parent__isnull=True, project=project, deleted_at=None)
         .order_by("-created_at")
         .select_related("account", "project")
     )
@@ -53,7 +53,7 @@ def index(request, slug):
 @login_required
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    comments = project.comments.order_by("-id")
+    comments = project.comments.order_by("-id").filter(deleted_at=None)
 
     if request.method == "POST":
         content = request.POST.get("content")
@@ -109,7 +109,7 @@ def delete(request, slug, comment_slug):
     comment = get_object_or_404(Comment, slug=comment_slug, project=project)
 
     if request.user == comment.account:
-        comment.delete()
+        comment.save()
         return HttpResponse("")
     return redirect("projects:show", slug=project.slug)
 
@@ -117,7 +117,9 @@ def delete(request, slug, comment_slug):
 @login_required
 def reply_form(request, slug, comment_slug):
     project = get_object_or_404(Project, slug=slug)
-    parent_comment = get_object_or_404(Comment, slug=comment_slug, project=project)
+    parent_comment = get_object_or_404(
+        Comment, slug=comment_slug, project=project, deleted_at=None
+    )
     return render(
         request,
         "comments/reply_form.html",

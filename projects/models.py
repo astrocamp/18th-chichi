@@ -29,6 +29,8 @@ class Project(models.Model):
     start_at = models.DateTimeField(null=True)
     end_at = models.DateTimeField()
     story = models.TextField()
+    deleted_at = models.DateTimeField(null=True, db_index=True)
+
     categories = models.ManyToManyField(
         Category, through="ProjectCategory", through_fields=("project", "category")
     )

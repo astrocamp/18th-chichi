@@ -16,6 +16,7 @@ class UpdateRecord(models.Model):
     description = models.TextField()
     create_at = models.DateTimeField(auto_now_add=True)
     update_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(null=True, db_index=True)
     project = models.ForeignKey(
         Project, on_delete=models.CASCADE, related_name="update_records"
     )

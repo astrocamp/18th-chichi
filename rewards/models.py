@@ -23,6 +23,7 @@ class Reward(models.Model):
     quantity = models.PositiveIntegerField(default=1)  
     created_at = models.DateTimeField(auto_now_add=True)  
     updated_at = models.DateTimeField(null=True)
+    deleted_at= models.DateTimeField(null=True,db_index=True)
     project = models.ForeignKey(Project,on_delete=models.CASCADE)
 
 
