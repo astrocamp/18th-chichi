@@ -4,10 +4,5 @@
     : {{ comment.content }}
   </p>
   <small class="text-gray-500 text-xs">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
-  {% if user == comment.account %}
-  <form hx-post="{% url 'comments:delete' project.slug comment.slug %}" hx-target="#reply-{{ comment.slug }}" hx-swap="outerHTML" hx-confirm="確定要刪除這條回覆嗎" class="inline-block mt-2">
-    {% csrf_token %}
-    <button type="submit" class="text-red-500 hover:underline">刪除</button>
-  </form>
-  {% endif %}
+
 </div>
