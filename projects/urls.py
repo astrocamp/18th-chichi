@@ -21,6 +21,7 @@ from .views import (
     gender_proportion_excel,
     reward_grouped_bar_chart_excel,
     daily_sponsorship_amount_excel,
+    search_projects,
 )
 from faqs.views import index as faq_index, new as faq_new
 from update_records.views import (
@@ -84,10 +85,26 @@ urlpatterns = [
     ),
     path("<slug:slug>/chart_page/", chart_page, name="chart_page"),
     path("<slug:slug>/gender_proportion/", gender_proportion, name="gender_proportion"),
-    path("<slug:slug>/gender_amount_scatter_excel/", gender_amount_scatter_excel, name="gender_amount_scatter_excel"),
-    path("<slug:slug>/gender_proportion_excel/", gender_proportion_excel, name="gender_proportion_excel"),
-    path("<slug:slug>/reward_grouped_bar_chart_excel/", reward_grouped_bar_chart_excel, name="reward_grouped_bar_chart_excel"),
-    path("<slug:slug>/daily_sponsorship_amount_excel/", daily_sponsorship_amount_excel, name="daily_sponsorship_amount_excel"),
+    path(
+        "<slug:slug>/gender_amount_scatter_excel/",
+        gender_amount_scatter_excel,
+        name="gender_amount_scatter_excel",
+    ),
+    path(
+        "<slug:slug>/gender_proportion_excel/",
+        gender_proportion_excel,
+        name="gender_proportion_excel",
+    ),
+    path(
+        "<slug:slug>/reward_grouped_bar_chart_excel/",
+        reward_grouped_bar_chart_excel,
+        name="reward_grouped_bar_chart_excel",
+    ),
+    path(
+        "<slug:slug>/daily_sponsorship_amount_excel/",
+        daily_sponsorship_amount_excel,
+        name="daily_sponsorship_amount_excel",
+    ),
     path(
         "<slug:slug>/daily_sponsorship_amount/",
         daily_sponsorship_amount,
@@ -108,4 +125,5 @@ urlpatterns = [
         get_subcategories,
         name="get_subcategories",
     ),
+    path("search/", search_projects, name="search_projects"),
 ]
