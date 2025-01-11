@@ -57,10 +57,10 @@
                 type="text"
                 x-model="product.name"
                 :name="'products[' + index + ']'"
-                class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="mt-1 block w-full   border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
-            <button type="button" @click="removeProduct(index)" class="btn" style="background-color: #ff6b6b; color: white">
+            <button type="button" @click="removeProduct(index)" class="btn " style=" background-color: #ff6b6b; color: white">
               <i class="fas fa-trash mr-2"></i>
               刪除
             </button>
@@ -94,12 +94,12 @@
           <div class="flex items-center space-x-4 p-4 border rounded-md">
             <div class="flex-grow grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium text-gray-700">選項名稱</label>
+                <label class="block text-sm font-medium  text-gray-700">選項名稱</label>
                 <input
                   type="text"
                   x-model="option.name"
                   :name="'options[' + index + '][name]'"
-                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  class="mt-1 block w-full border-2  border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
               </div>
               <div>
@@ -108,7 +108,7 @@
                   type="number"
                   x-model="option.price"
                   :name="'options[' + index + '][price]'"
-                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  class="mt-1 block w-full border-2  border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
               </div>
             </div>

@@ -24,7 +24,6 @@ class Reward(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
-    deleted_at = models.DateTimeField(null=True, db_index=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -35,7 +34,6 @@ class RewardProduct(models.Model):
     name = models.CharField(max_length=300)
     rewards = models.ManyToManyField(Reward, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    deleted_at = models.DateTimeField(null=True, db_index=True)
 
     def __str__(self):
         return f"{self.name} (x{self.quantity})"
@@ -46,8 +44,6 @@ class OptionalAdd(models.Model):
     price = models.DecimalField(default=0, max_digits=10, decimal_places=0)
     rewards = models.ManyToManyField(Reward, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
-    deleted_at = models.DateTimeField(null=True, db_index=True)
-
 
     def __str__(self):
         return self.name

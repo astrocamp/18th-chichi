@@ -34,8 +34,6 @@
           <div id="comments-list" class="space-y-8">
             {% for comment in comments %}
             <div class="bg-gray-50 rounded-lg shadow-sm p-6">{% include "comments/comment_item.html" with comment=comment project=project %}</div>
-            {% empty %}
-            <p class="text-gray-600">目前沒有留言。</p>
             {% endfor %}
           </div>
         </div>

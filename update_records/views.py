@@ -23,7 +23,7 @@ def index(request, slug):
 
     update_records = UpdateRecord.objects.filter(
         project=project, deleted_at__isnull=True
-    )
+    ).order_by("-create_at")
 
     # 如果是htmx請求，返回projects下的內容模板
     if request.headers.get("HX-Request"):
