@@ -1018,12 +1018,8 @@ def search_projects(request):
             print("0" * 50)
         if status:
             projects = projects.filter(status=status)
-            print(f"搜尋結果: {status}")
-            print("0" * 50)
         if location:
             projects = projects.filter(location__icontains=location)
-            print(f"搜尋結果: {projects}")
-            print("0" * 50)
 
     return render(
         request,
