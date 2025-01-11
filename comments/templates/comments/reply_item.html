@@ -1,6 +1,6 @@
 <div class="reply-item bg-gray-100 rounded-md p-4 shadow-sm mt-4" id="reply-{{ comment.slug }}">
   <p class="text-gray-800">
-    <strong>{{ comment.account.username }}</strong>
+    <strong>{{ comment.account.profile.name }}</strong>
     : {{ comment.content }}
   </p>
   <small class="text-gray-500 text-xs">{{ comment.created_at|date:"Y-m-d H:i" }}</small>
