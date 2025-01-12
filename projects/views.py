@@ -234,13 +234,14 @@ def collect_projects(request, slug):
 
     if not created:
         collect.delete()
+        collected = False
+    else:
+        collected = True
 
-    # 根據來源頁面決定重定向目標
-    referer = request.META.get("HTTP_REFERER", "")
-    if "public" in referer:
-        return redirect("projects:public", slug=project.slug)
-    return redirect("projects:show", slug=project.slug)
-
+    return JsonResponse({
+        "collected": collected,
+        "collect_count": project.get_collect_count(),
+    })
 
 @login_required
 @require_POST
@@ -253,12 +254,14 @@ def like_projects(request, slug):
 
     if not created:
         favorite.delete()
+        favorited = False
+    else:
+        favorited = True
 
-    # 根據來源頁面決定重定向目標
-    referer = request.META.get("HTTP_REFERER", "")
-    if "public" in referer:
-        return redirect("projects:public", slug=project.slug)
-    return redirect("projects:show", slug=project.slug)
+    return JsonResponse({
+        "favorited": favorited,
+        "like_count": project.get_like_count(),
+    })
 
 
 def chart_page(request, slug):

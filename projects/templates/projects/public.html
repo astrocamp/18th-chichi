@@ -1,8 +1,4 @@
-{% extends "shared/layout.html" %}
-{% load static %}
-{% load humanize %}
-
-{% block "content" %}
+{% extends "shared/layout.html" %} {% load static %} {% load humanize %} {% block "content" %}
 <div class="min-h-screen bg-gray-50">
   <!-- 主要內容區塊 -->
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -10,62 +6,36 @@
       <!-- 左側專案內容 -->
       <div class="lg:col-span-8">
         <!-- 專案圖片輪播 -->
-        <div x-data="{ currentSlide: 0, images: [
+        <div
+          x-data="{ currentSlide: 0, images: [
           '{{ project.cover_image.url }}'
-        ] }" class="relative mb-8 rounded-lg overflow-hidden bg-gray-100">
+        ] }"
+          class="relative mb-8 rounded-lg overflow-hidden bg-gray-100"
+        >
           <div class="h-[480px]">
-            <img :src="images[currentSlide]" class="w-full h-full object-contain" alt="Project image">
+            <img :src="images[currentSlide]" class="w-full h-full object-contain" alt="Project image" />
           </div>
           <!-- 輪播控制按鈕 -->
           <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
             <template x-for="(image, index) in images" :key="index">
-              <button 
-                @click="currentSlide = index"
-                :class="{'bg-white': currentSlide === index, 'bg-white/50': currentSlide !== index}"
-                class="w-2 h-2 rounded-full">
-              </button>
+              <button @click="currentSlide = index" :class="{'bg-white': currentSlide === index, 'bg-white/50': currentSlide !== index}" class="w-2 h-2 rounded-full"></button>
             </template>
           </div>
         </div>
 
         <!-- 專案標題和描述 -->
         <h1 class="text-3xl font-bold text-gray-900 mb-4">{{ project.title }}</h1>
-        <p class="text-xl text-gray-600 mb-8  line-clamp-2 overflow-hidden">{{ project.subtitle }}</p>
+        <p class="text-xl text-gray-600 mb-8 line-clamp-2 overflow-hidden">{{ project.subtitle }}</p>
 
         <!-- 專案內容標籤頁 -->
         <div x-data="{ activeTab: 'story' }" class="mb-8">
           <div class="border-b border-gray-200">
             <nav class="-mb-px flex space-x-8">
-              <button 
-                @click="activeTab = 'story'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'story'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">
-                專案內容
-              </button>
-              <button 
-                @click="activeTab = 'rewards'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'rewards'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">
-                贊助方案
-              </button>
-              <button 
-                @click="activeTab = 'faq'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'faq'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">
-                常見問題
-              </button>
-              <button 
-                @click="activeTab = 'updates'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'updates'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">
-                更新記錄
-              </button>
-              <button 
-                @click="activeTab = 'comments'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'comments'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">
-                留言討論
-              </button>
+              <button @click="activeTab = 'story'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'story'}" class="border-b-2 py-4 px-1 text-sm font-medium">專案內容</button>
+              <button @click="activeTab = 'rewards'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'rewards'}" class="border-b-2 py-4 px-1 text-sm font-medium">贊助方案</button>
+              <button @click="activeTab = 'faq'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'faq'}" class="border-b-2 py-4 px-1 text-sm font-medium">常見問題</button>
+              <button @click="activeTab = 'updates'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'updates'}" class="border-b-2 py-4 px-1 text-sm font-medium">更新記錄</button>
+              <button @click="activeTab = 'comments'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'comments'}" class="border-b-2 py-4 px-1 text-sm font-medium">留言討論</button>
             </nav>
           </div>
 
@@ -76,13 +46,7 @@
             </div>
             <div x-show="activeTab === 'rewards'" class="space-y-6">
               <!-- 贊助方案使用 htmx 動態載入 -->
-              <div 
-                hx-get="{% url 'rewards:rewards_content' project.slug %}"
-                hx-trigger="load"
-                hx-target="this"
-                hx-swap="innerHTML"
-                hx-indicator="#rewards-loading"
-              >
+              <div hx-get="{% url 'rewards:rewards_content' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML" hx-indicator="#rewards-loading">
                 <div id="rewards-loading" class="text-center py-8">
                   <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#1EA29E]"></div>
                   <p class="mt-2 text-gray-600">載入贊助方案中...</p>
@@ -91,36 +55,15 @@
             </div>
             <div x-show="activeTab === 'faq'" class="space-y-6">
               <!-- FAQ 內容使用 htmx 動態載入 -->
-              <div 
-                hx-get="{% url 'projects:faq_index' project.slug %}" 
-                hx-trigger="load"
-                hx-target="this"
-                hx-swap="innerHTML"
-              >
-                Loading FAQs...
-              </div>
+              <div hx-get="{% url 'projects:faq_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">Loading FAQs...</div>
             </div>
             <div x-show="activeTab === 'updates'" class="space-y-6">
               <!-- 更新記錄使用 htmx 動態載入 -->
-              <div 
-                hx-get="{% url 'projects:update_records_index' project.slug %}" 
-                hx-trigger="load"
-                hx-target="this"
-                hx-swap="innerHTML"
-              >
-                Loading updates...
-              </div>
+              <div hx-get="{% url 'projects:update_records_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">Loading updates...</div>
             </div>
             <div x-show="activeTab === 'comments'" class="space-y-6">
               <!-- 留言區使用 htmx 動態載入 -->
-              <div 
-                hx-get="{% url 'projects:comments_index' project.slug %}" 
-                hx-trigger="load"
-                hx-target="this"
-                hx-swap="innerHTML"
-              >
-                Loading comments...
-              </div>
+              <div hx-get="{% url 'projects:comments_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">Loading comments...</div>
             </div>
           </div>
         </div>
@@ -137,7 +80,8 @@
                   <p class="text-sm text-gray-500 mb-1">剩餘天數</p>
                   <p class="text-2xl font-bold text-gray-900 leading-none mb-1">{{ total_days }}</p>
                   <p class="text-xs text-[#1EA29E]">
-                    <i class="fas fa-clock mr-1"></i>倒數中
+                    <i class="fas fa-clock mr-1"></i>
+                    倒數中
                   </p>
                 </div>
                 <div class="flex flex-col items-end">
@@ -152,66 +96,87 @@
             <!-- 進度條 -->
             <div class="relative pt-1">
               <div class="overflow-hidden h-4 mb-4 text-xs flex rounded bg-gray-200">
-                <div
-                  class="bg-[#1EA29E] h-4 rounded"
-                  style="width: {{ progress_percentage }}%"
-                ></div>
+                <div class="bg-[#1EA29E] h-4 rounded" style="width: {{ progress_percentage }}%"></div>
               </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-4">
-              <div class="text-center">
-                <p class="text-2xl font-bold text-gray-900">{{ backers_count }}</p>
-                <p class="text-sm text-gray-500">贊助人數</p>
+            <div
+              x-data="{ 
+              collected: {{ collected|yesno:'true,false' }},
+              favorited: {{ favorited|yesno:'true,false' }},
+              collectCount: {{ project.get_collect_count }},
+              likeCount: {{ project.get_like_count }}
+          }"
+            >
+              <!-- 數據顯示 -->
+              <div class="grid grid-cols-3 gap-4">
+                <div class="text-center">
+                  <p class="text-2xl font-bold text-gray-900">{{ backers_count }}</p>
+                  <p class="text-sm text-gray-500">贊助人數</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-2xl font-bold text-gray-900" x-text="collectCount"></p>
+                  <p class="text-sm text-gray-500">收藏人數</p>
+                </div>
+                <div class="text-center">
+                  <p class="text-2xl font-bold text-gray-900" x-text="likeCount"></p>
+                  <p class="text-sm text-gray-500">按讚人數</p>
+                </div>
               </div>
-              <div class="text-center">
-                <p class="text-2xl font-bold text-gray-900">{{ project.get_collect_count }}</p>
-                <p class="text-sm text-gray-500">收藏人數</p>
-              </div>
-              <div class="text-center">
-                <p class="text-2xl font-bold text-gray-900">{{ project.get_like_count }}</p>
-                <p class="text-sm text-gray-500">按讚人數</p>
-              </div>
-            </div>
 
-            <!-- 收藏和按讚按鈕 -->
-            {% if user.is_authenticated %}
-            <div class="flex justify-center space-x-4 mt-4">
-              <form action="{% url 'projects:collect' project.slug %}" method="post" class="inline-block">
-                {% csrf_token %}
-                <button type="submit" 
-                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
-                  style="background-color: {% if collected %}#1EA29E{% else %}#1ea29e20{% endif %}; color: {% if collected %}white{% else %}#1EA29E{% endif %}; transition: all 0.3s ease;"
-                  onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
-                  onmouseout="this.style.backgroundColor='{% if collected %}#1EA29E{% else %}#1ea29e20{% endif %}'; this.style.color='{% if collected %}white{% else %}#1EA29E{% endif %}';"
+              <!-- 按讚與收藏按鈕 -->
+              {% if user.is_authenticated %}
+              <div class="flex justify-center space-x-4 mt-4">
+                <!-- 收藏按鈕 -->
+                <button
+                  x-bind:style="collected ? 'background-color: #1EA29E; color: white;' : 'background-color: #1ea29e20; color: #1EA29E;'"
+                  x-on:mouseover="collected || (this.style.backgroundColor = '#1EA29E', this.style.color = 'white')"
+                  x-on:mouseout="collected || (this.style.backgroundColor = '#1ea29e20', this.style.color = '#1EA29E')"
+                  x-on:click.prevent="
+                  fetch('{% url 'projects:collect' project.slug %}', {
+                    method: 'POST',
+                    headers: {
+                      'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    collected = data.collected;
+                    collectCount = data.collect_count;
+                  });
+                "
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300"
                 >
                   <i class="fas fa-bookmark mr-2"></i>
-                  {% if collected %}
-                  已收藏
-                  {% else %}
-                  收藏
-                  {% endif %}
+                  <span x-text="collected ? '已收藏' : '收藏'"></span>
                 </button>
-              </form>
 
-              <form action="{% url 'projects:like' project.slug %}" method="post" class="inline-block">
-                {% csrf_token %}
-                <button type="submit" 
-                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8"
-                  style="background-color: {% if favorited %}#1EA29E{% else %}#1ea29e20{% endif %}; color: {% if favorited %}white{% else %}#1EA29E{% endif %}; transition: all 0.3s ease;"
-                  onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
-                  onmouseout="this.style.backgroundColor='{% if favorited %}#1EA29E{% else %}#1ea29e20{% endif %}'; this.style.color='{% if favorited %}white{% else %}#1EA29E{% endif %}';"
+                <!-- 按讚按鈕 -->
+                <button
+                  x-bind:style="favorited ? 'background-color: #1EA29E; color: white;' : 'background-color: #1ea29e20; color: #1EA29E;'"
+                  x-on:mouseover="favorited || (this.style.backgroundColor = '#1EA29E', this.style.color = 'white')"
+                  x-on:mouseout="favorited || (this.style.backgroundColor = '#1ea29e20', this.style.color = '#1EA29E')"
+                  x-on:click.prevent="
+                  fetch('{% url 'projects:like' project.slug %}', {
+                    method: 'POST',
+                    headers: {
+                      'X-CSRFToken': '{{ csrf_token }}',
+                    },
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+                    favorited = data.favorited;
+                    likeCount = data.like_count;
+                  });
+                "
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300"
                 >
                   <i class="fas fa-heart mr-2"></i>
-                  {% if favorited %}
-                  已按讚
-                  {% else %}
-                  按讚
-                  {% endif %}
+                  <span x-text="favorited ? '已按讚' : '按讚'"></span>
                 </button>
-              </form>
+              </div>
+              {% endif %}
             </div>
-            {% endif %}
           </div>
 
           <!-- 專案資訊 -->
@@ -224,22 +189,14 @@
               </div>
               <div>
                 <p class="text-sm text-gray-500">募資時間</p>
-                <p class="text-sm font-medium text-gray-900">
-                  {{ project.start_at|date:"Y/m/d" }} - {{ project.end_at|date:"Y/m/d" }}
-                </p>
+                <p class="text-sm font-medium text-gray-900">{{ project.start_at|date:"Y/m/d" }} - {{ project.end_at|date:"Y/m/d" }}</p>
               </div>
               <div>
                 <p class="text-sm text-gray-500">專案分類</p>
                 {% if categories %}
                 <ul class="list-none">
                   {% for category in categories %}
-                  <li class="text-sm font-medium text-gray-900">
-                    {% if category.parent %}
-                      {{ category.parent.title }} > {{ category.title }}
-                    {% else %}
-                      {{ category.title }}
-                    {% endif %}
-                  </li>
+                  <li class="text-sm font-medium text-gray-900">{% if category.parent %} {{ category.parent.title }} > {{ category.title }} {% else %} {{ category.title }} {% endif %}</li>
                   {% endfor %}
                 </ul>
                 {% else %}
@@ -252,7 +209,7 @@
               </div>
 
               <div
-              x-data="{
+                x-data="{
                 copyText: 'https://chichii.com/projects/{{ project.slug }}',
                 copyToClipboard() {
                   navigator.clipboard.writeText(this.copyText)
@@ -265,31 +222,26 @@
                 }
               }"
               >
-              <h1 >一鍵複製專案</h1>
-              <div class="pt-2">
-                <input
-                    type="text"
-                    x-model="copyText"
-                    class="border border-gray-300 rounded px-4 py-2 w-full sm:w-[350px] md:w-[350px] lg:w-[350px] text-gray-700"
-                    readonly>
-                    <button
+                <h1>一鍵複製專案</h1>
+                <div class="pt-2">
+                  <input type="text" x-model="copyText" class="border border-gray-300 rounded px-4 py-2 w-full sm:w-[350px] md:w-[350px] lg:w-[350px] text-gray-700" readonly />
+                  <button
                     @click="copyToClipboard"
                     type="button"
-                    class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8  mt-2"
-                    style="background-color: #1EA29E; color: white; transition: all 0.3s ease;"
+                    class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 mt-2"
+                    style="background-color: #1ea29e; color: white; transition: all 0.3s ease"
                     onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
                     onmouseout="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
-                >
+                  >
                     複製到剪貼板
-                </button>
-
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+    {% endblock %}
   </div>
-
-
 </div>
-{% endblock %} 
