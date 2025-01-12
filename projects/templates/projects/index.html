@@ -19,19 +19,11 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for project in projects %}
         <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-          {% if project.cover_image %} {% if media_type == "image" %}
+          {% if project.cover_image %}
           <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
             <img src="{{ project.cover_image.url }}" alt="{{ project.title }}" class="max-w-full max-h-full object-contain" />
           </div>
-          {% elif media_type == "video" %}
-          <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-            <video src="{{ project.cover_image.url }}" controls class="max-w-full max-h-full object-contain">您的瀏覽器不支援影片播放。</video>
-          </div>
           {% else %}
-          <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-            <span class="text-gray-400">不支援的媒體格式。</span>
-          </div>
-          {% endif %} {% else %}
           <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
             <span class="text-gray-400">暫無圖片</span>
           </div>
