@@ -2,7 +2,7 @@
 <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
   <h1 class="text-3xl font-bold text-gray-800 mb-4">更新個人資料</h1>
 
-  <form method="POST" action="{% url 'profile:index' %}" enctype="multipart/form-data" class="space-y-6">
+  <form method="POST" action="{% url 'accounts:index' %}" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
 
     <!-- 名稱 -->
@@ -97,20 +97,15 @@
 
     <!-- 網站 -->
     <div>
-      {% if profile.website %}
-      <label for="website" class="block text-lg font-semibold text-gray-600"
-        >網站</label
-      >
+      <label for="website" class="block text-lg font-semibold text-gray-600">網站</label>
       <input
         type="url"
         id="website"
         name="website"
         value="{{ profile.website|default_if_none:'' }}"
+        placeholder="尚未填寫網站"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
       />
-      {% else %}
-      <p class="text-gray-500 italic">尚未填寫網站</p>
-      {% endif %}
     </div>
 
     <!-- 自我介紹 -->
@@ -150,7 +145,7 @@
 
     <!-- 提交按鈕 -->
     <div class="flex justify-end space-x-4">
-      <a href="{% url 'profile:index' %}" class="btn" style="background-color: #85cacc20; color: #1EA29E">
+      <a href="{% url 'accounts:index' %}" class="btn" style="background-color: #85cacc20; color: #1EA29E">
         <i class="fas fa-arrow-left mr-2"></i>返回
       </a>
       <button type="submit" class="btn" style="background-color: #1EA29E; color: white; padding: 0.75rem 2rem">

@@ -2,7 +2,7 @@
 <div class="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg">
   <h1 class="text-3xl font-bold text-gray-800 mb-4">個人資料設定</h1>
 
-  <form method="POST" action="{% url 'profile:index' %}" enctype="multipart/form-data" class="space-y-6">
+  <form method="POST" action="{% url 'accounts:index' %}" enctype="multipart/form-data" class="space-y-6">
     {% csrf_token %}
 
     <!-- 名稱 -->
@@ -14,7 +14,8 @@
     <!-- 性別 -->
     <div>
       <label for="gender" class="block text-lg font-semibold text-gray-600">性別</label>
-      <select name="gender" id="gender" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none">
+      <select name="gender" id="gender" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none" required>
+        <option value="" disabled selected>請選擇性別</option>
         <option value="M">男</option>
         <option value="F">女</option>
         <option value="O">其他</option>
@@ -47,6 +48,7 @@
         max="{{ today|date:'Y-m-d' }}"
         value=""
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        required
       />
     </div>
 
@@ -103,10 +105,6 @@
 
     <!-- 提交按鈕 -->
     <div class="flex justify-end space-x-4">
-      <a href="{% url 'profile:index' %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
-        <i class="fas fa-arrow-left mr-2"></i>
-        返回
-      </a>
       <button type="submit" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
         <i class="fas fa-user-plus mr-2"></i>
         新增

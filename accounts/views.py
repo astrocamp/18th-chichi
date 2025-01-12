@@ -12,6 +12,8 @@ from chats.models import ChatRoom
 from anymail.message import AnymailMessage
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
+from users.forms import ProfileForm
+from django.utils import timezone
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -58,6 +60,23 @@ def index(request):
             birthday=None,
             website="",
         )
+    if request.POST:
+        form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "個人資料更新成功。")
+            profile.updated_at = timezone.now()
+            profile.save()
+            return redirect("accounts:index")
+        else:
+            messages.error(request, "個人資料新增失敗。")
+            return render(
+                request,
+                "profiles/new.html",
+                {"profile": profile, "form": form, "account": account},
+            )
+
+
 
     # 獲取用戶贊助的專案，包含贈品資訊
     sponsored_projects = (
@@ -127,8 +146,13 @@ def register(request):
             }
             message.send()
 
-            messages.success(request, "註冊成功")
-            return redirect("homepages:homepages")
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login_user(request, user)
+                messages.success(request, "註冊成功並已登入")
+                return redirect("profile:new")
         else:
             for field, errors in form.errors.items():
                 for error in errors:
