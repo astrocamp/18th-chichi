@@ -156,6 +156,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # 確保這裡指向包含 styles 的目錄
+    BASE_DIR / "frontends",
 ]
 
 # Default primary key field type
@@ -239,3 +240,4 @@ AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 CSRF_TRUSTED_ORIGINS = [
     'https://chichii.com',
 ]
+GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")

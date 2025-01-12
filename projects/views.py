@@ -24,6 +24,7 @@ from chats.models import ChatRoom, Message
 import pandas as pd
 
 from .forms import ProjectSearchForm
+from django.conf import settings
 
 
 def calculate_total_days(end_date):
@@ -83,7 +84,13 @@ def new(request):
     account = request.user
     categories = Category.objects.filter(parent__isnull=True)
     return render(
-        request, "projects/new.html", {"account": account, "categories": categories}
+        request,
+        "projects/new.html",
+        {
+            "account": account,
+            "categories": categories,
+            "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
+        },
     )
 
 
