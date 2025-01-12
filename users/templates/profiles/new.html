@@ -7,13 +7,19 @@
 
     <!-- 名稱 -->
     <div>
-      <label for="name" class="block text-lg font-semibold text-gray-600">名稱</label>
-      <input type="text" id="name" name="name" value="{{ profile.name }}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none" />
+      <label for="name" class="block text-lg font-semibold text-gray-600">
+        名稱
+        <span class="text-red-500">*</span>
+      </label>
+      <input type="text" id="name" name="name" value="{{ profile.name }}" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none" required />
     </div>
 
     <!-- 性別 -->
     <div>
-      <label for="gender" class="block text-lg font-semibold text-gray-600">性別</label>
+      <label for="gender" class="block text-lg font-semibold text-gray-600">
+        性別
+        <span class="text-red-500">*</span>
+      </label>
       <select name="gender" id="gender" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none" required>
         <option value="" disabled selected>請選擇性別</option>
         <option value="M">男</option>
@@ -24,7 +30,10 @@
 
     <!-- 電話 -->
     <div>
-      <label for="phone" class="block text-lg font-semibold text-gray-600">電話</label>
+      <label for="phone" class="block text-lg font-semibold text-gray-600">
+        電話
+        <span class="text-red-500">*</span>
+      </label>
       <input
         type="text"
         id="phone"
@@ -40,7 +49,10 @@
 
     <!-- 生日 -->
     <div>
-      <label for="birthday" class="block text-lg font-semibold text-gray-600">生日</label>
+      <label for="birthday" class="block text-lg font-semibold text-gray-600">
+        生日
+        <span class="text-red-500">*</span>
+      </label>
       <input
         type="date"
         id="birthday"
@@ -54,7 +66,10 @@
 
     <!-- 地點 -->
     <div>
-      <label for="location" class="block text-lg font-semibold text-gray-600">居住地區</label>
+      <label for="location" class="block text-lg font-semibold text-gray-600">
+        居住地區
+        <span class="text-red-500">*</span>
+      </label>
       <select id="location" name="location" class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none" required>
         <option value="" disabled selected>請選擇地點</option>
         <option value="台北市">台北市</option>

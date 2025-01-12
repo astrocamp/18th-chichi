@@ -7,50 +7,56 @@
 
     <!-- 名稱 -->
     <div>
-      <label for="name" class="block text-lg font-semibold text-gray-600"
-        >名稱</label
-      >
+      <label for="name" class="block text-lg font-semibold text-gray-600">
+        名稱 <span class="text-red-500">*</span>
+      </label>
       <input
         type="text"
         id="name"
         name="name"
         value="{{ profile.name|default_if_none:'' }}"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        required
       />
     </div>
-        <!-- 性別 -->
-        <div>
-          <label for="gender" class="block text-lg font-semibold text-gray-600">性別</label>
-          <select 
-              name="gender" 
-              id="gender" 
-              class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
-          >
-              <option value="M" {% if profile.gender == "M" %}selected{% endif %}>男</option>
-              <option value="F" {% if profile.gender == "F" %}selected{% endif %}>女</option>
-              <option value="O" {% if profile.gender == "O" %}selected{% endif %}>其他</option>
-          </select>
-      </div>
+
+    <!-- 性別 -->
+    <div>
+      <label for="gender" class="block text-lg font-semibold text-gray-600">
+        性別 <span class="text-red-500">*</span>
+      </label>
+      <select
+        name="gender"
+        id="gender"
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        required
+      >
+        <option value="M" {% if profile.gender == "M" %}selected{% endif %}>男</option>
+        <option value="F" {% if profile.gender == "F" %}selected{% endif %}>女</option>
+        <option value="O" {% if profile.gender == "O" %}selected{% endif %}>其他</option>
+      </select>
+    </div>
 
     <!-- 電話 -->
     <div>
-      <label for="phone" class="block text-lg font-semibold text-gray-600"
-        >電話</label
-      >
+      <label for="phone" class="block text-lg font-semibold text-gray-600">
+        電話 <span class="text-red-500">*</span>
+      </label>
       <input
         type="tel"
         id="phone"
         name="phone"
         value="{{ profile.phone|default_if_none:'' }}"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        required
       />
     </div>
 
     <!-- 生日 -->
     <div>
-      <label for="birthday" class="block text-lg font-semibold text-gray-600"
-        >生日</label
-      >
+      <label for="birthday" class="block text-lg font-semibold text-gray-600">
+        生日 <span class="text-red-500">*</span>
+      </label>
       <input
         type="date"
         id="birthday"
@@ -58,33 +64,37 @@
         max="{{ today|date:'Y-m-d' }}"
         value="{{ format_time|default_if_none:'' }}"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        required
       />
     </div>
 
     <!-- 地點 -->
     <div>
-      <label for="location" class="block text-lg font-semibold text-gray-600">地點</label>
+      <label for="location" class="block text-lg font-semibold text-gray-600">
+        地點 <span class="text-red-500">*</span>
+      </label>
       <select
         id="location"
         name="location"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        required
       >
         <option value="" {% if profile.location == "" or profile.location is None %}selected{% endif %}>請選擇地點</option>
         <option value="台北市" {% if profile.location == "台北市" %}selected{% endif %}>台北市</option>
         <option value="新北市" {% if profile.location == "新北市" %}selected{% endif %}>新北市</option>
-        <option value="桃園市" {% if profile.location == "桃園市" %}selected{% endif %}>桃園市</option>
-        <option value="台中市" {% if profile.location == "台中市" %}selected{% endif %}>台中市</option>
-        <option value="台南市" {% if profile.location == "台南市" %}selected{% endif %}>台南市</option>
-        <option value="高雄市" {% if profile.location == "高雄市" %}selected{% endif %}>高雄市</option>
         <option value="基隆市" {% if profile.location == "基隆市" %}selected{% endif %}>基隆市</option>
+        <option value="桃園市" {% if profile.location == "桃園市" %}selected{% endif %}>桃園市</option>
         <option value="新竹市" {% if profile.location == "新竹市" %}selected{% endif %}>新竹市</option>
         <option value="新竹縣" {% if profile.location == "新竹縣" %}selected{% endif %}>新竹縣</option>
         <option value="苗栗縣" {% if profile.location == "苗栗縣" %}selected{% endif %}>苗栗縣</option>
+        <option value="台中市" {% if profile.location == "台中市" %}selected{% endif %}>台中市</option>
         <option value="彰化縣" {% if profile.location == "彰化縣" %}selected{% endif %}>彰化縣</option>
         <option value="南投縣" {% if profile.location == "南投縣" %}selected{% endif %}>南投縣</option>
         <option value="雲林縣" {% if profile.location == "雲林縣" %}selected{% endif %}>雲林縣</option>
         <option value="嘉義市" {% if profile.location == "嘉義市" %}selected{% endif %}>嘉義市</option>
         <option value="嘉義縣" {% if profile.location == "嘉義縣" %}selected{% endif %}>嘉義縣</option>
+        <option value="台南市" {% if profile.location == "台南市" %}selected{% endif %}>台南市</option>
+        <option value="高雄市" {% if profile.location == "高雄市" %}selected{% endif %}>高雄市</option>
         <option value="屏東縣" {% if profile.location == "屏東縣" %}selected{% endif %}>屏東縣</option>
         <option value="宜蘭縣" {% if profile.location == "宜蘭縣" %}selected{% endif %}>宜蘭縣</option>
         <option value="花蓮縣" {% if profile.location == "花蓮縣" %}selected{% endif %}>花蓮縣</option>
@@ -110,32 +120,19 @@
 
     <!-- 自我介紹 -->
     <div>
-      <label for="bio" class="block text-lg font-semibold text-gray-600"
-        >自我介紹</label
-      >
+      <label for="bio" class="block text-lg font-semibold text-gray-600">自我介紹</label>
       <textarea
         id="bio"
         name="bio"
         rows="4"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
-      >
-{{ profile.bio|default_if_none:'' }}</textarea
-      >
+      >{{ profile.bio|default_if_none:'' }}</textarea>
     </div>
 
     <!-- 個人圖片 -->
     <div>
-      <label
-        for="profile_picture"
-        class="block text-lg font-semibold text-gray-600"
-        >個人圖片</label
-      >
-      <input
-        type="file"
-        id="profile_picture"
-        name="profile_picture"
-        class="mt-1"
-      />
+      <label for="profile_picture" class="block text-lg font-semibold text-gray-600">個人圖片</label>
+      <input type="file" id="profile_picture" name="profile_picture" class="mt-1" />
       {% if profile.profile_picture %}
       <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" class="mt-4 w-40 h-40 rounded-full object-cover" />
       {% else %}
@@ -151,6 +148,7 @@
       <button type="submit" class="btn" style="background-color: #1EA29E; color: white; padding: 0.75rem 2rem">
         <i class="fas fa-save mr-2"></i>更新
       </button>
+
     </div>
   </form>
 </div>
