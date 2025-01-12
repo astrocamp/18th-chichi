@@ -174,6 +174,7 @@ def comment(request, slug):
 def edit(request, slug):
     from .models import ProjectCategory
     project = get_object_or_404(Project, slug=slug)
+    
 
     # 找出專案相關的子分類
     categories = Category.objects.filter(
@@ -184,6 +185,7 @@ def edit(request, slug):
 
     # 找出所有父分類
     parent_ids = [category.parent_id for category in categories if category.parent_id]
+    all_parent_categories = Category.objects.filter(parent__isnull=True)
     parent_categories = Category.objects.filter(id__in=parent_ids)
 
     # 取得已選中的主要分類與子分類
@@ -195,6 +197,7 @@ def edit(request, slug):
         "projects/edit.html",
         {
             "project": project,
+            "all_parent_categories": all_parent_categories,  # 所有父分類
             "categories": parent_categories,  # 傳遞父分類到模板
             "selected_category": selected_category,  # 預設選中的主要分類
             "selected_sub_category": selected_sub_category,  # 預設選中的子分類

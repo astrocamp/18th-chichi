@@ -1,8 +1,7 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <div class="relative flex items-center justify-center py-8"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
         <h1 class="text-3xl font-bold mb-3 text-gray-800">建立新專案</h1>
@@ -24,23 +23,22 @@
 
             <div>
               <label for="title" class="block text-sm font-medium text-gray-700 mb-1">專案標題</label>
-              <input type="text" id="title" name="title" required class="input input-bordered w-full"
-                placeholder="為你的專案取個好標題" />
+              <input type="text" id="title" name="title" required class="input input-bordered w-full" placeholder="為你的專案取個好標題" />
             </div>
             <div>
               <label for="subtitle" class="block text-sm font-medium text-gray-700 mb-1">專案副標題</label>
-              <input type="text" id="subtitle" name="subtitle" required class="input input-bordered w-full"
-                placeholder="為你的專案取個好副標題" />
+              <input type="text" id="subtitle" name="subtitle" required class="input input-bordered w-full" placeholder="為你的專案取個好副標題" />
             </div>
 
             <div class="max-w-xl" x-data="fileUploadHandler()">
               <label for="cover_image" class="block text-sm font-medium text-gray-700 mb-1">封面圖片</label>
               <div class="relative">
-                <input type="file" id="cover_image" name="cover_image" accept="image/*" required class="sr-only"
-                  @change="handleFile($event)" />
-                <label for="cover_image"
+                <input type="file" id="cover_image" name="cover_image" accept="image/*" required class="sr-only" @change="handleFile($event)" />
+                <label
+                  for="cover_image"
                   class="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-lg shadow-sm cursor-pointer hover:opacity-90"
-                  style="background-color: #1ea29e">
+                  style="background-color: #1ea29e"
+                >
                   選擇檔案
                 </label>
                 <span class="ml-4 text-gray-600 text-sm" x-text="fileName"></span>
@@ -56,16 +54,15 @@
 
             <div>
               <label for="goal_amount" class="block text-sm font-medium text-gray-700 mb-1">目標金額</label>
-              <input type="number" id="goal_amount" name="goal_amount" required min="0"
-                class="input input-bordered w-full" placeholder="設定你的募資目標金額" />
+              <input type="number" id="goal_amount" name="goal_amount" required min="0" class="input input-bordered w-full" placeholder="設定你的募資目標金額" />
             </div>
           </div>
-          <br>
+          <br />
           <!-- 時間設定 -->
           <label for="amount_time">時間設定</label>
           <div class="flex gap-2">
-            <input type="text" id="start-date" name="start_at"  class="p-2 border rounded-lg" readonly placeholder="開始日期">
-            <input type="text" id="end-date"  name="end_at" class="p-2 border rounded-lg" readonly placeholder="結束日期">
+            <input type="text" id="start-date" name="start_at" class="p-2 border rounded-lg" readonly placeholder="開始日期" />
+            <input type="text" id="end-date" name="end_at" class="p-2 border rounded-lg" readonly placeholder="結束日期" />
           </div>
 
           <!-- 專案內容 -->
@@ -74,13 +71,11 @@
 
             <div>
               <label for="story" class="block text-sm font-medium text-gray-700 mb-1">專案說明</label>
-              <textarea id="story" name="story" rows="6" required class="textarea textarea-bordered w-full"
-                placeholder="詳細描述你的專案內容、特色和計畫"></textarea>
+              <textarea id="story" name="story" rows="6" required class="textarea textarea-bordered w-full" placeholder="詳細描述你的專案內容、特色和計畫"></textarea>
             </div>
             <div class="mb-4">
               <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類</label>
-              <select name="category" id="category" class="input input-bordered w-full"
-                onchange="updateSubCategories()">
+              <select name="category" id="category" class="input input-bordered w-full" onchange="updateSubCategories()">
                 <option value="" selected>選擇</option>
                 {% for category in categories %}
                 <option value="{{ category.id }}">{{ category.title }}</option>
@@ -96,8 +91,12 @@
 
             <div>
               <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點</label>
-              <select id="location" name="location" required
-                class="border border-gray-300 rounded-lg w-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+              <select
+                id="location"
+                name="location"
+                required
+                class="border border-gray-300 rounded-lg w-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
                 <option value="" disabled selected>請選擇專案地點</option>
                 <option value="基隆市">基隆市</option>
                 <option value="台北市">台北市</option>
