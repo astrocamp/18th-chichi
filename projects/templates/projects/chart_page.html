@@ -23,6 +23,12 @@
       <div x-data="genderProportionChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
         <canvas id="gender_proportion" x-ref="canvas" data-slug="{{ slug }}"></canvas>
       </div>
+      <div class="mt-4">
+        <a href="/projects/{{ project.slug }}/gender_proportion_excel/" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+          <i class="fas fa-file-excel mr-2"></i>
+          下載 Excel
+        </a>
+      </div>
     </div>
 
     <!-- 圖表 2: 每日贊助金額 -->
@@ -31,13 +37,25 @@
       <div x-data="dailySponsorshipChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
         <canvas id="daily_sponsorship_amount" x-ref="canvas" data-slug="{{ slug }}"></canvas>
       </div>
+      <div class="mt-4">
+        <a href="/projects/{{ project.slug }}/daily_sponsorship_amount_excel/" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+          <i class="fas fa-file-excel mr-2"></i>
+          下載 Excel
+        </a>
+      </div>
     </div>
 
-    <!-- 圖表 3: 性別與金額箱型圖 -->
+    <!-- 圖表 3: 性別與金額點狀圖 -->
     <div>
-      <h2 class="text-2xl font-semibold text-gray-800 mb-4">性別與金額點狀圖（含中位數）</h2>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">性別與自由贊助金額</h2>
       <div x-data="genderAmountScatterChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
         <canvas id="gender_amount_scatter" x-ref="canvas" data-slug="{{ slug }}"></canvas>
+      </div>
+      <div class="mt-4">
+        <a href="/projects/{{ project.slug }}/gender_amount_scatter_excel/" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+          <i class="fas fa-file-excel mr-2"></i>
+          下載 Excel
+        </a>
       </div>
     </div>
 
@@ -46,6 +64,12 @@
       <h2 class="text-2xl font-semibold text-gray-800 mb-4">熱門回饋方案</h2>
       <div x-data="rewardGroupedBarChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
         <canvas id="reward_grouped_bar_chart" x-ref="canvas" data-slug="{{ slug }}"></canvas>
+      </div>
+      <div class="mt-4">
+        <a href="/projects/{{ project.slug }}/reward_grouped_bar_chart_excel/" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+          <i class="fas fa-file-excel mr-2"></i>
+          下載 Excel
+        </a>
       </div>
     </div>
   </div>

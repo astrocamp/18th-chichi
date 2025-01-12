@@ -21,6 +21,8 @@ from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from categories.models import Category
 from chats.models import ChatRoom, Message
+import pandas as pd
+
 
 
 def calculate_total_days(end_date):
@@ -715,3 +717,223 @@ def projects_all(request):
         "projects/projects_all.html",
         {"page_obj": page_obj, "categories": categories},
     )
+
+
+@login_required
+def gender_amount_scatter_excel(request, slug):
+    from .models import Sponsor
+    project = get_object_or_404(Project, slug=slug)
+
+    # 獲取每筆贊助的性別和金額
+    sponsor_data = (
+        Sponsor.objects.filter(project=project, reward__isnull=True)
+        .select_related("account__profile")
+        .values("account__profile__gender", "amount")
+    )
+
+    scatter_data = {"M": [], "F": [], "O": []}
+    median_data = {"M": 0, "F": 0, "O": 0}
+
+    # 整理贊助數據
+    for entry in sponsor_data:
+        gender = entry["account__profile__gender"]
+        amount = entry["amount"]
+        if gender in scatter_data:
+            scatter_data[gender].append(float(amount))
+
+    # 計算中位數
+    for gender, amounts in scatter_data.items():
+        if amounts:
+            sorted_amounts = sorted(amounts)
+            n = len(sorted_amounts)
+            if n % 2 == 0:
+                median_data[gender] = (sorted_amounts[n // 2 - 1] + sorted_amounts[n // 2]) / 2
+            else:
+                median_data[gender] = sorted_amounts[n // 2]
+
+    # 建立 DataFrame
+    data = []
+    for gender, amounts in scatter_data.items():
+        for amount in amounts:
+            data.append({"性別": "男" if gender == "M" else "女" if gender == "F" else "其他", "金額": amount})
+    for gender, median in median_data.items():
+        data.append({"性別": f"中位數 - {'男' if gender == 'M' else '女' if gender == 'F' else '其他'}", "金額": median})
+
+    df = pd.DataFrame(data)
+
+    # 將 DataFrame 輸出為 Excel
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = f'attachment; filename="gender_amount_scatter_{slug}.xlsx"'
+    with pd.ExcelWriter(response, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="贊助數據")
+    
+    return response
+
+@login_required
+def gender_proportion_excel(request, slug):
+    from .models import Sponsor
+    project = get_object_or_404(Project, slug=slug)
+
+    # 使用 distinct() 確保只計算唯一贊助者
+    gender_data = (
+        Sponsor.objects.filter(project=project)
+        .values("account__profile__gender")
+        .distinct()
+        .annotate(count=Count("account", distinct=True))
+    )
+
+    labels = []
+    counts = []
+    total_count = 0
+
+    for entry in gender_data:
+        gender = entry["account__profile__gender"]
+        if gender == "M":
+            labels.append("男")
+        elif gender == "F":
+            labels.append("女")
+        elif gender == "O":
+            labels.append("其他")
+        else:
+            labels.append("未知")
+        count = entry["count"]
+        counts.append(count)
+        total_count += count
+
+    # 構建 DataFrame
+    data = {"性別": labels, "人數": counts}
+    df = pd.DataFrame(data)
+
+    # 新增總人數行
+    df.loc[len(df.index)] = ["總人數", total_count]
+
+    # 將 DataFrame 輸出為 Excel
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = f'attachment; filename="gender_proportion_{slug}.xlsx"'
+    with pd.ExcelWriter(response, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="性別比例")
+    
+    return response
+
+@login_required
+def reward_grouped_bar_chart_excel(request, slug):
+    from .models import Sponsor 
+    project = get_object_or_404(Project, slug=slug)
+
+    def get_age_group(birthday):
+        if not birthday:
+            return None
+        age = (date.today() - birthday).days // 365
+        if age < 18:
+            return "未成年"
+        elif 18 <= age <= 25:
+            return "18-25"
+        elif 26 <= age <= 35:
+            return "26-35"
+        elif 36 <= age <= 45:
+            return "36-45"
+        else:
+            return "46+"
+
+    sponsor_data = (
+        Sponsor.objects.filter(project=project, reward__isnull=False)
+        .select_related("reward", "account__profile")
+        .values(
+            "reward__title", "account__profile__gender", "account__profile__birthday"
+        )
+        .annotate(count=Count("id"))
+        .order_by("reward__title")
+    )
+
+    gender_groups = ["M", "F", "O"]
+    age_groups = ["未成年", "18-25", "26-35", "36-45", "46+"]
+    grouped_data = {}
+
+    for entry in sponsor_data:
+        reward_title = entry["reward__title"] or "無回饋"
+        gender = entry["account__profile__gender"]
+        age_group = get_age_group(entry["account__profile__birthday"])
+
+        if not gender or not age_group:
+            continue
+
+        group_key = f"{gender}_{age_group}"
+        count = entry["count"]
+
+        if reward_title not in grouped_data:
+            grouped_data[reward_title] = {
+                f"{g}_{a}": 0 for g in gender_groups for a in age_groups
+            }
+
+        grouped_data[reward_title][group_key] = count
+
+    # 構建 DataFrame
+    rows = []
+    for reward, group_counts in grouped_data.items():
+        for combination, count in group_counts.items():
+            gender, age_group = combination.split("_")
+            rows.append({"回饋": reward, "性別": gender, "年齡區間": age_group, "人數": count})
+
+    df = pd.DataFrame(rows)
+
+    # 將 DataFrame 輸出為 Excel
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = f'attachment; filename="reward_grouped_bar_chart_{slug}.xlsx"'
+
+    with pd.ExcelWriter(response, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="回饋分析")
+    
+    return response
+
+
+@login_required
+def daily_sponsorship_amount_excel(request, slug):
+    from .models import Sponsor
+    project = get_object_or_404(Project, slug=slug)
+    sponsors = Sponsor.objects.filter(project=project)
+
+    if not sponsors.exists():
+        # 如果無贊助數據，返回空 Excel
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response["Content-Disposition"] = f'attachment; filename="daily_sponsorship_amount_{slug}.xlsx"'
+        with pd.ExcelWriter(response, engine="openpyxl") as writer:
+            pd.DataFrame({"日期": [], "每日金額": [], "累積金額": []}).to_excel(writer, index=False, sheet_name="每日累積金額")
+        return response
+
+    # 計算每日金額和累積金額
+    start_date = sponsors.order_by("created_at").first().created_at.date()
+    end_date = sponsors.order_by("-created_at").first().created_at.date()
+
+    daily_totals = {}
+    for sponsor in sponsors:
+        date = sponsor.created_at.date()
+        if date not in daily_totals:
+            daily_totals[date] = 0
+        daily_totals[date] += sponsor.amount
+
+    date_range = []
+    cumulative_amount = []
+    cumulative_total = 0
+
+    current_date = start_date
+    while current_date <= end_date:
+        date_range.append(current_date)
+        daily_amount = daily_totals.get(current_date, 0)
+        cumulative_total += daily_amount
+        cumulative_amount.append(cumulative_total)
+        current_date += timedelta(days=1)
+
+    # 構建 DataFrame
+    df = pd.DataFrame({
+        "日期": [date.strftime("%Y-%m-%d") for date in date_range],
+        "每日金額": [daily_totals.get(date, 0) for date in date_range],
+        "累積金額": cumulative_amount,
+    })
+
+    # 輸出 Excel
+    response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    response["Content-Disposition"] = f'attachment; filename="daily_sponsorship_amount_{slug}.xlsx"'
+    with pd.ExcelWriter(response, engine="openpyxl") as writer:
+        df.to_excel(writer, index=False, sheet_name="每日累積金額")
+    
+    return response
