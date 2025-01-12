@@ -56,7 +56,6 @@ def index(request):
         else:
             return HttpResponse(f"輸入錯誤: {form.errors}")
     projects = Project.objects.filter(account=account, deleted_at__isnull=True)
-    media_type = None
 
     for project in projects:
         project.update_status()
@@ -68,12 +67,11 @@ def index(request):
             )
         else:
             project.progress_percentage = 0
-        media_type = get_media_type(project.cover_image.name)
 
     return render(
         request,
         "projects/index.html",
-        {"projects": projects, "account": account, "media_type": media_type},
+        {"projects": projects, "account": account},
     )
 
 
@@ -137,7 +135,6 @@ def show(request, slug):
         account=request.user, project=project
     ).first()
 
-    media_type = get_media_type(project.cover_image.name)
     categories = Category.objects.filter(
         id__in=ProjectCategory.objects.filter(project_id=project.id).values_list(
             "category_id", flat=True
@@ -155,7 +152,6 @@ def show(request, slug):
             "account": account,
             "favorited": favorited,
             "comments": comments,
-            "media_type": media_type,
             "progress_percentage": progress_percentage,  # 加入達成率
             "categories": categories,
             "parent_categories": parent_categories,
@@ -174,37 +170,34 @@ def comment(request, slug):
     )
 
 
-def get_media_type(file_name):
-    file_name = file_name.lower()
-    image_extensions = (".jpg", ".jpeg", ".png", ".gif")
-    video_extensions = (".mp4", ".mov", ".avi", ".wmv")
-
-    if file_name.endswith(image_extensions):
-        return "image"
-    elif file_name.endswith(video_extensions):
-        return "video"
-    return "unsupported"
-
-
 @login_required
 def edit(request, slug):
     from .models import ProjectCategory
-
     project = get_object_or_404(Project, slug=slug)
-    media_type = get_media_type(project.cover_image.name)
 
-    format_time_start = localtime(project.start_at).strftime("%Y-%m-%dT%H:%M")
-    format_time_end = localtime(project.end_at).strftime("%Y-%m-%dT%H:%M")
-    categories = Category.objects.filter(parent__isnull=True)
+    # 找出專案相關的子分類
+    categories = Category.objects.filter(
+        id__in=ProjectCategory.objects.filter(project_id=project.id).values_list(
+            "category_id", flat=True
+        )
+    )
+
+    # 找出所有父分類
+    parent_ids = [category.parent_id for category in categories if category.parent_id]
+    parent_categories = Category.objects.filter(id__in=parent_ids)
+
+    # 取得已選中的主要分類與子分類
+    selected_sub_category = categories.first() if categories.exists() else None
+    selected_category = selected_sub_category.parent if selected_sub_category else None
+
     return render(
         request,
         "projects/edit.html",
         {
             "project": project,
-            "format_time_start": format_time_start,
-            "format_time_end": format_time_end,
-            "media_type": media_type,
-            "categories": categories,
+            "categories": parent_categories,  # 傳遞父分類到模板
+            "selected_category": selected_category,  # 預設選中的主要分類
+            "selected_sub_category": selected_sub_category,  # 預設選中的子分類
         },
     )
 

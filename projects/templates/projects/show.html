@@ -11,16 +11,13 @@
     <div>
       <h2 class="text-lg font-semibold text-gray-600 mb-4">封面圖片</h2>
       <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center" style="max-height: 400px">
-        {% if media_type == "image" %}
+        {% if project.cover_image %}
         <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-auto h-auto max-w-full max-h-full object-contain" />
-        {% elif media_type == "video" %}
-        <video src="{{ project.cover_image.url }}" controls class="w-auto h-auto max-w-full max-h-full object-contain rounded-lg">您的瀏覽器不支援影片播放。</video>
         {% else %}
-        <p class="text-gray-600">不支援的媒體格式。</p>
+        <p class="text-gray-600">目前沒有封面圖片。</p>
         {% endif %}
       </div>
     </div>
-
     <!-- 金額資訊 -->
     <div class="mb-8">
       <div class="mb-6">

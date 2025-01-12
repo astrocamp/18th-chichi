@@ -82,7 +82,7 @@
                   type="file"
                   id="cover_image"
                   name="cover_image"
-                  accept="image/*,video/*"
+                  accept="image/*"
                   class="sr-only"
                   @change="handleFile($event)"
                 />
@@ -104,22 +104,14 @@
             
                 <!-- 原有的媒體顯示區域 -->
                 <div class="mt-4" x-show="!previewUrl">
-                  {% if media_type == "image" %}
+                  {% if project.cover_image %}
                   <img
                     src="{{ project.cover_image.url }}"
                     alt="Profile Picture"
                     class="w-40 h-40 rounded-full object-cover"
                   />
-                  {% elif media_type == "video" %}
-                  <video
-                    src="{{ project.cover_image.url }}"
-                    controls
-                    class="w-40 h-40 rounded-lg object-cover"
-                  >
-                    您的瀏覽器不支援影片播放。
-                  </video>
                   {% else %}
-                  <p class="text-red-500">不支援的媒體格式。</p>
+                  <p class="text-gray-600">目前沒有封面圖片。</p>
                   {% endif %}
                 </div>
               </div>
@@ -155,11 +147,12 @@
             </div>
             <div class="mb-4">
               <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類</label>
-              <select name="category" id="category" class="input input-bordered w-full"
-                onchange="updateSubCategories()">
-                <option value="" selected>選擇</option>
+              <select name="category" id="category" class="input input-bordered w-full" onchange="updateSubCategories()">
+                <option value="">選擇</option>
                 {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.title }}</option>
+                <option value="{{ category.id }}" {% if selected_category and category.id == selected_category.id %}selected{% endif %}>
+                  {{ category.title }}
+                </option>
                 {% endfor %}
               </select>
             </div>
@@ -167,10 +160,16 @@
             <div class="mb-4">
               <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類</label>
               <select name="categories" id="sub_category" class="input input-bordered w-full">
-                <option value="" selected>選擇</option>
+                <option value="">選擇</option>
+                {% if selected_category %}
+                {% for sub_category in selected_category.children.all %}
+                <option value="{{ sub_category.id }}" {% if selected_sub_category and sub_category.id == selected_sub_category.id %}selected{% endif %}>
+                  {{ sub_category.title }}
+                </option>
+                {% endfor %}
+                {% endif %}
               </select>
             </div>
-          </div>
 
             <div>
               <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點</label>
@@ -233,27 +232,33 @@
   </div>
 </div>
 <script>
-  function updateSubCategories() {
-    const parentId = document.getElementById("category").value;
-    const subCategorySelect = document.getElementById("sub_category");
+function updateSubCategories() {
+  const parentId = document.getElementById("category").value;
+  const subCategorySelect = document.getElementById("sub_category");
 
-    // 清空子類別選項
-    subCategorySelect.innerHTML = '<option value="">選擇</option>';
+  // 清空子分類選項
+  subCategorySelect.innerHTML = '<option value="">選擇</option>';
 
-    if (parentId) {
-      $.ajax({
-        url: "{% url 'projects:get_subcategories' %}",
-        data: { parent_id: parentId },
-        success: function (data) {
-          data.forEach(function (subCategory) {
-            const option = document.createElement("option");
-            option.value = subCategory.id;
-            option.textContent = subCategory.title;
-            subCategorySelect.appendChild(option);
-          });
-        },
-      });
-    }
+  if (parentId) {
+    $.ajax({
+      url: "{% url 'projects:get_subcategories' %}",
+      data: { parent_id: parentId },
+      success: function (data) {
+        data.forEach(function (subCategory) {
+          const option = document.createElement("option");
+          option.value = subCategory.id;
+          option.textContent = subCategory.title;
+          subCategorySelect.appendChild(option);
+        });
+
+        // 使用 Django 模板語法處理預設子分類
+        const selectedSubCategoryId = "{% if selected_sub_category %}{{ selected_sub_category.id }}{% else %}""{% endif %}";
+        if (selectedSubCategoryId) {
+          subCategorySelect.value = selectedSubCategoryId;
+        }
+      },
+    });
   }
+}
 </script>
 {% endblock %}

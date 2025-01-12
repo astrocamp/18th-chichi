@@ -23,7 +23,7 @@ class Project(models.Model):
     ]
     title = models.CharField(max_length=100)
     subtitle = models.CharField(max_length=100, null=True)
-    cover_image = models.FileField(upload_to="cover_img/", null=True)
+    cover_image = models.ImageField(upload_to="cover_img/", null=True)
     raised_amount = models.DecimalField(null=True, decimal_places=0, max_digits=10)
     goal_amount = models.DecimalField(decimal_places=0, max_digits=10)
     start_at = models.DateTimeField(null=True)
