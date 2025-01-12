@@ -10,7 +10,7 @@ from .views import (
     gender_proportion,
     chart_page,
     daily_sponsorship_amount,
-    gender_amount_boxplot,
+    gender_amount_scatter,
     reward_grouped_bar_chart,
     comment,
     public,
@@ -86,9 +86,9 @@ urlpatterns = [
         name="daily_sponsorship_amount",
     ),
     path(
-        "<slug:slug>/gender_amount_boxplot/",
-        gender_amount_boxplot,
-        name="gender_amount_boxplot",
+        "<slug:slug>/gender_amount_scatter/",
+        gender_amount_scatter,
+        name="gender_amount_scatter",
     ),
     path(
         "<slug:slug>/reward_grouped_bar_chart/",

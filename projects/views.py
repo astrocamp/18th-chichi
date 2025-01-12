@@ -291,10 +291,12 @@ def gender_proportion(request, slug):
 
     project = get_object_or_404(Project, slug=slug)
 
+    # 使用 distinct() 確保只計算唯一贊助者
     gender_data = (
         Sponsor.objects.filter(project=project)
         .values("account__profile__gender")
-        .annotate(count=Count("id"))
+        .distinct()
+        .annotate(count=Count("account", distinct=True))
     )
 
     labels = []
@@ -393,7 +395,7 @@ def daily_sponsorship_amount(request, slug):
 
 
 @login_required
-def gender_amount_boxplot(request, slug):
+def gender_amount_scatter(request, slug):
     from .models import Sponsor
 
     project = get_object_or_404(Project, slug=slug)
@@ -404,66 +406,53 @@ def gender_amount_boxplot(request, slug):
         .values("account__profile__gender", "amount")
     )
 
-    gender_amounts = {"M": [], "F": [], "O": []}
+    scatter_data = {"M": [], "F": [], "O": []}
+    median_data = {"M": 0, "F": 0, "O": 0}
 
+    # 將數據分類
     for entry in gender_data:
         gender = entry["account__profile__gender"]
         amount = entry["amount"]
-        if gender in gender_amounts:
-            gender_amounts[gender].append(amount)
+        if gender in scatter_data:
+            scatter_data[gender].append(float(amount))
 
-    boxplot_data = []
-    for gender, amounts in gender_amounts.items():
+    # 計算中位數
+    for gender, amounts in scatter_data.items():
         if amounts:
             sorted_amounts = sorted(amounts)
             n = len(sorted_amounts)
-
-            q1_idx = int(n * 0.25)
-            q2_idx = int(n * 0.5)
-            q3_idx = int(n * 0.75)
-
-            q1 = sorted_amounts[q1_idx]
-            median = sorted_amounts[q2_idx]
-            q3 = sorted_amounts[q3_idx]
-
-            iqr = q3 - q1
-
-            lower_bound = max(min(sorted_amounts), q1 - iqr * Decimal("1.5"))
-            upper_bound = min(max(sorted_amounts), q3 + iqr * Decimal("1.5"))
-
-            outliers = [x for x in sorted_amounts if x < lower_bound or x > upper_bound]
-
-            boxplot_data.append(
-                {
-                    "min": float(lower_bound),
-                    "q1": float(q1),
-                    "median": float(median),
-                    "q3": float(q3),
-                    "max": float(upper_bound),
-                    "outliers": [float(x) for x in outliers],
-                }
-            )
-        else:
-            boxplot_data.append(
-                {"min": 0, "q1": 0, "median": 0, "q3": 0, "max": 0, "outliers": []}
-            )
+            if n % 2 == 0:
+                median_data[gender] = (sorted_amounts[n // 2 - 1] + sorted_amounts[n // 2]) / 2
+            else:
+                median_data[gender] = sorted_amounts[n // 2]
 
     response_data = {
         "labels": ["男", "女", "其他"],
-        "datasets": [
+        "scatter_datasets": [
             {
-                "label": "贊助金額分布",
-                "data": boxplot_data,
-                "backgroundColor": ["#F8AFAF", "#A8D3F0", "#FFE69B"],
-                "borderColor": "#FFFFFF",
-                "borderWidth": 2,
-            }
+                "label": "男",
+                "data": scatter_data["M"],
+                "backgroundColor": "#F8AFAF",
+            },
+            {
+                "label": "女",
+                "data": scatter_data["F"],
+                "backgroundColor": "#A8D3F0",
+            },
+            {
+                "label": "其他",
+                "data": scatter_data["O"],
+                "backgroundColor": "#FFE69B",
+            },
+        ],
+        "median_data": [
+            {"x": "男", "y": median_data["M"]},
+            {"x": "女", "y": median_data["F"]},
+            {"x": "其他", "y": median_data["O"]},
         ],
     }
 
     return JsonResponse(response_data)
-
-
 @login_required
 def reward_grouped_bar_chart(request, slug):
     from .models import Sponsor

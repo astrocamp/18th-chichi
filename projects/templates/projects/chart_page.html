@@ -1,5 +1,4 @@
 {% extends "shared/layout.html" %} {% block "content" %}
-
 <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
   <div class="container mx-auto px-4">
     <div class="text-center">
@@ -9,55 +8,46 @@
   </div>
 </div>
 
-<!-- 返回專案按鈕 -->
-<div class="py-4">
-  <div class="container mx-auto px-4">
-    <div class="max-w-4xl mx-auto">
-      <a href="{% url 'projects:show' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
-        <i class="fas fa-arrow-left mr-2"></i>
-        回到專案
-      </a>
-    </div>
+<div class="max-w-4xl mx-auto py-8 text-center">
+  <div class="flex justify-start items-center mb-6">
+    <a href="{% url 'projects:show' project.slug %}" class="btn inline-flex items-center justify-center whitespace-nowrap h-12" style="background-color: #85cacc20; color: #1ea29e">
+      <i class="fas fa-arrow-left mr-2"></i>
+      <span>回到專案</span>
+    </a>
   </div>
-</div>
 
-<!-- 分析內容區 -->
-<div class="py-16">
-  <div class="container mx-auto px-4">
-    <div class="max-w-4xl mx-auto space-y-12">
-      <!-- 圖表 1: 性別比例 -->
-      <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">性別比例分析</h2>
-        <div x-data="genderProportionChart()" x-init="init()" class="bg-white rounded-lg shadow-md p-6">
-          <canvas id="gender_proportion" x-ref="canvas" data-slug="{{ slug }}"></canvas>
-        </div>
+  <div class="bg-white shadow-md rounded-lg p-6 space-y-12 text-center">
+    <!-- 圖表 1: 性別比例 -->
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">性別比例分析</h2>
+      <div x-data="genderProportionChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
+        <canvas id="gender_proportion" x-ref="canvas" data-slug="{{ slug }}"></canvas>
       </div>
+    </div>
 
-      <!-- 圖表 2: 每日贊助金額 -->
-      <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">每日贊助金額</h2>
-        <div x-data="dailySponsorshipChart()" x-init="init()" class="bg-white rounded-lg shadow-md p-6">
-          <canvas id="daily_sponsorship_amount" x-ref="canvas" data-slug="{{ slug }}"></canvas>
-        </div>
+    <!-- 圖表 2: 每日贊助金額 -->
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">每日贊助金額</h2>
+      <div x-data="dailySponsorshipChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
+        <canvas id="daily_sponsorship_amount" x-ref="canvas" data-slug="{{ slug }}"></canvas>
       </div>
+    </div>
 
-      <!-- 圖表 3: 性別與金額箱型圖 -->
-      <div class="mb-8">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">性別與金額箱型圖</h2>
-        <div x-data="genderAmountBoxplotChart()" x-init="init()" class="bg-white rounded-lg shadow-md p-6">
-          <canvas id="gender_amount_boxplot" x-ref="canvas" data-slug="{{ slug }}"></canvas>
-        </div>
+    <!-- 圖表 3: 性別與金額箱型圖 -->
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">性別與金額點狀圖（含中位數）</h2>
+      <div x-data="genderAmountScatterChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
+        <canvas id="gender_amount_scatter" x-ref="canvas" data-slug="{{ slug }}"></canvas>
       </div>
+    </div>
 
-      <!-- 圖表 4: 獎勵分組柱狀圖 -->
-      <div>
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">獎勵分組分析</h2>
-        <div x-data="rewardGroupedBarChart()" x-init="init()" class="bg-white rounded-lg shadow-md p-6">
-          <canvas id="reward_grouped_bar_chart" x-ref="canvas" data-slug="{{ slug }}"></canvas>
-        </div>
+    <!-- 圖表 4: 獎勵分組柱狀圖 -->
+    <div>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-4">熱門回饋方案</h2>
+      <div x-data="rewardGroupedBarChart()" x-init="init()" class="bg-white shadow-md rounded-lg p-6 inline-block">
+        <canvas id="reward_grouped_bar_chart" x-ref="canvas" data-slug="{{ slug }}"></canvas>
       </div>
     </div>
   </div>
 </div>
-
 {% endblock %}

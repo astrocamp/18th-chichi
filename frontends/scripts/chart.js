@@ -188,7 +188,7 @@ function dailySponsorshipChart() {
 }
 window.dailySponsorshipChart = dailySponsorshipChart;
 
-function genderAmountBoxplotChart() {
+function genderAmountScatterChart() {
   return {
     canvas: null,
     slug: null,
@@ -197,7 +197,7 @@ function genderAmountBoxplotChart() {
       this.canvas = this.$refs.canvas;
       this.slug = this.canvas.dataset.slug;
 
-      this.canvas.width = 400;
+      this.canvas.width = 600;
       this.canvas.height = 400;
 
       this.fetchChartData();
@@ -205,7 +205,7 @@ function genderAmountBoxplotChart() {
 
     async fetchChartData() {
       try {
-        const response = await fetch(`/projects/${this.slug}/gender_amount_boxplot/`);
+        const response = await fetch(`/projects/${this.slug}/gender_amount_scatter/`);
         const data = await response.json();
         this.renderChart(data);
       } catch (error) {
@@ -218,64 +218,102 @@ function genderAmountBoxplotChart() {
 
       if (ctx) {
         new Chart(ctx, {
-          type: "boxplot",
+          type: "scatter",
           data: {
             labels: data.labels,
             datasets: [
+              // 男性點狀數據
               {
-                label: data.datasets[0].label,
-                data: data.datasets[0].data.map((box) => ({
-                  min: box.min,
-                  q1: box.q1,
-                  median: box.median,
-                  q3: box.q3,
-                  max: box.max,
-                  outliers: box.outliers,
-                })),
-                backgroundColor: data.datasets[0].backgroundColor,
-                borderColor: data.datasets[0].borderColor,
-                borderWidth: data.datasets[0].borderWidth,
+                label: "男",
+                data: this.jitterPoints(data.scatter_datasets[0].data, "男"),
+                backgroundColor: "#F8AFAF",
+                pointRadius: 4,
+              },
+              // 女性點狀數據
+              {
+                label: "女",
+                data: this.jitterPoints(data.scatter_datasets[1].data, "女"),
+                backgroundColor: "#A8D3F0",
+                pointRadius: 4,
+              },
+              // 其他性別點狀數據
+              {
+                label: "其他",
+                data: this.jitterPoints(data.scatter_datasets[2].data, "其他"),
+                backgroundColor: "#FFE69B",
+                pointRadius: 4,
+              },
+              // 中位數顯示為獨立點
+              {
+                label: "中位數",
+                data: data.median_data,
+                type: "scatter",
+                backgroundColor: "#CACACA",
+                borderColor: "#CACACA",
+                borderWidth: 2,
+                pointRadius: 8, // 中位數顯示為更大的點
               },
             ],
           },
           options: {
-            responsive: false,
-            maintainAspectRatio: false,
             plugins: {
               legend: {
                 display: true,
-              },
-              title: {
-                display: true,
-                text: "贊助金額性別分布箱型圖",
-                font: {
-                  size: 16,
-                  weight: "bold",
-                },
+                position: "top",
               },
               tooltip: {
-                enabled: false,
+                enabled: true,
+                callbacks: {
+                  label: (context) => {
+                    if (context.dataset.label === "中位數") {
+                      return `中位數: ${context.raw.y} 元`;
+                    }
+                    return `金額: ${context.raw.y} 元`;
+                  },
+                },
               },
               datalabels: {
                 display: false,
               },
             },
             scales: {
+              x: {
+                type: "category",
+                title: {
+                  display: true,
+                  text: "性別",
+                },
+                ticks: {
+                  autoSkip: false,
+                  padding: 20,
+                },
+                offset: true, // 增加左右留白
+              },
               y: {
                 title: {
                   display: true,
-                  text: "金額 (單位: 元)",
+                  text: "金額 (元)",
                 },
+                beginAtZero: true,
               },
             },
           },
         });
       }
     },
+
+    jitterPoints(points, category) {
+      const jitterAmount = 0.2; // 控制水平偏移的範圍
+      return points.map((amount) => ({
+        x: category,
+        y: amount,
+        _jitterX: Math.random() * jitterAmount - jitterAmount / 2, // 隨機水平偏移
+      }));
+    },
   };
 }
-window.genderAmountBoxplotChart = genderAmountBoxplotChart;
 
+window.genderAmountScatterChart = genderAmountScatterChart;
 function rewardGroupedBarChart() {
   return {
     canvas: null,
