@@ -707,7 +707,7 @@ def projects_all(request):
     categories = Category.objects.filter(parent__isnull=True)
     projects = (
         Project.objects.prefetch_related("categories__parent")
-        .filter(status="live")
+        .filter(status="live", deleted_at__isnull=True)
         .order_by("-created_at")
     )
 

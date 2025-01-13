@@ -9,7 +9,7 @@ def homepages(request):
 
     projects = (
         Project.objects.prefetch_related("categories__parent")
-        .filter(status="live")
+        .filter(status="live",deleted_at__isnull=True)
         .order_by("-created_at")
     )
 
