@@ -91,8 +91,10 @@ def new(request):
 def show(request, slug):
     from .models import ProjectCategory
 
-    project = get_object_or_404(Project, slug=slug, deleted_at__isnull=True)
-    account = get_object_or_404(User, id=request.user.id)
+    account = request.user
+    project = get_object_or_404(
+        Project, slug=slug, deleted_at__isnull=True, account=account
+    )
     comments = project.comments.filter(
         parent__isnull=True,
     ).order_by("-id")
@@ -185,8 +187,8 @@ def show(request, slug):
 
 
 def comment(request, slug):
-    project = get_object_or_404(Project, slug=slug)
     account = get_object_or_404(User, id=request.user.id)
+    project = get_object_or_404(Project, slug=slug, account=account)
     comments = project.comments.filter(parent__isnull=True).order_by("-id")
     return render(
         request,
@@ -199,7 +201,8 @@ def comment(request, slug):
 def edit(request, slug):
     from .models import ProjectCategory
 
-    project = get_object_or_404(Project, slug=slug)
+    account = get_object_or_404(User, id=request.user.id)
+    project = get_object_or_404(Project, slug=slug, account=account)
 
     # 找出專案相關的子分類
     categories = Category.objects.filter(
@@ -221,6 +224,7 @@ def edit(request, slug):
         request,
         "projects/edit.html",
         {
+            "account": account,
             "project": project,
             "all_parent_categories": all_parent_categories,  # 所有父分類
             "categories": parent_categories,  # 傳遞父分類到模板
@@ -291,7 +295,7 @@ def like_projects(request, slug):
 
 
 def chart_page(request, slug):
-    project = get_object_or_404(Project, slug=slug)
+    project = get_object_or_404(Project, slug=slug, account=request.user)
 
     return render(
         request, "projects/chart_page.html", {"slug": slug, "project": project}

@@ -4,6 +4,7 @@ import datetime
 from autoslug import AutoSlugField
 import random
 import string
+from django.contrib.auth.models import User
 
 
 def generate_random_slug():
@@ -25,6 +26,7 @@ class Reward(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.title

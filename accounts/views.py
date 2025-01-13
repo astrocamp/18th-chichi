@@ -47,9 +47,8 @@ class CustomUserCreationForm(UserCreationForm):
 @login_required
 def index(request):
     account = request.user
-    # 獲取用戶的 profile
     try:
-        profile = Profile.objects.get(account=account)
+        profile = Profile.objects.filter(account=account)
     except Profile.DoesNotExist:
         # 如果找不到 profile，創建一個新的
         profile = Profile.objects.create(
@@ -75,8 +74,6 @@ def index(request):
                 "profiles/new.html",
                 {"profile": profile, "form": form, "account": account},
             )
-
-
 
     # 獲取用戶贊助的專案，包含贈品資訊
     sponsored_projects = (
@@ -176,6 +173,7 @@ def terms(request):
 
 def privacy(request):
     return render(request, "accounts/privacy.html")
+
 
 @receiver(user_signed_up)
 def send_welcome_email(request, user, **kwargs):

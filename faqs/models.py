@@ -1,6 +1,8 @@
 from django.db import models
 from projects.models import Project
 from autoslug import AutoSlugField
+from django.contrib.auth.models import User
+
 import random
 import string
 
@@ -23,10 +25,11 @@ class Faq(models.Model):
         null=True,
         always_update=False,
     )
-    created_at = models.DateTimeField(auto_now_add=True)  
-    updated_at = models.DateTimeField(auto_now=True)  
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     position = models.PositiveIntegerField(default=0)
     deleted_at = models.DateTimeField(null=True, db_index=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="faqs")
 
     class Meta:
         ordering = ["position"]

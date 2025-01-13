@@ -8,7 +8,7 @@ from django.contrib import messages
 
 
 def index(request, slug):
-    project = get_object_or_404(Project, slug=slug)
+    project = get_object_or_404(Project, slug=slug, account=request.user)
 
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -18,6 +18,7 @@ def index(request, slug):
             title=request.POST["title"],
             description=request.POST["description"],
             project=project,
+            created_by=request.user,
         )
         return redirect("projects:update_records_index", slug=project.slug)
 
@@ -43,12 +44,18 @@ def index(request, slug):
 @login_required
 def new(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    return render(request, "update_records/new.html", {"project": project})
+    return render(
+        request,
+        "update_records/new.html",
+        {
+            "project": project,
+        },
+    )
 
 
 @login_required
 def show(request, slug):
-    update_record = get_object_or_404(UpdateRecord, slug=slug)
+    update_record = get_object_or_404(UpdateRecord, slug=slug, created_by=request.user)
     project = update_record.project
 
     if request.POST:
@@ -67,7 +74,7 @@ def show(request, slug):
 
 @login_required
 def edit(request, slug):
-    update_record = get_object_or_404(UpdateRecord, slug=slug)
+    update_record = get_object_or_404(UpdateRecord, slug=slug, created_by=request.user)
     project = update_record.project
 
     return render(
@@ -79,7 +86,7 @@ def edit(request, slug):
 
 @login_required
 def delete(request, slug):
-    update_record = get_object_or_404(UpdateRecord, slug=slug)
+    update_record = get_object_or_404(UpdateRecord, slug=slug, created_by=request.user)
     project = update_record.project
 
     if request.POST:

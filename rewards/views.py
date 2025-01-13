@@ -16,10 +16,7 @@ from datetime import datetime
 
 @login_required
 def index(request, slug):
-    project = get_object_or_404(Project, slug=slug)
-    if project.account != request.user:
-        messages.error(request, "您無權訪問該頁面")
-        return redirect("homapages:homepages")
+    project = get_object_or_404(Project, slug=slug, account=request.user)
     if request.method == "POST" and "reward" in request.POST:
         reward_form = RewardForm(request.POST)
         if reward_form.is_valid():
@@ -290,11 +287,10 @@ def reward_sponsor_options(request, slug):
         return redirect("projects:sponsor", slug=project.slug)
 
     reward = sponsor.reward
-    reward_products = RewardProduct.objects.filter(
-        project=project, rewards=reward
-    )
+    reward_products = RewardProduct.objects.filter(project=project, rewards=reward)
     optional_adds = OptionalAdd.objects.filter(
-        project=project, rewards=reward,
+        project=project,
+        rewards=reward,
     )
 
     if request.POST:

@@ -3,6 +3,7 @@ from projects.models import Project
 from autoslug import AutoSlugField
 import random
 import string
+from django.contrib.auth.models import User
 
 
 def generate_random_slug():
@@ -28,3 +29,5 @@ class UpdateRecord(models.Model):
         null=True,
         always_update=False,
     )
+
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="update_records")
