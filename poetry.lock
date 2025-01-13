@@ -579,6 +579,20 @@ files = [
 django = ">=4.2"
 
 [[package]]
+name = "hyperlink"
+version = "21.0.0"
+description = "A featureful, immutable, and correct URL for Python."
+optional = false
+python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+files = [
+    {file = "hyperlink-21.0.0-py2.py3-none-any.whl", hash = "sha256:e6b14c37ecb73e89c77d78cdb4c2cc8f3fb59a885c5b3f819ff4ed80f25af1b4"},
+    {file = "hyperlink-21.0.0.tar.gz", hash = "sha256:427af957daa58bc909471c6c40f74c5450fa123dd093fc53efd2e91d2705a56b"},
+]
+
+[package.dependencies]
+idna = ">=2.5"
+
+[[package]]
 name = "idna"
 version = "3.10"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -1345,3 +1359,4 @@ content-hash = "b96712da2aff4e1f62986c7662569ac81f33f26016b05b7c696eb846c6350df4
 content-hash = "d6da50a44036b8af73154e9e2bd4ab1d7a4fa87708d27144c67ced091401e904"
 content-hash = "e33f0ce1fa56c6ccd993dd379a11609c44dc966ecaebc3476ffdc3517c60eb2c"
 content-hash = "e3914e7f226b3129db44b77a52f9c5a59ba70caa7623207a535043a97c1474b5"
+content-hash = "b1724bacd7aa2724c978181e7d77c748d6a05b502581f46d0da0fc5b26fb72da"
