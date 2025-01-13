@@ -43,7 +43,7 @@ def index(request, slug):
 
 @login_required
 def new(request, slug):
-    project = get_object_or_404(Project, slug=slug)
+    project = get_object_or_404(Project, slug=slug, account=request.user)
     return render(
         request,
         "update_records/new.html",
