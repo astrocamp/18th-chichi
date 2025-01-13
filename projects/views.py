@@ -1090,6 +1090,7 @@ def search_projects(request):
 def project_calendar_events(request, slug):
     account = request.user
 
+    project = get_object_or_404(Project, slug=slug)
     events = ProjectCalendar.objects.filter(account=account)
     serializer = ProjectCalendarSerializer(events, many=True)
     return Response(serializer.data)
@@ -1097,19 +1098,22 @@ def project_calendar_events(request, slug):
 
 @api_view(["POST"])
 def add_calendar_event(request, slug):
-    project = get_object_or_404(Project, slug, account=request.user)
+    project = get_object_or_404(Project, slug=slug, account=request.user)
     serializer = ProjectCalendarSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(project=project, account=request.user)
-        return Response(serializer.errors, status=400)
+        return Response(serializer.data, status=201)
+    return Response(serializer.errors, status=400)
 
 
 @api_view(["PUT"])
 def update_calendar_event(request, slug, event_id):
+
     project = get_object_or_404(Project, slug=slug, account=request.user)
     event = get_object_or_404(
         ProjectCalendar, id=event_id, project=project, account=request.user
     )
+
     serializer = ProjectCalendarSerializer(event, data=request.data)
     if serializer.is_valid():
         serializer.save()
