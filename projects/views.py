@@ -90,6 +90,7 @@ def new(request):
             "account": account,
             "categories": categories,
             "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
+            "GOOGLE_MAPS_MAP_ID": settings.GOOGLE_MAPS_MAP_ID,
         },
     )
 
@@ -189,6 +190,8 @@ def show(request, slug):
             "categories": categories,
             "parent_categories": parent_categories,
             "chat_rooms": chat_rooms,  # 加入聊天室列表
+            "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
+            "GOOGLE_MAPS_MAP_ID": settings.GOOGLE_MAPS_MAP_ID,
         },
     )
 

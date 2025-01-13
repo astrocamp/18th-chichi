@@ -202,7 +202,7 @@
 
   // 確保在 DOM 載入完成後才初始化
   document.addEventListener('DOMContentLoaded', () => {
-    initAutocomplete('{{ GOOGLE_MAPS_API_KEY }}');
+    initAutocomplete('{{ GOOGLE_MAPS_API_KEY }}', '{{ GOOGLE_MAPS_MAP_ID }}');
   });
 </script>
 {% endblock %}
