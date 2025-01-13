@@ -47,14 +47,13 @@
               <i class="fas fa-project-diagram mr-2"></i>
               我的專案
             </a>
-            <button
-              class="w-full text-left px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200"
-              data-logout-url="{% url 'accounts:logout' %}"
-              data-csrf="{{ csrf_token }}"
-            >
-              <i class="fas fa-sign-out-alt mr-2"></i>
-              登出
-            </button>
+            <form action="{% url 'accounts:logout' %}" method="post" class="block">
+              {% csrf_token %}
+              <button type="submit" class="w-full text-left px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
+                <i class="fas fa-sign-out-alt mr-2"></i>
+                登出
+              </button>
+            </form>
             {% else %}
             <a href="{% url 'accounts:login' %}" class="block px-4 py-2 text-gray-800 hover:bg-teal-500 hover:text-white transition-colors duration-200">
               <i class="fas fa-sign-in-alt mr-2"></i>
