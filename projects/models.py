@@ -161,6 +161,22 @@ class FavoritePrject(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
 
+class ProjectCalendar(models.Model):
+    project = models.ForeignKey(
+        "Project", on_delete=models.CASCADE, related_name="calendar_events"
+    )
+    account = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="calendar_events"
+    )
+
+    title = models.CharField(max_length=100)
+    start_at = models.DateTimeField(null=True)
+    end_at = models.DateTimeField()
+
+    def __str__(self):
+        return self.title
+
+
 class Sponsor(models.Model):
     from rewards.models import Reward
 

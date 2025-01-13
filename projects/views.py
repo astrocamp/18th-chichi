@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import ProjectFrom
-from .models import Project, CollectProject, FavoritePrject
+from .models import Project, CollectProject, FavoritePrject, ProjectCalendar
 from django.utils.timezone import localtime, now
 from django.views.decorators.http import require_POST
 from django.utils import timezone
@@ -22,9 +22,11 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from categories.models import Category
 from chats.models import ChatRoom, Message
 import pandas as pd
-
 from .forms import ProjectSearchForm
 from django.conf import settings
+from .serializers import ProjectCalendarSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 
 def calculate_total_days(end_date):
@@ -1064,7 +1066,7 @@ def search_projects(request):
         if location:
             projects = projects.filter(location__icontains=location)
 
-    projects = projects.order_by('id') 
+    projects = projects.order_by("id")
 
     paginator = Paginator(projects, 12)
     page_number = request.GET.get("page", 1)
@@ -1080,3 +1082,48 @@ def search_projects(request):
         "projects/search_results.html",
         {"page_obj": page_obj, "query": query},
     )
+
+    return response
+
+
+@api_view(["GET"])
+def project_calendar_events(request, slug):
+    account = request.user
+
+    events = ProjectCalendar.objects.filter(account=account)
+    serializer = ProjectCalendarSerializer(events, many=True)
+    return Response(serializer.data)
+
+
+@api_view(["POST"])
+def add_calendar_event(request, slug):
+    project = get_object_or_404(Project, slug, account=request.user)
+    serializer = ProjectCalendarSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(project=project, account=request.user)
+        return Response(serializer.errors, status=400)
+
+
+@api_view(["PUT"])
+def update_calendar_event(request, slug, event_id):
+    project = get_object_or_404(Project, slug=slug, account=request.user)
+    event = get_object_or_404(
+        ProjectCalendar, id=event_id, project=project, account=request.user
+    )
+    serializer = ProjectCalendarSerializer(event, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=400)
+
+
+@api_view(["DELETE"])
+def delete_calendar_event(request, slug, event_id):
+
+    project = get_object_or_404(Project, slug=slug, account=request.user)
+    event = get_object_or_404(
+        ProjectCalendar, id=event_id, project=project, account=request.user
+    )
+
+    event.delete()
+    return Response(status=204)

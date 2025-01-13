@@ -147,6 +147,71 @@
     </div>
   </div>
 </div>
+
+
+<!-- 日曆 -->
+<div class="container mx-auto max-w-7xl px-4 py-8">
+  <div id="calendar" class="bg-white p-6 rounded-lg shadow-lg"></div>
+</div>
+
+<dialog id="eventDialog" class="p-0 border-0 rounded-xl shadow-2xl max-w-lg w-11/12 bg-white">
+  <div class="bg-[#1EA29E] text-white px-6 py-4 rounded-t-xl">
+      <h3 class="text-xl font-medium m-0">事件詳情</h3>
+  </div>
+  <form method="dialog" class="p-6">
+      <div class="mb-5">
+          <label for="eventTitle" class="block mb-2 text-sm font-medium text-gray-700">標題</label>
+          <input 
+              type="text" 
+              id="eventTitle" 
+              name="title" 
+              required 
+              placeholder="請輸入事件標題"
+              class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#1EA29E] focus:ring-2 focus:ring-[#1EA29E] focus:ring-opacity-20 transition-all text-sm"
+          >
+      </div>
+      <div class="mb-5">
+          <label for="eventStart" class="block mb-2 text-sm font-medium text-gray-700">開始時間</label>
+          <input 
+              type="datetime-local" 
+              id="eventStart" 
+              name="start_at" 
+              required
+              class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#1EA29E] focus:ring-2 focus:ring-[#1EA29E] focus:ring-opacity-20 transition-all text-sm"
+          >
+      </div>
+      <div class="mb-5">
+          <label for="eventEnd" class="block mb-2 text-sm font-medium text-gray-700">結束時間</label>
+          <input 
+              type="datetime-local" 
+              id="eventEnd" 
+              name="end_at" 
+              required
+              class="w-full px-3 py-2.5 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#1EA29E] focus:ring-2 focus:ring-[#1EA29E] focus:ring-opacity-20 transition-all text-sm"
+          >
+      </div>
+      <div class="flex justify-end gap-3 mt-6 pt-4 border-t border-gray-200">
+            <button 
+            type="button" 
+            id="saveEvent" 
+            class="px-4 py-2 bg-[#1EA29E] text-white rounded-lg hover:bg-[#198784] transition-colors text-sm font-medium">
+            儲存
+            </button>
+            <button 
+              type="button" 
+              id="closeDialog" 
+              class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors text-sm font-medium">
+              取消
+            </button>
+            <button 
+                type="button" 
+                id="deleteEvent" 
+                class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm font-medium">
+                刪除
+            </button>
+      </div>
+  </form>
+</dialog>
 {% endblock %} {% block "extra_js" %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
