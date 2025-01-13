@@ -9,7 +9,6 @@ from django.contrib.auth.models import User
 from django import forms
 from projects.models import Sponsor
 from users.models import Profile
-from users.views import Profile
 from chats.models import ChatRoom
 
 

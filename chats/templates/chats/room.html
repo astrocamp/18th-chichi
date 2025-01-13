@@ -2,6 +2,15 @@
 
 {% block "content" %}
 <div class="container mx-auto px-4 py-8">
+    <!-- 返回按鈕 -->
+    <div class="mb-4">
+        <a href="{% if request.user == project.account %}{% url 'projects:show' project.slug %}{% else %}{% url 'projects:public' project.slug %}{% endif %}" 
+           class="inline-flex items-center px-4 py-2 text-sm font-medium text-[#1EA29E] bg-[#1EA29E]/10 rounded-lg hover:bg-[#1EA29E]/20">
+            <i class="fas fa-arrow-left mr-2"></i>
+            返回專案
+        </a>
+    </div>
+
     <div class="chat-container bg-white rounded-lg shadow-lg">
         <div class="chat-header border-b p-4">
             <h2 class="text-xl font-bold">{{ project.title }}</h2>

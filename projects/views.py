@@ -20,6 +20,7 @@ from decimal import Decimal
 from datetime import datetime
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from categories.models import Category
+from chats.models import ChatRoom, Message
 
 
 def calculate_total_days(end_date):
@@ -146,6 +147,20 @@ def show(request, slug):
 
     parent_ids = [category.parent_id for category in categories if category.parent_id]
     parent_categories = Category.objects.filter(id__in=parent_ids)
+
+    # 獲取聊天室列表
+    chat_rooms = ChatRoom.objects.filter(project=project).order_by("-updated_at")
+    for room in chat_rooms:
+        # 獲取最後一條消息
+        last_message = (
+            Message.objects.filter(chat_room=room).order_by("-created_at").first()
+        )
+        room.last_message = last_message
+        # 獲取未讀消息數量
+        room.unread_count = Message.objects.filter(
+            chat_room=room, is_read=False, sender=room.visitor
+        ).count()
+
     return render(
         request,
         "projects/show.html",
@@ -159,6 +174,7 @@ def show(request, slug):
             "progress_percentage": progress_percentage,  # 加入達成率
             "categories": categories,
             "parent_categories": parent_categories,
+            "chat_rooms": chat_rooms,  # 加入聊天室列表
         },
     )
 
@@ -603,6 +619,7 @@ def public(request, slug):
             "parent_categories": parent_categories,
             "profile": profile,
             "comments": comments,
+            "user": request.user,
         },
     )
 
