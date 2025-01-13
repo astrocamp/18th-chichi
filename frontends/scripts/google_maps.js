@@ -30,7 +30,7 @@ export function initAutocomplete(apiKey) {
       const map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 25.033964, lng: 121.564468 },
         zoom: 14,
-        mapId: "6a3b782ec188f026",
+        mapId: mapId,
       });
 
       const input = document.getElementById("searchBox");
