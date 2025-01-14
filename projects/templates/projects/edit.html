@@ -31,7 +31,9 @@
               <label
                 for="title"
                 class="block text-sm font-medium text-gray-700 mb-1"
-                >專案標題</label
+                >專案標題
+                <span class="text-red-500">*</span>
+                </label
               >
               <input
                 type="text"
@@ -47,9 +49,12 @@
               <label
                 for="subtitle"
                 class="block text-sm font-medium text-gray-700 mb-1"
-                >副標題</label
+                >副標題
+                <span class="text-red-500">*</span>
+                </label
               >
               <input
+                required
                 type="text"
                 id="subtitle"
                 name="subtitle"
@@ -58,20 +63,20 @@
               />
             </div>
 
-            <div>
-              <label
-                for="goal_amount"
-                class="block text-sm font-medium text-gray-700 mb-1"
-                >目標金額</label
-              >
+            <div x-data="goalAmountHandler({{ project.goal_amount|default_if_none:0 }})" class="mt-4">
+              <label for="goal_amount" class="block text-sm font-medium text-gray-700 mb-1">
+                目標金額
+                <span class="text-red-500">* 注意：最高為10位數，最低不可為0，並且只能填寫數字</span>
+              </label>
               <input
-                type="number"
+                type="text"
                 id="goal_amount"
                 name="goal_amount"
-                required
-                min="0"
+                x-model="goalAmountRaw"
+                @input="validateInput"
                 class="input input-bordered w-full"
-                value="{{ project.goal_amount }}"
+                placeholder="設定你的募資目標金額"
+                required
               />
             </div>
 
@@ -117,7 +122,8 @@
               </div>
             </div>
           <!-- 時間設定 -->
-          募款時間:
+          募款時間:                <span class="text-red-500">*</span>
+
           <div class="flex gap-2">
             <input type="text" id="start-date" name="start_at" value="{{ project.start_at|date:"Y-m-d" }}" class="p-2 border rounded-lg"  placeholder="開始日期">
             <input type="text" id="end-date"  name="end_at" value="{{ project.end_at|date:"Y-m-d" }}"  class="p-2 border rounded-lg" placeholder="結束日期">
@@ -133,7 +139,9 @@
               <label
                 for="story"
                 class="block text-sm font-medium text-gray-700 mb-1"
-                >專案說明</label
+                >專案說明
+                <span class="text-red-500">*</span>
+                </label
               >
               <textarea
                 id="story"
@@ -146,8 +154,11 @@
               >
             </div>
             <div class="mb-4">
-              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類</label>
-              <select name="category" id="category" class="input input-bordered w-full" onchange="updateSubCategories()">
+              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類
+                <span class="text-red-500">*</span>
+
+              </label>
+              <select required name="category" id="category" class="input input-bordered w-full" onchange="updateSubCategories()">
                 <option value="">選擇</option>
                 {% for category in all_parent_categories %}
                 <option value="{{ category.id }}" {% if selected_category and category.id == selected_category.id %}selected{% endif %}>
@@ -158,12 +169,15 @@
             </div>
 
             <div class="mb-4">
-              <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類</label>
+              <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類
+                <span class="text-red-500">*</span>
+
+              </label>
               <select name="categories" id="sub_category" class="input input-bordered w-full">
                 <option value="">選擇</option>
                 {% if selected_category %}
                 {% for sub_category in selected_category.children.all %}
-                <option value="{{ sub_category.id }}" {% if selected_sub_category and sub_category.id == selected_sub_category.id %}selected{% endif %}>
+                <option required value="{{ sub_category.id }}" {% if selected_sub_category and sub_category.id == selected_sub_category.id %}selected{% endif %}>
                   {{ sub_category.title }}
                 </option>
                 {% endfor %}
@@ -172,8 +186,11 @@
             </div>
 
             <div>
-              <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點</label>
-              <select id="location" name="location" class="input input-bordered w-full">
+              <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點
+                <span class="text-red-500">*</span>
+
+              </label>
+              <select required id="location" name="location" class="input input-bordered w-full">
                 <option value="" {% if project.location == "" %}selected{% endif %}>請選擇縣市</option>
                 <option value="台北市" {% if project.location == "台北市" %}selected{% endif %}>台北市</option>
                 <option value="新北市" {% if project.location == "新北市" %}selected{% endif %}>新北市</option>
