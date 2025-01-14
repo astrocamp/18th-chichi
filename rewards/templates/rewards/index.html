@@ -78,11 +78,7 @@
       </div>
 
       <!-- 底部連結 -->
-      <div class="mt-8 flex justify-between items-center">
-        <a href="{% url 'projects:show' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
-          <i class="fas fa-arrow-left mr-2"></i>
-          回募資專案
-        </a>
+      <div class="mt-8 flex justify-end items-center">
         <a href="{% url 'projects:reward_items' project.slug %}" class="btn text-white" style="background-color: #1ea29e; border: none">
           <i class="fas fa-plus-circle mr-2"></i>
           新增商品及加價購商品
