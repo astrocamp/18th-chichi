@@ -129,10 +129,9 @@
               <div class="flex justify-center space-x-4 mt-4">
                 <!-- 收藏按鈕 -->
                 <button
-                  x-bind:style="collected ? 'background-color: #1EA29E; color: white;' : 'background-color: #1ea29e20; color: #1EA29E;'"
-                  x-on:mouseover="collected || (this.style.backgroundColor = '#1EA29E', this.style.color = 'white')"
-                  x-on:mouseout="collected || (this.style.backgroundColor = '#1ea29e20', this.style.color = '#1EA29E')"
-                  x-on:click.prevent="
+                  :class="collected ? 'bg-[#1EA29E] text-white' : 'bg-[#1ea29e20] text-[#1EA29E]'"
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300 hover:bg-[#1EA29E] hover:text-white"
+                  @click.prevent="
                   fetch('{% url 'projects:collect' project.slug %}', {
                     method: 'POST',
                     headers: {
@@ -145,7 +144,6 @@
                     collectCount = data.collect_count;
                   });
                 "
-                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300"
                 >
                   <i class="fas fa-bookmark mr-2"></i>
                   <span x-text="collected ? '已收藏' : '收藏'"></span>
@@ -153,10 +151,9 @@
 
                 <!-- 按讚按鈕 -->
                 <button
-                  x-bind:style="favorited ? 'background-color: #1EA29E; color: white;' : 'background-color: #1ea29e20; color: #1EA29E;'"
-                  x-on:mouseover="favorited || (this.style.backgroundColor = '#1EA29E', this.style.color = 'white')"
-                  x-on:mouseout="favorited || (this.style.backgroundColor = '#1ea29e20', this.style.color = '#1EA29E')"
-                  x-on:click.prevent="
+                  :class="favorited ? 'bg-[#1EA29E] text-white' : 'bg-[#1ea29e20] text-[#1EA29E]'"
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300 hover:bg-[#1EA29E] hover:text-white"
+                  @click.prevent="
                   fetch('{% url 'projects:like' project.slug %}', {
                     method: 'POST',
                     headers: {
@@ -169,7 +166,6 @@
                     likeCount = data.like_count;
                   });
                 "
-                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300"
                 >
                   <i class="fas fa-heart mr-2"></i>
                   <span x-text="favorited ? '已按讚' : '按讚'"></span>
