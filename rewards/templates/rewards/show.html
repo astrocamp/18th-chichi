@@ -46,7 +46,7 @@
 
     <!-- Optional Add-Ons -->
     <div class="mb-6">
-      <h2 class="text-lg font-semibold mb-2">選用附加回報</h2>
+      <h2 class="text-lg font-semibold mb-2">選擇加價購</h2>
       <ul class="space-y-2">
         {% for add_on in reward.optionaladd_set.all %}
         <li class="p-4 bg-gray-50 border rounded-md">
@@ -54,7 +54,7 @@
           <p class="text-sm text-gray-500">+NTD {{ add_on.price }}</p>
         </li>
         {% empty %}
-        <li class="text-gray-500">無附加選項</li>
+        <li class="text-gray-500">無加價購選項</li>
         {% endfor %}
       </ul>
     </div>

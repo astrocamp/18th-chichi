@@ -2,7 +2,7 @@
 <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
   <div class="container mx-auto px-4">
     <div class="text-center">
-      <h1 class="text-3xl font-bold mb-3 text-gray-800">回饋 & 商品/附加商品</h1>
+      <h1 class="text-3xl font-bold mb-3 text-gray-800">回饋 & 商品/加價購商品</h1>
       <p class="text-lg text-gray-600 max-w-xl mx-auto">管理專案的回饋及商品資訊</p>
     </div>
   </div>
@@ -61,7 +61,7 @@
             {% endfor %}
           </ul>
 
-          <h2 class="text-xl font-semibold mt-6 mb-4 text-gray-800">可選擇的附加選項</h2>
+          <h2 class="text-xl font-semibold mt-6 mb-4 text-gray-800">可選擇的加價購選項</h2>
           <ul class="space-y-4">
             {% for option in options %}
             <li class="p-4 bg-white shadow-md rounded-lg border border-gray-200">
@@ -71,7 +71,7 @@
               </div>
             </li>
             {% empty %}
-            <li class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500">目前沒有附加選項</li>
+            <li class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500">目前沒有加價購選項</li>
             {% endfor %}
           </ul>
         </div>
@@ -85,7 +85,7 @@
         </a>
         <a href="{% url 'projects:reward_items' project.slug %}" class="btn text-white" style="background-color: #1ea29e; border: none">
           <i class="fas fa-plus-circle mr-2"></i>
-          新增商品及附加商品
+          新增商品及加價購商品
         </a>
       </div>
     </div>

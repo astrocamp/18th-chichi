@@ -2,14 +2,14 @@
 <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
   <div class="container mx-auto px-4">
     <div class="text-center">
-      <h1 class="text-3xl font-bold mb-3 text-gray-800">新增及附加商品</h1>
-      <p class="text-lg text-gray-600 max-w-xl mx-auto">管理專案中的商品與附加選項</p>
+      <h1 class="text-3xl font-bold mb-3 text-gray-800">新增商品及加價購商品</h1>
+      <p class="text-lg text-gray-600 max-w-xl mx-auto">管理專案中的商品與加價購選項</p>
     </div>
   </div>
 </div>
 
 <div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6">
-  <h1 class="text-2xl font-bold mb-4">新增及附加商品</h1>
+  <h1 class="text-2xl font-bold mb-4">新增及加價購商品</h1>
 
   <!-- 已存在的商品與選項 -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -29,7 +29,7 @@
 
     <!-- 右側：已存在的附加選項 -->
     <div>
-      <h2 class="text-xl font-semibold mb-4">已存在的附加選項</h2>
+      <h2 class="text-xl font-semibold mb-4">已存在的加價購選項</h2>
       <ul class="space-y-2">
         {% for option in options %}
         <li class="p-4 border rounded-md bg-gray-50 flex justify-between items-center">
@@ -37,7 +37,7 @@
           <span class="text-gray-500">NTD {{ option.price }}</span>
         </li>
         {% empty %}
-        <p class="text-gray-500">目前沒有附加選項</p>
+        <p class="text-gray-500">目前沒有加價購選項</p>
         {% endfor %}
       </ul>
     </div>
@@ -57,10 +57,10 @@
                 type="text"
                 x-model="product.name"
                 :name="'products[' + index + ']'"
-                class="mt-1 block w-full   border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
               />
             </div>
-            <button type="button" @click="removeProduct(index)" class="btn " style=" background-color: #ff6b6b; color: white">
+            <button type="button" @click="removeProduct(index)" class="btn" style="background-color: #ff6b6b; color: white">
               <i class="fas fa-trash mr-2"></i>
               刪除
             </button>
@@ -94,12 +94,12 @@
           <div class="flex items-center space-x-4 p-4 border rounded-md">
             <div class="flex-grow grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-medium  text-gray-700">選項名稱</label>
+                <label class="block text-sm font-medium text-gray-700">選項名稱</label>
                 <input
                   type="text"
                   x-model="option.name"
                   :name="'options[' + index + '][name]'"
-                  class="mt-1 block w-full border-2  border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
               </div>
               <div>
@@ -108,7 +108,7 @@
                   type="number"
                   x-model="option.price"
                   :name="'options[' + index + '][price]'"
-                  class="mt-1 block w-full border-2  border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
               </div>
             </div>
