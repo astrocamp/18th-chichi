@@ -48,7 +48,7 @@ class CustomUserCreationForm(UserCreationForm):
 def index(request):
     account = request.user
     try:
-        profile = Profile.objects.filter(account=account)
+        profile = Profile.objects.get(account=account)
     except Profile.DoesNotExist:
         # 如果找不到 profile，創建一個新的
         profile = Profile.objects.create(
