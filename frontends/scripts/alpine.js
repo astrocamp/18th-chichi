@@ -134,3 +134,29 @@ function dateValidationHandler(defaultDate, today) {
   };
 }
 window.dateValidationHandler = dateValidationHandler;
+
+function goalAmountHandler() {
+  return {
+    goalAmountRaw: "", // 原始輸入值
+    goalAmountFormatted: "0", // 格式化後的顯示值
+
+    validateInput(event) {
+      // 移除非數字字符
+      const input = event.target.value.replace(/[^0-9]/g, "");
+      const parsedValue = parseInt(input, 10);
+
+      // 檢查範圍並更新值
+      if (isNaN(parsedValue) || parsedValue < 1) {
+        this.goalAmountRaw = ""; // 清空輸入框值
+        this.goalAmountFormatted = "0"; // 顯示格式化金額為 0
+      } else if (parsedValue > 9999999999) {
+        this.goalAmountRaw = parsedValue.toString().slice(0, 10); // 限制 10 位數
+        this.goalAmountFormatted = "9,999,999,999"; // 格式化為最大值
+      } else {
+        this.goalAmountRaw = parsedValue.toString(); // 更新原始輸入值
+        this.goalAmountFormatted = parsedValue.toLocaleString("en-US"); // 格式化顯示
+      }
+    },
+  };
+}
+window.goalAmountHandler = goalAmountHandler;
