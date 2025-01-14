@@ -155,11 +155,7 @@
                               目標 $ {{ project.goal_amount|floatformat:0|intcomma }}
                           </span>
                           <div class="text-base sm:text-lg lg:text-xl text-[#1EA29E]">
-                              {% if project.remaining_days > 0 %}
-                                  剩餘 {{ project.remaining_days }} 天
-                              {% else %}
-                                  已結束
-                              {% endif %}
+                              剩餘 {% if project.remaining_days >= 0 %}{{ project.remaining_days|add:"1" }}{% else %}0{% endif %} 天
                           </div>
                       </div>
                   </div>
