@@ -996,14 +996,13 @@ def daily_sponsorship_amount_excel(request, slug):
 
 def search_projects(request):
     form = ProjectSearchForm(request.GET or None)  # 初始化表單
-    projects = Project.objects.all()
+    projects = Project.objects.filter(status="live",deleted_at__isnull=True)
 
     if form.is_valid():
         query = form.cleaned_data.get("query", "")
         status = form.cleaned_data.get("status", "")
         location = form.cleaned_data.get("location", "")
-        print(f"Query: {query}")
-        print("-" * 50)
+
         if query:
             projects = projects.filter(
                 Q(title__icontains=query)
