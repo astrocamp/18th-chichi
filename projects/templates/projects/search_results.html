@@ -70,7 +70,7 @@
             </div>
             <div class="flex justify-between items-center">
               <span class="text-lg sm:text-xl lg:text-2xl font-bold text-[#1EA29E]">
-                目標 $ {{ project.raised_amount|default:0|floatformat:0 }}
+                目標 $ {{ project.goal_amount|default:0|floatformat:0 }}
               </span>
               <div class="text-base sm:text-lg lg:text-xl text-[#1EA29E]">
                 剩餘 {{ project.remaining_days }} 天
