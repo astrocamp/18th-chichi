@@ -996,26 +996,45 @@ def daily_sponsorship_amount_excel(request, slug):
 
 def search_projects(request):
     form = ProjectSearchForm(request.GET or None)  # 初始化表單
-    results = []
+    projects = Project.objects.all()
 
-    if form.is_valid():  # 驗證表單資料
-        query = form.cleaned_data.get("query")
-        status = form.cleaned_data.get("status")
-        location = form.cleaned_data.get("location")
-        categories = form.cleaned_data.get("categories")
-
-        filters = Q()
+    if form.is_valid():
+        query = form.cleaned_data.get("query", "")
+        status = form.cleaned_data.get("status", "")
+        location = form.cleaned_data.get("location", "")
+        print(f"Query: {query}")
+        print("-" * 50)
         if query:
-            filters &= Q(title__icontains=query)
+            projects = projects.filter(
+                Q(title__icontains=query)
+                | Q(subtitle__icontains=query)
+                | Q(story__icontains=query)
+                | Q(status__icontains=query)
+                | Q(location__icontains=query)
+                | Q(categories__title__icontains=query)
+            ).distinct()
+            print(f"搜尋結果: {projects}")
+            print("0" * 50)
         if status:
-            filters &= Q(status=status)
+            projects = projects.filter(status=status)
+            print(f"搜尋結果: {status}")
+            print("0" * 50)
         if location:
-            filters &= Q(location__icontains=location)
-        if categories:
-            filters &= Q(categories__in=categories)
+            projects = projects.filter(location__icontains=location)
+            print(f"搜尋結果: {projects}")
+            print("0" * 50)
 
-        results = Project.objects.filter(filters).distinct()
+    paginator = Paginator(projects, 12)
+    page_number = request.GET.get("page", 1)
 
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
     return render(
-        request, "projects/search_results.html", {"form": form, "results": results}
+        request,
+        "projects/search_results.html",
+        {"page_obj": page_obj, "query": query},
     )

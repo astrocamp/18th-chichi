@@ -1,27 +1,88 @@
-{% extends "shared/layout.html" %}
-{% load static %}
-{% block content %}
-<form method="get" action="{% url 'projects:search' %}">
-  <input type="text" name="query" placeholder="搜尋專案" value="{{ query }}">
-  <button type="submit">搜尋</button>
-</form>
+{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+
 
 <div class="container mx-auto p-4">
   <h1 class="text-xl font-bold mb-4">搜尋結果</h1>
   {% if query %}
   <p class="mb-4">搜尋關鍵字: <strong>{{ query }}</strong></p>
-  {% if results %}
-  <ul class="space-y-4">
-    {% for project in results %}
-    <li class="border p-4 rounded shadow-sm">
-      <h2 class="text-lg font-bold">
-        <a href="{% url 'projects:detail' project.slug %}">{{ project.title }}</a>
-      </h2>
-      <p class="text-sm text-gray-500">{{ project.subtitle }}</p>
-      <p class="text-sm">{{ project.start_at|date:"Y/m/d" }} ~ {{ project.end_at|date:"Y/m/d" }}</p>
-    </li>
+  {% if page_obj %}
+
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 p-4 sm:p-6 lg:p-8">
+    {% for project in page_obj %}
+    <a href="{% url 'projects:public' project.slug %}" class="block h-full" data-project
+      data-categories="{% for cat in project.categories.all %}{{ cat.parent.title }}{% if not forloop.last %}, {% endif %}{% endfor %}"
+      x-show="activeTab === '全部' || $el.dataset.categories.includes(activeTab)" x-cloak>
+      <div
+        class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200 h-full flex flex-col">
+        <!-- 圖片部分 -->
+        <div class="relative w-full h-48 sm:h-56 lg:h-64 overflow-hidden">
+          {% if project.cover_image %}
+          <img src="{{ project.cover_image.url }}" alt="{{ project.title }}"
+            class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
+          {% else %}
+          <img src="{% static 'images/default-project.jpg' %}" alt="{{ project.title }}"
+            class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
+          {% endif %}
+        </div>
+
+        <!-- 內容部分 -->
+        <div class="p-4 sm:p-5 flex flex-col flex-grow">
+          <!-- 標籤部分 -->
+          <div class="flex flex-wrap gap-2 mb-3">
+            <span
+              class="inline-block px-3 sm:px-4 py-1 text-sm sm:text-base lg:text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
+              {% for categories in project.categories.all %}
+              {{ categories.parent }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </span>
+            <span
+              class="inline-block px-3 sm:px-4 py-1 text-sm sm:text-base lg:text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
+              {% for categories in project.categories.all %}
+              {{ categories.title }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </span>
+          </div>
+
+          <!-- 標題和副標題 -->
+          <h3 class="text-xl sm:text-2xl font-bold line-clamp-1 mb-2">{{ project.title }}</h3>
+          <div class="min-h-[5rem] sm:min-h-[6rem] lg:min-h-[7rem]">
+            <p class="text-base sm:text-lg lg:text-xl text-gray-600 line-clamp-2 font-sans">
+              {{ project.subtitle }}
+            </p>
+          </div>
+
+          <!-- 進度條和資訊部分 -->
+          <div class="mt-4 sm:mt-5 lg:mt-6 space-y-3">
+            {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
+            <div class="w-full bg-gray-100 rounded-full h-2.5">
+              <div class="h-2.5 rounded-full transition-all duration-700 bg-[#1EA29E]"
+                style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%">
+              </div>
+            </div>
+            <div class="flex justify-between text-sm sm:text-base">
+              <span class="font-medium text-gray-600">
+                NT$ {{ project.raised_amount|default:0|floatformat:0 }}
+              </span>
+              <span class="font-medium text-[#1EA29E]">
+                {{ percentage }}%
+              </span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-lg sm:text-xl lg:text-2xl font-bold text-[#1EA29E]">
+                目標 $ {{ project.raised_amount|default:0|floatformat:0 }}
+              </span>
+              <div class="text-base sm:text-lg lg:text-xl text-[#1EA29E]">
+                剩餘 {{ project.remaining_days }} 天
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
     {% endfor %}
-  </ul>
+  </div>
+
   {% else %}
   <p class="text-gray-500">未找到相關結果。</p>
   {% endif %}
