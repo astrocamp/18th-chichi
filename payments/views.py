@@ -33,7 +33,7 @@ def send_success_email(order):
     project = order.reward.project if order.reward else None
 
     local_created_at = timezone.localtime(order.created_at)
-    formatted_amount = "{:,.2f}".format(order.amount)
+    formatted_amount = "{:,.0f}".format(order.amount)
 
     message = AnymailMessage(
         subject="贊助成功",
@@ -50,8 +50,7 @@ def send_success_email(order):
         "user_phone": user_profile.phone if user_profile.phone else "",
         "project_title": project.title if project else "自由贊助",
         "reward_title": order.reward.title if order.reward else "自由贊助",
-        "reward_price": ("{:,.2f}".format(order.reward.price) if order.reward else formatted_amount),
-        "estimated_delivery": (order.reward.estimated_delivery.strftime("%Y-%m-%d") if order.reward else ""),
+        "reward_price": ("{:,.0f}".format(order.reward.price) if order.reward else formatted_amount),
     }
     message.send()
 
