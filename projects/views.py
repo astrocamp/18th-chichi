@@ -1013,16 +1013,13 @@ def search_projects(request):
                 | Q(location__icontains=query)
                 | Q(categories__title__icontains=query)
             ).distinct()
-            print(f"搜尋結果: {projects}")
-            print("0" * 50)
+            
         if status:
             projects = projects.filter(status=status)
-            print(f"搜尋結果: {status}")
-            print("0" * 50)
+            
         if location:
             projects = projects.filter(location__icontains=location)
-            print(f"搜尋結果: {projects}")
-            print("0" * 50)
+            
 
     paginator = Paginator(projects, 12)
     page_number = request.GET.get("page", 1)
