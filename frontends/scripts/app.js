@@ -7,6 +7,7 @@ import "./navbar.js";
 import "./register.js";
 import "./calendar.js";
 import { initCategoryNav, initCategoryScroll, categoryManagerall } from "./categoryNav.js";
+import "./fullcalendar.js";
 window.htmx = htmx;
 
 window.htmx = htmx;
