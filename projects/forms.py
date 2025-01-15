@@ -49,3 +49,6 @@ class ProjectSearchForm(Form):
         required=False,
         widget=TextInput(attrs={"placeholder": "地點", "class": "form-control"}),
     )
+    categories = ModelMultipleChoiceField(
+        queryset=Category.objects.all(), required=False, label="分類"
+    )

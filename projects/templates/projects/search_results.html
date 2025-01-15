@@ -1,50 +1,32 @@
 {% extends "shared/layout.html" %}
 {% load static %}
 {% block content %}
-<h1>專案搜尋</h1>
-
-<form method="get" action="{% url 'projects:search_projects' %}" class="mb-4">
-    <div class="row">
-        <div class="col-md-4">
-            {{ form.query.label_tag }}
-            {{ form.query }}
-        </div>
-        <div class="col-md-4">
-            {{ form.status.label_tag }}
-            {{ form.status }}
-        </div>
-        <div class="col-md-4">
-            {{ form.location.label_tag }}
-            {{ form.location }}
-        </div>
-        <div class="col-md-4">
-            {{ form.categories.label_tag }}
-            {{ form.categories }}
-        </div>
-    </div>
-    <button type="submit" class="btn btn-primary mt-3">搜尋</button>
+<form method="get" action="{% url 'projects:search' %}">
+  <input type="text" name="query" placeholder="搜尋專案" value="{{ query }}">
+  <button type="submit">搜尋</button>
 </form>
 
-{% if projects %}
-<h2>搜尋結果</h2>
-<ul>
-    {% for project in projects %}
-    <li>
-        <h3>
-            <a href="{% url 'projects:detail' project.id %}">{{ project.title }}</a>
-        </h3>
-        <p>{{ project.subtitle }}</p>
-        <p>地點: {{ project.location }}</p>
-        <p>狀態: {{ project.get_status_display }}</p>
-        <p>分類:
-            {% for category in project.categories.all %}
-            <span>{{ category.title }}</span>
-            {% endfor %}
-        </p>
+<div class="container mx-auto p-4">
+  <h1 class="text-xl font-bold mb-4">搜尋結果</h1>
+  {% if query %}
+  <p class="mb-4">搜尋關鍵字: <strong>{{ query }}</strong></p>
+  {% if results %}
+  <ul class="space-y-4">
+    {% for project in results %}
+    <li class="border p-4 rounded shadow-sm">
+      <h2 class="text-lg font-bold">
+        <a href="{% url 'projects:detail' project.slug %}">{{ project.title }}</a>
+      </h2>
+      <p class="text-sm text-gray-500">{{ project.subtitle }}</p>
+      <p class="text-sm">{{ project.start_at|date:"Y/m/d" }} ~ {{ project.end_at|date:"Y/m/d" }}</p>
     </li>
     {% endfor %}
-</ul>
-{% else %}
-<p>未找到相關專案。</p>
-{% endif %}
+  </ul>
+  {% else %}
+  <p class="text-gray-500">未找到相關結果。</p>
+  {% endif %}
+  {% else %}
+  <p class="text-gray-500">請輸入搜尋關鍵字。</p>
+  {% endif %}
+</div>
 {% endblock %}
