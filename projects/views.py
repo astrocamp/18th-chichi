@@ -1110,9 +1110,7 @@ def add_calendar_event(request, slug):
 def update_calendar_event(request, slug, event_id):
 
     project = get_object_or_404(Project, slug=slug, account=request.user)
-    event = get_object_or_404(
-        ProjectCalendar, id=event_id, project=project, account=request.user
-    )
+    event = get_object_or_404(ProjectCalendar, id=event_id, account=request.user)
 
     serializer = ProjectCalendarSerializer(event, data=request.data)
     if serializer.is_valid():
@@ -1125,9 +1123,7 @@ def update_calendar_event(request, slug, event_id):
 def delete_calendar_event(request, slug, event_id):
 
     project = get_object_or_404(Project, slug=slug, account=request.user)
-    event = get_object_or_404(
-        ProjectCalendar, id=event_id, project=project, account=request.user
-    )
+    event = get_object_or_404(ProjectCalendar, id=event_id, account=request.user)
 
     event.delete()
     return Response(status=204)
