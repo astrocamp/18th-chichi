@@ -46,24 +46,39 @@
             </div>
             <div x-show="activeTab === 'rewards'" class="space-y-6">
               <!-- 贊助方案使用 htmx 動態載入 -->
-              <div hx-get="{% url 'rewards:rewards_content' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML" hx-indicator="#rewards-loading">
-                <div id="rewards-loading" class="text-center py-8">
-                  <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#1EA29E]"></div>
-                  <p class="mt-2 text-gray-600">載入贊助方案中...</p>
+              <div hx-get="{% url 'rewards:rewards_content' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">
+                <div class="text-center py-12">
+                  <i class="fas fa-gift text-4xl text-gray-300 mb-4"></i>
+                  <p class="text-gray-500">尚未設定贊助方案</p>
                 </div>
               </div>
             </div>
             <div x-show="activeTab === 'faq'" class="space-y-6">
               <!-- FAQ 內容使用 htmx 動態載入 -->
-              <div hx-get="{% url 'projects:faq_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">Loading FAQs...</div>
+              <div hx-get="{% url 'projects:faq_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">
+                <div class="text-center py-12">
+                  <i class="fas fa-question-circle text-4xl text-gray-300 mb-4"></i>
+                  <p class="text-gray-500">尚未新增常見問題</p>
+                </div>
+              </div>
             </div>
             <div x-show="activeTab === 'updates'" class="space-y-6">
               <!-- 更新記錄使用 htmx 動態載入 -->
-              <div hx-get="{% url 'projects:update_records_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">Loading updates...</div>
+              <div hx-get="{% url 'projects:update_records_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">
+                <div class="text-center py-12">
+                  <i class="fas fa-newspaper text-4xl text-gray-300 mb-4"></i>
+                  <p class="text-gray-500">尚未發布更新記錄</p>
+                </div>
+              </div>
             </div>
             <div x-show="activeTab === 'comments'" class="space-y-6">
               <!-- 留言區使用 htmx 動態載入 -->
-              <div hx-get="{% url 'projects:comments_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">Loading comments...</div>
+              <div hx-get="{% url 'projects:comments_index' project.slug %}" hx-trigger="load" hx-target="this" hx-swap="innerHTML">
+                <div class="text-center py-12">
+                  <i class="fas fa-comments text-4xl text-gray-300 mb-4"></i>
+                  <p class="text-gray-500">尚未有留言討論</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
