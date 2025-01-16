@@ -36,10 +36,10 @@ def index(request, slug):
                 for option in options:
                     option.rewards.add(reward)
 
-            messages.success(request, "Reward 新增成功")
+            messages.success(request, "回饋方案新增成功")
             return redirect("projects:rewards_index", slug=project.slug)
         else:
-            messages.error(request, "Reward 表單有誤，請檢查後再提交")
+            messages.error(request, "回饋方案表單有誤，請檢查後再提交")
     rewards = Reward.objects.filter(project_id=project.id)
     products = RewardProduct.objects.filter(
         project_id=project.id,
@@ -164,7 +164,7 @@ def show(request, id):
                 )
                 reward.optionaladd_set.add(*options)
 
-            messages.success(request, "Reward 更新成功")
+            messages.success(request, "回饋方案更新成功")
             return redirect("rewards:show", id=reward.id)
         else:
             messages.error(request, "表單提交有誤，請檢查輸入內容")

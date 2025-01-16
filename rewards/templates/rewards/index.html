@@ -13,15 +13,26 @@
   <div class="container mx-auto px-4">
     <div class="max-w-5xl mx-auto">
       <!-- 操作按鈕 -->
-      <div class="flex justify-between items-center mb-8">
-        <a href="{% url 'projects:show' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+      <div x-data="rewardManager()" class="flex justify-between items-center mb-8">
+        <a href="{% url 'projects:show' project.slug %}" class="btn bg-[#85cacc20] text-[#1ea29e] px-4 py-2 rounded shadow hover:bg-[#85cacc40]">
           <i class="fas fa-arrow-left mr-2"></i>
           回到專案
         </a>
-        <a href="{% url 'projects:rewards_new' project.slug %}" class="btn text-white" style="background-color: #1ea29e; border: none">
+        <p class="text-gray-600 text-lg md:mx-4 text-center">溫馨提示：請先新增商品及加價購，再新增回饋方案。</p>
+        <a href="{% url 'projects:rewards_new' project.slug %}" @click="validateBeforeAdd(event)" class="btn text-white" style="background-color: #1ea29e; border: none">
           <i class="fas fa-plus mr-2"></i>
           新增回饋
         </a>
+
+        <!-- 提示框 -->
+        <div
+          x-show="showToast"
+          x-transition:enter="transition-opacity duration-300"
+          x-transition:leave="transition-opacity duration-300"
+          x-cloak
+          class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-[#1ea29e] text-white px-8 py-6 rounded-lg shadow-lg text-lg max-w-md text-center"
+          x-text="toastMessage"
+        ></div>
       </div>
 
       <!-- 網格布局 -->
@@ -49,7 +60,7 @@
         <!-- 商品 & 附加選項 -->
         <div class="pl-4 md:pl-8">
           <h2 class="text-xl font-semibold mb-4 text-gray-800">可選擇的商品</h2>
-          <ul class="space-y-4">
+          <ul id="product-list" class="space-y-4">
             {% for product in products %}
             <li class="p-4 bg-white shadow-md rounded-lg border border-gray-200">
               <div class="flex justify-between items-center">
@@ -57,12 +68,11 @@
               </div>
             </li>
             {% empty %}
-            <li class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500">目前沒有商品</li>
+            <li class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500 placeholder">目前沒有商品</li>
             {% endfor %}
           </ul>
-
           <h2 class="text-xl font-semibold mt-6 mb-4 text-gray-800">可選擇的加價購選項</h2>
-          <ul class="space-y-4">
+          <ul id="option-list" class="space-y-4">
             {% for option in options %}
             <li class="p-4 bg-white shadow-md rounded-lg border border-gray-200">
               <div class="flex justify-between items-center">
@@ -71,7 +81,7 @@
               </div>
             </li>
             {% empty %}
-            <li class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500">目前沒有加價購選項</li>
+            <li class="p-4 bg-gray-50 rounded-lg border border-gray-200 text-gray-500 placeholder">目前沒有加價購選項</li>
             {% endfor %}
           </ul>
         </div>
