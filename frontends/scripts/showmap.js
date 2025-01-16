@@ -1,5 +1,4 @@
 export function showMap(apiKey, mapId, address) {
-  // 1. 載入 Google Maps JS
   function loadGoogleMapsAPI() {
     return new Promise((resolve, reject) => {
       if (window.google && window.google.maps) {
@@ -26,7 +25,7 @@ export function showMap(apiKey, mapId, address) {
 
       // 建立地圖，可先放全球視野
       const map = new googleMaps.Map(document.getElementById("map"), {
-        center: { lat: 0, lng: 0 },
+        center: { lat: 25.033964, lng: 121.564468 },
         zoom: 2,
         mapId: mapId || undefined,
       });
