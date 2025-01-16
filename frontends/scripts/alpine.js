@@ -5,6 +5,10 @@ function formHandler() {
   return {
     products: [{ name: "" }],
     options: [{ name: "", price: 0 }],
+    activeSection: null,
+    toggleSection(section) {
+      this.activeSection = this.activeSection === section ? null : section;
+    },
     addProduct() {
       this.products.push({ name: "" });
     },
@@ -17,8 +21,15 @@ function formHandler() {
     removeOption(index) {
       this.options.splice(index, 1);
     },
+    resetForm() {
+      this.products = [{ name: "" }];
+    },
+    resetOptions() {
+      this.options = [{ name: "", price: 0 }];
+    },
   };
 }
+window.formHandler = formHandler;
 
 function rewardForm(basePrice) {
   return {
@@ -36,7 +47,6 @@ function rewardForm(basePrice) {
 }
 
 window.rewardForm = rewardForm;
-window.formHandler = formHandler;
 
 function fileUploadHandler() {
   return {

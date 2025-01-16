@@ -8,9 +8,16 @@
   </div>
 </div>
 
-<div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6">
-  <h1 class="text-2xl font-bold mb-4">新增及加價購商品</h1>
+<div class="max-w-5xl mx-auto mt-6">
+  <!-- 回到回饋列表按鈕 -->
+  <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+    <i class="fas fa-arrow-left mr-2"></i>
+    回到回饋列表
+  </a>
+</div>
 
+<div class="max-w-5xl mx-auto bg-white shadow-md rounded-lg p-6 mt-4">
+  <h1 class="text-2xl font-bold mb-4">新增及加價購商品</h1>
   <!-- 已存在的商品與選項 -->
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
     <!-- 左側：已存在的商品 -->
@@ -45,105 +52,101 @@
 
   <div x-data="formHandler()" class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <!-- 左側：Products Form -->
-    <form method="POST" class="border p-4 rounded-md">
-      {% csrf_token %}
-      <h2 class="text-xl font-semibold mb-4">商品</h2>
-      <div class="space-y-4">
-        <template x-for="(product, index) in products" :key="index">
-          <div class="flex items-center space-x-4 p-4 border rounded-md">
-            <div class="flex-grow">
-              <label class="block text-sm font-medium text-gray-700">商品名稱</label>
-              <input
-                type="text"
-                x-model="product.name"
-                :name="'products[' + index + ']'"
-                class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-              />
-            </div>
-            <button type="button" @click="removeProduct(index)" class="btn" style="background-color: #ff6b6b; color: white">
-              <i class="fas fa-trash mr-2"></i>
-              刪除
-            </button>
-          </div>
-        </template>
-
-        <button type="button" @click="addProduct" class="btn w-full" style="background-color: #1ea29e; color: white">
-          <i class="fas fa-plus mr-2"></i>
-          新增商品
-        </button>
-      </div>
-
-      <div class="flex justify-between mt-6">
-        <button type="reset" @click="resetForm" class="btn" style="background-color: #85cacc20; color: #1ea29e">
-          <i class="fas fa-undo mr-2"></i>
-          重置
-        </button>
-        <button name="save_products" type="submit" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
-          <i class="fas fa-save mr-2"></i>
-          儲存
-        </button>
-      </div>
-    </form>
-
-    <!-- 右側：Options Form -->
-    <form method="POST" class="border p-4 rounded-md">
-      {% csrf_token %}
-      <h2 class="text-xl font-semibold mb-4">選項</h2>
-      <div class="space-y-4">
-        <template x-for="(option, index) in options" :key="index">
-          <div class="flex items-center space-x-4 p-4 border rounded-md">
-            <div class="flex-grow grid grid-cols-2 gap-4">
-              <div>
-                <label class="block text-sm font-medium text-gray-700">選項名稱</label>
+    <div>
+      <button @click="toggleSection('products')" class="btn w-full text-white" style="background-color: #1ea29e">
+        <i class="fas fa-box mr-2"></i>
+        新增商品
+      </button>
+      <form x-show="activeSection === 'products'" method="POST" class="border p-4 rounded-md mt-4">
+        {% csrf_token %}
+        <h2 class="text-xl font-semibold mb-4">商品</h2>
+        <div class="space-y-4">
+          <template x-for="(product, index) in products" :key="index">
+            <div class="flex items-center space-x-4 p-4 border rounded-md">
+              <div class="flex-grow">
+                <label class="block text-sm font-medium text-gray-700">商品名稱</label>
                 <input
                   type="text"
-                  x-model="option.name"
-                  :name="'options[' + index + '][name]'"
-                  class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                />
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-700">價格</label>
-                <input
-                  type="number"
-                  x-model="option.price"
-                  :name="'options[' + index + '][price]'"
+                  x-model="product.name"
+                  :name="'products[' + index + ']'"
                   class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                 />
               </div>
             </div>
-            <button type="button" @click="removeOption(index)" class="btn" style="background-color: #ff6b6b; color: white">
-              <i class="fas fa-trash mr-2"></i>
-              刪除
-            </button>
-          </div>
-        </template>
+          </template>
 
-        <button type="button" @click="addOption" class="btn w-full" style="background-color: #1ea29e; color: white">
-          <i class="fas fa-plus mr-2"></i>
-          新增選項
-        </button>
-      </div>
+          <button type="button" @click="addProduct" class="btn w-full" style="background-color: #1ea29e; color: white">
+            <i class="fas fa-plus mr-2"></i>
+            新增商品
+          </button>
+        </div>
 
-      <div class="flex justify-between mt-6">
-        <button type="reset" @click="resetOptions" class="btn" style="background-color: #85cacc20; color: #1ea29e">
-          <i class="fas fa-undo mr-2"></i>
-          重置
-        </button>
-        <button name="save_options" type="submit" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
-          <i class="fas fa-save mr-2"></i>
-          儲存
-        </button>
-      </div>
-    </form>
+        <div class="flex justify-between mt-6">
+          <button type="reset" @click="resetForm" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+            <i class="fas fa-undo mr-2"></i>
+            重置
+          </button>
+          <button name="save_products" type="submit" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+            <i class="fas fa-save mr-2"></i>
+            儲存
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- 右側：Options Form -->
+    <div>
+      <button @click="toggleSection('options')" class="btn w-full text-white" style="background-color: #1ea29e">
+        <i class="fas fa-box mr-2"></i>
+        新增加價購
+      </button>
+      <form x-show="activeSection === 'options'" method="POST" class="border p-4 rounded-md mt-4">
+        {% csrf_token %}
+        <h2 class="text-xl font-semibold mb-4">選項</h2>
+        <div class="space-y-4">
+          <template x-for="(option, index) in options" :key="index">
+            <div class="flex items-center space-x-4 p-4 border rounded-md">
+              <div class="flex-grow grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">選項名稱</label>
+                  <input
+                    type="text"
+                    x-model="option.name"
+                    :name="'options[' + index + '][name]'"
+                    class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  />
+                </div>
+                <div>
+                  <label class="block text-sm font-medium text-gray-700">價格</label>
+                  <input
+                    type="number"
+                    x-model="option.price"
+                    :name="'options[' + index + '][price]'"
+                    class="mt-1 block w-full border-2 border-gray-600 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                  />
+                </div>
+              </div>
+            </div>
+          </template>
+
+          <button type="button" @click="addOption" class="btn w-full" style="background-color: #1ea29e; color: white">
+            <i class="fas fa-plus mr-2"></i>
+            新增加價購
+          </button>
+        </div>
+
+        <div class="flex justify-between mt-6">
+          <button type="reset" @click="resetOptions" class="btn" style="background-color: #85cacc20; color: #1ea29e">
+            <i class="fas fa-undo mr-2"></i>
+            重置
+          </button>
+          <button name="save_options" type="submit" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+            <i class="fas fa-save mr-2"></i>
+            儲存
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>
-
-<div class="max-w-5xl mx-auto mt-6">
-  <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
-    <i class="fas fa-arrow-left mr-2"></i>
-    回到回饋列表
-  </a>
-</div>
-
 {% endblock %}
