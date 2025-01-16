@@ -126,4 +126,5 @@ urlpatterns = [
         name="get_subcategories",
     ),
     path("search/", search_projects, name="search_projects"),
+    path("projects_all/", projects_all, name="projects_all"),
 ]

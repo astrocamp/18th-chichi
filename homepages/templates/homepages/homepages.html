@@ -5,284 +5,272 @@
 
 
 <div class="min-h-screen bg-white relative z-0">
-  <div class="relative group">
-    <img src="{% static 'media/網頁圖3.png' %}" 
-        alt="puzzle"
-        class="w-full h-auto object-cover">
-        <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center gap-6">
-          <!-- 瀏覽專案按鈕 -->
-          <a href="{% url 'projects:projects_all' %}"
-             class="px-8 py-3 bg-white/90 hover:bg-white text-[#1EA29E] text-[20px] font-bold rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
-              瀏覽專案
-          </a>
-          
-          <!-- 發起專案按鈕 -->
-          <a href="{%url 'projects:new'%}"
-             class="px-8 py-3 bg-white/90 hover:bg-white text-[#1EA29E] text-[20px] font-bold rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
-              發起專案
-          </a>
-      </div>
-      
-        
-  </div>
-
-
-<!-- 分類和專案區域 -->
-<div class="py-6 sm:py-8 lg:py-12 bg-white"
-     x-data="{ 
-       activeTab: '{% if current_category %}{{ current_category }}{% else %}全部{% endif %}',
-       filterProjects(category) {
-           this.activeTab = category;
-           const url = new URL(window.location.href);
-           url.search = '';
-           if (category !== '全部') {
-               url.searchParams.set('category', category);
-           }
-           window.location.href = url.toString();  // 重新載入整頁
-       }
-     }">
-
-    <!-- 分類按鈕導航 -->
-    <div class="mb-6 sm:mb-8"
-         x-data="{ 
-            showLeftArrow: false,
-            showRightArrow: false,
-            scrollContainer: null,
-            init() {
-                this.scrollContainer = this.$refs.categoryNav;
-                this.checkArrows();
-                this.scrollContainer.addEventListener('scroll', () => this.checkArrows());
-
-                // 頁面載入後, 自動捲動到當前 activeTab 按鈕
-                this.$nextTick(() => {
-                    const activeBtn = this.scrollContainer.querySelector(`[data-category='${activeTab}']`);
-                    if (activeBtn) {
-                        activeBtn.scrollIntoView({
-                            behavior: 'smooth',
-                            inline: 'center'
-                        });
-                    }
-                });
-            },
-            checkArrows() {
-                this.showLeftArrow = this.scrollContainer.scrollLeft > 0;
-                this.showRightArrow = 
-                    this.scrollContainer.scrollLeft < 
-                    (this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth);
-            },
-            scrollLeft() {
-                this.scrollContainer.scrollBy({ left: -400, behavior: 'smooth' });
-            },
-            scrollRight() {
-                this.scrollContainer.scrollBy({ left: 400, behavior: 'smooth' });
-            }
-         }"
-         x-init="init()">
-        <div class="relative max-w-6xl mx-auto">
-            <!-- 左箭頭 -->
-            <button 
-                @click="scrollLeft"
-                x-show="showLeftArrow"
-                class="absolute left-0 top-1/2 -translate-y-1/2 z-10  w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-    
-            <!-- 分類導航 -->
-            <nav x-ref="categoryNav" 
-                 class="flex gap-3 sm:gap-4 overflow-x-auto mx-8 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                <!-- 全部按鈕 -->
-                <button data-category="全部" 
-                @click="filterProjects('全部')"
-                        :class="{ 
-                            'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
-                            'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
-                        }"
-                        class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
-                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
-                    全部
-                </button>
-    
-                <!-- 動態分類按鈕 -->
-                {% for category in categories %}
-                <button data-category="{{category.title}}"
-                 @click="filterProjects('{{ category.title }}')"
-                        :class="{ 
-                            'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
-                            'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
-                        }"
-                        class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
-                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
-                    {{ category.title }}
-                </button>
-                {% endfor %}
-            </nav>
-    
-            <!-- 右箭頭 -->
-            <button 
-                @click="scrollRight"
-                x-show="showRightArrow"
-                class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center  bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-    </div> 
-
-
-  <!-- 卡片網格 -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 p-4 sm:p-6 lg:p-8">
-      {% for project in page_obj %}
-      <a href="{% url 'projects:public' project.slug %}"
-         class="block h-full"
-         data-project
-         data-categories="{% for cat in project.categories.all %}{{ cat.parent.title }}{% if not forloop.last %}, {% endif %}{% endfor %}"
-         x-show="activeTab === '全部' || $el.dataset.categories.includes(activeTab)"
-         x-cloak>
-          <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200 h-full flex flex-col">
-              <!-- 圖片部分 -->
-              <div class="relative w-full h-48 sm:h-56 lg:h-64 overflow-hidden">
-                  {% if project.cover_image %}
-                  <img src="{{ project.cover_image.url }}"
-                       alt="{{ project.title }}" 
-                       class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
-                  {% else %}
-                  <img src="{% static 'images/default-project.jpg' %}" 
-                       alt="{{ project.title }}" 
-                       class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
-                  {% endif %}
-              </div>
-
-              <!-- 內容部分 -->
-              <div class="p-4 sm:p-5 flex flex-col flex-grow">
-                  <!-- 標籤部分 -->
-                  <div class="flex flex-wrap gap-2 mb-3">
-                      <span class="inline-block px-3 sm:px-4 py-1 text-sm sm:text-base lg:text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
-                          {% for categories in project.categories.all %}
-                          {{ categories.parent }}{% if not forloop.last %}, {% endif %}
-                          {% endfor %}
-                      </span>
-                      <span class="inline-block px-3 sm:px-4 py-1 text-sm sm:text-base lg:text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
-                          {% for categories in project.categories.all %}
-                          {{ categories.title }}{% if not forloop.last %}, {% endif %}
-                          {% endfor %}
-                      </span>
-                  </div>
-
-                  <!-- 標題和副標題 -->
-                  <h3 class="text-xl sm:text-2xl font-bold line-clamp-1 mb-2">{{ project.title }}</h3>
-                  <div class="min-h-[5rem] sm:min-h-[6rem] lg:min-h-[7rem]">
-                      <p class="text-base sm:text-lg lg:text-xl text-gray-600 line-clamp-2 font-sans">
-                          {{ project.subtitle }}
-                      </p>
-                  </div>
-
-                  <!-- 進度條和資訊部分 -->
-                  <div class="mt-4 sm:mt-5 lg:mt-6 space-y-3">
-                      {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
-                      <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                          <div class="h-2.5 rounded-full transition-all duration-700 bg-[#1EA29E]"
-                               style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%">
-                          </div>
-                      </div>
-                      <div class="flex justify-between text-sm sm:text-base">
-                          <span class="font-medium text-gray-600">
-                              NT$ {{ project.raised_amount|floatformat:0|intcomma }}
-                          </span>
-                          <span class="font-medium text-[#1EA29E]">
-                              {% if percentage > 999 %}999+{% else %}{{ percentage }}{% endif %}%
-                          </span>
-                      </div>
-                      <div class="flex justify-between items-center">
-                          <span class="text-lg sm:text-xl lg:text-2xl font-bold text-[#1EA29E]">
-                              目標 $ {{ project.goal_amount|floatformat:0|intcomma }}
-                          </span>
-                          <div class="text-base sm:text-lg lg:text-xl text-[#1EA29E]">
-                              剩餘 {% if project.remaining_days >= 0 %}{{ project.remaining_days|add:"1" }}{% else %}0{% endif %} 天
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </a>
-      {% endfor %}
-  </div>
-</div>
-
-
-      {% if page_obj.paginator.num_pages > 1 %}
-        <div class="flex justify-center items-center space-x-2 py-8">
-            {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}" 
-              class="px-4 py-2 text-xl  rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
-                上一頁
+    <div class="relative group">
+      <img src="{% static 'media/網頁圖3.png' %}" 
+          alt="puzzle"
+          class="w-full h-auto object-cover">
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col items-center justify-center gap-6">
+            <!-- 瀏覽專案按鈕 -->
+            <a href="{% url 'projects:projects_all' %}"
+               class="px-8 py-3 bg-white/90 hover:bg-white text-[#1EA29E] text-[20px] font-bold rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
+                瀏覽專案
             </a>
-            {% endif %}
-        
-            {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                    <span class="px-4 py-2 text-xl  rounded-lg bg-[#1EA29E] text-white">
-                        {{ num }}
-                    </span>
-                {% else %}
-                    {% if num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
-                        <a href="?page={{ num }}"
-                           class="px-4 py-2 text-xl  rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
-                            {{ num }}
-                        </a>
-                    {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
-                        <span class="px-4 py-2text-xl ">...</span>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-        
-            {% if page_obj.has_next %}
-              <a href="`?page={{ page_obj.next_page_number }}&category=${activeTab}`"
-                class="px-4 py-2 text-xl rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
-                  下一頁
-              </a>
-            {% endif %}
+            
+            <!-- 發起專案按鈕 -->
+            <a href="{% url 'projects:new' %}"
+               class="px-8 py-3 bg-white/90 hover:bg-white text-[#1EA29E] text-[20px] font-bold rounded-lg transition-all duration-300 opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0">
+                發起專案
+            </a>
         </div>
-        {% endif %}        
-
+    </div>
+  
+  <!-- 分類和專案區域 -->
+  <div class="py-6 sm:py-8 lg:py-12 bg-white"
+       x-data="{ 
+         activeTab: '{% if current_category %}{{ current_category }}{% else %}全部{% endif %}',
+         filterProjects(category) {
+             this.activeTab = category;
+             const url = new URL(window.location.href);
+             url.search = '';
+             if (category !== '全部') {
+                 url.searchParams.set('category', category);
+             }
+             window.location.href = url.toString();  // 重新載入整頁
+         }
+       }">
+  
+      <!-- 分類按鈕導航 -->
+      <div class="mb-6 sm:mb-8"
+           x-data="{ 
+              showLeftArrow: false,
+              showRightArrow: false,
+              scrollContainer: null,
+              init() {
+                  this.scrollContainer = this.$refs.categoryNav;
+                  this.checkArrows();
+                  this.scrollContainer.addEventListener('scroll', () => this.checkArrows());
+  
+                  // 頁面載入後, 自動捲動到當前 activeTab 按鈕
+                  this.$nextTick(() => {
+                      const activeBtn = this.scrollContainer.querySelector(`[data-category='${activeTab}']`);
+                      if (activeBtn) {
+                          activeBtn.scrollIntoView({
+                              behavior: 'smooth',
+                              inline: 'center'
+                          });
+                      }
+                  });
+              },
+              checkArrows() {
+                  this.showLeftArrow = this.scrollContainer.scrollLeft > 0;
+                  this.showRightArrow = 
+                      this.scrollContainer.scrollLeft < 
+                      (this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth);
+              },
+              scrollLeft() {
+                  this.scrollContainer.scrollBy({ left: -400, behavior: 'smooth' });
+              },
+              scrollRight() {
+                  this.scrollContainer.scrollBy({ left: 400, behavior: 'smooth' });
+              }
+           }"
+           x-init="init()">
+          <div class="relative max-w-6xl mx-auto">
+              <!-- 左箭頭 -->
+              <button 
+                  @click="scrollLeft"
+                  x-show="showLeftArrow"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 z-10  w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
+                  <i class="fas fa-chevron-left"></i>
+              </button>
+      
+              <!-- 分類導航 -->
+              <nav x-ref="categoryNav" 
+                   class="flex gap-3 sm:gap-4 overflow-x-auto mx-8 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  <!-- 全部按鈕 -->
+                  <button data-category="全部" 
+                  @click="filterProjects('全部')"
+                          :class="{ 
+                              'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
+                              'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
+                          }"
+                          class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
+                          style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
+                      全部
+                  </button>
+      
+                  <!-- 動態分類按鈕 -->
+                  {% for category in categories %}
+                  <button data-category="{{category.title}}"
+                   @click="filterProjects('{{ category.title }}')"
+                          :class="{ 
+                              'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
+                              'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
+                          }"
+                          class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
+                          style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
+                      {{ category.title }}
+                  </button>
+                  {% endfor %}
+              </nav>
+      
+              <!-- 右箭頭 -->
+              <button 
+                  @click="scrollRight"
+                  x-show="showRightArrow"
+                  class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center  bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
+                  <i class="fas fa-chevron-right"></i>
+              </button>
+          </div>
+      </div> 
+      
+      <!-- 專案卡片網格 -->
+      {% if page_obj and page_obj|length > 0 %}
+  
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 p-4 sm:p-6 lg:p-8">
+          {% for project in page_obj %}
+          <a href="{% url 'projects:public' project.slug %}"
+             class="block h-full">
+              <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-all duration-200 h-full flex flex-col">
+                  <!-- 圖片部分 -->
+                  <div class="relative w-full h-48 sm:h-56 lg:h-64 overflow-hidden">
+                      {% if project.cover_image %}
+                      <img src="{{ project.cover_image.url }}"
+                           alt="{{ project.title }}" 
+                           class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
+                      {% else %}
+                      <img src="{% static 'images/default-project.jpg' %}" 
+                           alt="{{ project.title }}" 
+                           class="w-full h-full object-cover transition-transform duration-200 hover:scale-105">
+                      {% endif %}
+                  </div>
+  
+                  <!-- 內容部分 -->
+                  <div class="p-4 sm:p-5 flex flex-col flex-grow">
+                      <!-- 標籤部分 -->
+                      <div class="flex flex-wrap gap-2 mb-3">
+                          {% for categories in project.categories.all %}
+                          <span class="inline-block px-3 sm:px-4 py-1 text-sm sm:text-base lg:text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
+                              {{ categories.parent }}
+                          </span>
+                          <span class="inline-block px-3 sm:px-4 py-1 text-sm sm:text-base lg:text-l font-medium rounded-full bg-[#1EA29E]/10 text-[#1EA29E]">
+                              {{ categories.title }}
+                          </span>
+                          {% endfor %}
+                      </div>
+  
+                      <!-- 標題和副標題 -->
+                      <h3 class="text-xl sm:text-2xl font-bold line-clamp-1 mb-2">{{ project.title }}</h3>
+                      <div class="min-h-[5rem] sm:min-h-[6rem] lg:min-h-[7rem]">
+                          <p class="text-base sm:text-lg lg:text-xl text-gray-600 line-clamp-2 font-sans">
+                              {{ project.subtitle }}
+                          </p>
+                      </div>
+  
+                      <!-- 進度條和資訊部分 -->
+                      <div class="mt-4 sm:mt-5 lg:mt-6 space-y-3">
+                          {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
+                          <div class="w-full bg-gray-100 rounded-full h-2.5">
+                              <div class="h-2.5 rounded-full transition-all duration-700 bg-[#1EA29E]"
+                                   style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%">
+                              </div>
+                          </div>
+                          <div class="flex justify-between text-sm sm:text-base">
+                              <span class="font-medium text-gray-600">
+                                  NT$ {{ project.raised_amount|floatformat:0|intcomma }}
+                              </span>
+                              <span class="font-medium text-[#1EA29E]">
+                                  {% if percentage > 999 %}999+{% else %}{{ percentage }}{% endif %}%
+                              </span>
+                          </div>
+                          <div class="flex justify-between items-center">
+                              <span class="text-lg sm:text-xl lg:text-2xl font-bold text-[#1EA29E]">
+                                  目標 $ {{ project.goal_amount|floatformat:0|intcomma }}
+                              </span>
+                              <div class="text-base sm:text-lg lg:text-xl text-[#1EA29E]">
+                                  剩餘 {% if project.remaining_days >= 0 %}{{ project.remaining_days|add:"1" }}{% else %}0{% endif %} 天
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </a>
+          {% endfor %}
+      </div>
+  
+      <!-- 分頁部分 -->
+      {% if page_obj.paginator.num_pages > 1 %}
+      <div class="flex justify-center items-center space-x-2 py-8">
+          {% if page_obj.has_previous %}
+          <a href="?{% if current_category %}category={{ current_category }}&{% endif %}page={{ page_obj.previous_page_number }}" 
+              class="px-4 py-2 text-xl rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+              上一頁
+          </a>
+          {% endif %}
+  
+          {% for num in page_obj.paginator.page_range %}
+              {% if num == page_obj.number %}
+                  <span class="px-4 py-2 text-xl rounded-lg bg-[#1EA29E] text-white">
+                      {{ num }}
+                  </span>
+              {% else %}
+                  {% if num == 1 or num == page_obj.paginator.num_pages or num >= page_obj.number|add:'-2' and num <= page_obj.number|add:'2' %}
+                      <a href="?{% if current_category %}category={{ current_category }}&{% endif %}page={{ num }}"
+                         class="px-4 py-2 text-xl rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+                          {{ num }}
+                      </a>
+                  {% elif num == page_obj.number|add:'-3' or num == page_obj.number|add:'3' %}
+                      <span class="px-4 py-2 text-xl">...</span>
+                  {% endif %}
+              {% endif %}
+          {% endfor %}
+  
+          {% if page_obj.has_next %}
+          <a href="?{% if current_category %}category={{ current_category }}&{% endif %}page={{ page_obj.next_page_number }}"
+              class="px-4 py-2 text-xl rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors duration-200">
+              下一頁
+          </a>
+          {% endif %}
+      </div>
+      {% endif %}
+      {% else %}
+      <!-- 當沒有專案時顯示的訊息 -->
+      <div class="flex justify-center items-center h-64">
+          <p class="text-center text-gray-500 text-lg sm:text-xl lg:text-2xl">目前該分類沒有專案(•ө•)</p>
+      </div>
+      {% endif %}
+  </div>
+  
+  
+      <!-- 查看更多按鈕 -->
       <div class="text-center pb-8">
-        <a
-        href="{% url 'projects:projects_all' %}"
-        class="inline-block px-10 py-2 text-[20px] font-bold rounded-lg text-white transition-all duration-200 hover:shadow-lg"
-        style="background-color: #1EA29E"
-        >
-        查看更多專案
-        </a>
+          <a href="{% url 'projects:projects_all' %}"
+             class="inline-block px-10 py-2 text-[20px] font-bold rounded-lg text-white transition-all duration-200 hover:shadow-lg"
+             style="background-color: #1EA29E">
+              查看更多專案
+          </a>
+      </div>
     </div>
-    </div>
-</section>
-
-<div class="bg-[#1EA29E] py-6">
-  <div class="container mx-auto px-6 max-w-4xl">
-    <div class="space-y-3 text-center">
-      <h2 class="text-2xl font-bold text-white">開始你的募資計畫</h2>
-      
-      <p class="text-white/80 text-base mx-auto">
-        無論是創新科技、文創藝術、或是社會公益，
-        我們都歡迎有理想、有熱情的你加入。現在就開始你的集資之旅！
-      </p>
-      
-      <div class="flex justify-center gap-4 pt-1">
-        <a
-          href="{% url 'projects:new' %}"
-          class="px-5 py-2 font-bold bg-white/10 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
-        >
-          立即提案
-        </a>
-        
-        <a
-          href="#"
-          class="px-5 py-2 font-bold bg-white/10 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
-          class="px-5 py-2 font-bold bg-white/10 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300"
-        >
-          了解更多
-        </a>
+  
+    <!-- 底部呼籲區域 -->
+    <div class="bg-[#1EA29E] py-6">
+      <div class="container mx-auto px-6 max-w-4xl">
+        <div class="space-y-3 text-center">
+          <h2 class="text-2xl font-bold text-white">開始你的募資計畫</h2>
+          
+          <p class="text-white/80 text-base mx-auto">
+            無論是創新科技、文創藝術、或是社會公益，
+            我們都歡迎有理想、有熱情的你加入。現在就開始你的集資之旅！
+          </p>
+          
+          <div class="flex justify-center gap-4 pt-1">
+            <a href="{% url 'projects:new' %}"
+               class="px-5 py-2 font-bold bg-white/10 text-white rounded-lg hover:bg-teal-700 transition-colors duration-300">
+              立即提案
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-</div>
-{% endblock %}
+  {% endblock %}

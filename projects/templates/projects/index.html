@@ -1,4 +1,7 @@
-{% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+{% extends "shared/layout.html" %}  
+{% load humanize %}
+{% load static %}
+{% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
   <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
@@ -40,12 +43,13 @@
             <p class="text-gray-600 text-sm mb-4">{{ project.subtitle }}</p>
             {% endif %}
             <div class="space-y-3">
+              {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
               <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="h-2 rounded-full" style="width: {{ project.progress_percentage }}%; background-color: #85cacc"></div>
+                <div class="h-2 rounded-full" style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%"></div>
               </div>
               <div class="flex justify-between text-sm">
-                <span class="font-bold" style="color: #1ea29e">NT$ {{ project.raised_amount|default:'0'|floatformat:0 }}</span>
-                <span class="text-gray-500">目標 {{ project.goal_amount|floatformat:0 }}</span>
+                <span class="font-bold" style="color: #1ea29e">NT$ {{ project.raised_amount|floatformat:0|intcomma }}</span>
+                <span class="text-gray-500">目標 {{ project.goal_amount|floatformat:0|intcomma }}</span>
               </div>
             </div>
             <div class="mt-6 flex justify-end space-x-2">
