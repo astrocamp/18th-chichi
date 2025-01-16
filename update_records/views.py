@@ -8,7 +8,7 @@ from django.contrib import messages
 
 
 def index(request, slug):
-    project = get_object_or_404(Project, slug=slug, account=request.user)
+    project = get_object_or_404(Project, slug=slug)
 
     if request.method == "POST":
         if not request.user.is_authenticated:
@@ -33,6 +33,9 @@ def index(request, slug):
             "projects/partials/update_records_content.html",
             {"update_records": update_records},
         )
+    if project.account != request.user:
+        messages.error(request, "您無權訪問該頁面")
+        return redirect("projects:public", slug=project.slug)
 
     return render(
         request,

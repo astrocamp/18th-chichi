@@ -13,7 +13,7 @@ from django.contrib.auth.models import User
 
 def index(request, slug):
     account = request.user
-    project = get_object_or_404(Project, slug=slug, account=account)
+    project = get_object_or_404(Project, slug=slug)
     if request.POST:
         if not request.user.is_authenticated:
             messages.error(request, "請先登入")
@@ -36,6 +36,9 @@ def index(request, slug):
             "projects/partials/faq_content.html",
             {"faqs": faqs, "account": account},
         )
+    if project.account != request.user:
+        messages.error(request, "您無權訪問該頁面")
+        return redirect("projects:public", slug=project.slug)
 
     return render(
         request,
