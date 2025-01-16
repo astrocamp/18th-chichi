@@ -240,6 +240,12 @@ def edit(request, slug):
             "categories": parent_categories,  # 傳遞父分類到模板
             "selected_category": selected_category,  # 預設選中的主要分類
             "selected_sub_category": selected_sub_category,  # 預設選中的子分類
+            "format_time_start": format_time_start,
+            "format_time_end": format_time_end,
+            "media_type": media_type,
+            "categories": categories,
+            "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
+            "GOOGLE_MAPS_MAP_ID": settings.GOOGLE_MAPS_MAP_ID,
         },
     )
 
@@ -639,6 +645,8 @@ def public(request, slug):
             "profile": profile,
             "comments": comments,
             "user": request.user,
+            "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
+            "GOOGLE_MAPS_MAP_ID": settings.GOOGLE_MAPS_MAP_ID,
         },
     )
 

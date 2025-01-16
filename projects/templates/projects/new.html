@@ -1,4 +1,11 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
+<script type="module">
+  import { initAutocomplete } from '/static/scripts/google_maps.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initAutocomplete('{{ GOOGLE_MAPS_API_KEY }}', '{{ GOOGLE_MAPS_MAP_ID }}');
+  });
+</script>
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
   <div class="relative flex items-center justify-center py-8"
@@ -92,82 +99,19 @@
               <h2 class="text-2xl font-semibold text-gray-800 mb-6">專案內容</h2>
 
               <div>
-                <label for="story" class="block text-sm font-medium text-gray-700 mb-1">專案說明
-                  <span class="text-red-500">*</span>
-
-                </label>
-                <textarea required id="story" name="story" rows="6" required class="textarea textarea-bordered w-full"
-                  placeholder="詳細描述你的專案內容、特色和計畫"></textarea>
-              </div>
-              <div class="mb-4">
-                <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類
-                  <span class="text-red-500">*</span>
-
-                </label>
-                <select required name="category" id="category" class="input input-bordered w-full"
-                  onchange="updateSubCategories()">
-                  <option value="" selected>選擇</option>
-                  {% for category in categories %}
-                  <option value="{{ category.id }}">{{ category.title }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="mb-4">
-                <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類
-                  <span class="text-red-500">*</span>
-
-                </label>
-                <select required name="categories" id="sub_category" class="input input-bordered w-full">
-                  <option value="" selected>選擇</option>
-                </select>
+                <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點</label>
+                <input id="searchBox" name="location" type="text" placeholder="請輸入地址"
+                  class="border border-gray-300 rounded px-4 py-2 w-full" />
+                <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
               </div>
 
-              <div>
-                <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點
-                  <span class="text-red-500">*</span>
-
-                </label>
-                <select id="location" name="location" required
-                  class="border border-gray-300 rounded-lg w-full px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                  <option value="" disabled selected>請選擇專案地點</option>
-                  <option value="基隆市">基隆市</option>
-                  <option value="台北市">台北市</option>
-                  <option value="新北市">新北市</option>
-                  <option value="桃園市">桃園市</option>
-                  <option value="新竹市">新竹市</option>
-                  <option value="新竹縣">新竹縣</option>
-                  <option value="苗栗縣">苗栗縣</option>
-                  <option value="台中市">台中市</option>
-                  <option value="彰化縣">彰化縣</option>
-                  <option value="南投縣">南投縣</option>
-                  <option value="雲林縣">雲林縣</option>
-                  <option value="嘉義市">嘉義市</option>
-                  <option value="嘉義縣">嘉義縣</option>
-                  <option value="台南市">台南市</option>
-                  <option value="高雄市">高雄市</option>
-                  <option value="屏東縣">屏東縣</option>
-                  <option value="宜蘭縣">宜蘭縣</option>
-                  <option value="花蓮縣">花蓮縣</option>
-                  <option value="台東縣">台東縣</option>
-                  <option value="澎湖縣">澎湖縣</option>
-                  <option value="金門縣">金門縣</option>
-                  <option value="連江縣">連江縣</option>
-                </select>
+              <!-- 按鈕區 -->
+              <div class="flex justify-end space-x-4 pt-8">
+                <a href="{% url 'projects:index' %}" class="btn"
+                  style="background-color: #85cacc20; color: #85cacc">取消</a>
+                <button type="submit" class="btn text-white"
+                  style="background-color: #1ea29e; border: none">建立專案</button>
               </div>
-            </div> -->
-            <div>
-              <p class="text-lg mb-1">地址搜尋</p>
-              <input id="searchBox" type="text" placeholder="請輸入地址"
-                class="border border-gray-300 rounded px-4 py-2 w-full" />
-              <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
-            </div>
-
-            <!-- 按鈕區 -->
-            <div class="flex justify-end space-x-4 pt-8">
-              <a href="{% url 'projects:index' %}" class="btn"
-                style="background-color: #85cacc20; color: #85cacc">取消</a>
-              <button type="submit" class="btn text-white" style="background-color: #1ea29e; border: none">建立專案</button>
-            </div>
         </form>
       </div>
     </div>
@@ -196,13 +140,5 @@
       });
     }
   }
-</script>
-<script type="module">
-  import { initAutocomplete } from '/static/scripts/google_maps.js';
-
-  // 確保在 DOM 載入完成後才初始化
-  document.addEventListener('DOMContentLoaded', () => {
-    initAutocomplete('{{ GOOGLE_MAPS_API_KEY }}', '{{ GOOGLE_MAPS_MAP_ID }}');
-  });
 </script>
 {% endblock %}

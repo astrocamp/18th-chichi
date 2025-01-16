@@ -1,4 +1,4 @@
-export function initAutocomplete(apiKey) {
+export function initAutocomplete(apiKey, mapId) {
   function loadGoogleMapsAPI() {
     return new Promise((resolve, reject) => {
       if (window.google && window.google.maps) {

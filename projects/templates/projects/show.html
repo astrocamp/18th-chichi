@@ -63,26 +63,26 @@
           </div>
         </div>
 
+
+        <!-- 分類區塊 -->
+        <div class="mt-4">
+          <h3 class="text-lg font-semibold mb-2">分類</h3>
+          {% if categories %}
+          <ul class="list-none">
+            {% for category in categories %}
+            <li class="text-gray-600">{% if category.parent %} {{ category.parent.title }} > {{ category.title }} {%
+              else %} {{ category.title }} {% endif %}</li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="text-gray-600">無分類</p>
+          {% endif %}
+        </div>
         <!-- 募資地點 -->
         <div>
-          <p class="text-lg mb-1">募資地點</p>
-          <p class="text-gray-600">{{ project.location }}</p>
+          <p class="text-sm text-gray-500">專案地點</p>
+          <p class="text-sm font-medium text-gray-900">{{ project.location }}</p>
           <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
-
-          <!-- 分類區塊 -->
-          <div class="mt-4">
-            <h3 class="text-lg font-semibold mb-2">分類</h3>
-            {% if categories %}
-            <ul class="list-none">
-              {% for category in categories %}
-              <li class="text-gray-600">{% if category.parent %} {{ category.parent.title }} > {{ category.title }} {%
-                else %} {{ category.title }} {% endif %}</li>
-              {% endfor %}
-            </ul>
-            {% else %}
-            <p class="text-gray-600">無分類</p>
-            {% endif %}
-          </div>
         </div>
       </div>
     </div>
@@ -160,6 +160,13 @@
     </div>
   </div>
 </div>
+<script type="module">
+  import { showMap } from "{% static 'scripts/showMap.js' %}";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    showMap("{{ GOOGLE_MAPS_API_KEY }}", "{{ GOOGLE_MAPS_MAP_ID }}", "{{ project.location }}");
+  });
+</script>
 {% endblock %} {% block "extra_js" %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
