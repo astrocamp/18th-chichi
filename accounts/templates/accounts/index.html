@@ -84,12 +84,12 @@
                 我的專案
               </a>
               <a
-                href="{% url 'profile:edit' %}"
+                href="{% if profile.birthday %}{% url 'profile:edit' %}{% else %}{% url 'profile:new' %}{% endif %}"
                 class="inline-flex items-center text-white rounded-lg transition-colors duration-200 hover:bg-teal-700 px-4 py-2"
                 style="background-color: #1ea29e; width: auto"
               >
                 <i class="fas fa-user-edit mr-2"></i>
-                編輯個人資料
+                {% if profile.birthday %}編輯個人資料{% else %}新增個人資料{% endif %}
               </a>
             </div>
           </div>

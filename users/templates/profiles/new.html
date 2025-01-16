@@ -48,20 +48,23 @@
     </div>
 
     <!-- 生日 -->
-    <div>
+    <div x-data="dateValidationHandler()">
       <label for="birthday" class="block text-lg font-semibold text-gray-600">
         生日
-        <span class="text-red-500">*</span>
+        <span class="text-red-500">* 注意：生日一經選定，將無法修改</span>
       </label>
       <input
         type="date"
         id="birthday"
         name="birthday"
         max="{{ today|date:'Y-m-d' }}"
-        value=""
+        x-model="selectedDate"
+        @change="validateDate"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        :class="{ 'border-red-500': isInvalid }"
         required
       />
+      <p x-show="isInvalid" class="text-red-500 text-sm">請選擇今天之前的日期。</p>
     </div>
 
     <!-- 地點 -->

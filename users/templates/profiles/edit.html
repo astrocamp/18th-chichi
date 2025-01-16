@@ -43,11 +43,13 @@
         電話 <span class="text-red-500">*</span>
       </label>
       <input
-        type="tel"
+        type="text"
         id="phone"
         name="phone"
         value="{{ profile.phone|default_if_none:'' }}"
         class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
+        pattern="09\d{8}"
+        maxlength="10"
         required
       />
     </div>
@@ -63,8 +65,8 @@
         name="birthday"
         max="{{ today|date:'Y-m-d' }}"
         value="{{ format_time|default_if_none:'' }}"
-        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring focus:ring-blue-200 focus:outline-none"
-        required
+        class="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-0 bg-gray-100 text-gray-500 cursor-not-allowed"
+        readonly
       />
     </div>
 
