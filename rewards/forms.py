@@ -7,7 +7,6 @@ class RewardForm(forms.ModelForm):
         fields = [
             "title", 
             "description",
-            "quantity",
             "price", 
             "estimated_delivery", 
         ]
