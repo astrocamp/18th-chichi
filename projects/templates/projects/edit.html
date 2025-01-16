@@ -16,6 +16,7 @@
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
         <form
+          id="project-form"
           method="POST"
           action="{% url 'projects:show' project.slug %}"
           class="space-y-6"
@@ -128,6 +129,8 @@
             <input type="text" id="start-date" name="start_at" value="{{ project.start_at|date:"Y-m-d" }}" class="p-2 border rounded-lg"  placeholder="開始日期">
             <input type="text" id="end-date"  name="end_at" value="{{ project.end_at|date:"Y-m-d" }}"  class="p-2 border rounded-lg" placeholder="結束日期">
           </div>
+          <p id="date-error" class="text-red-500 text-sm mt-2 hidden">請選擇開始和結束日期</p>
+
 
         
 
