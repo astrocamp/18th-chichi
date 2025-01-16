@@ -29,8 +29,6 @@ DEBUG = env.bool("DEBUG", default=True)
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 
-
-
 # Application definition
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -101,11 +99,11 @@ WSGI_APPLICATION = "core.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": env("DB_NAME"),
-        "USER": env("DB_USER"),
-        "PASSWORD": env("DB_PASSWORD"),
-        "HOST": env("DB_HOST"),
-        "PORT": env("DB_PORT"),
+        "NAME": env("MYSQL_DATABASE"),
+        "USER": env("MYSQL_USERNAME"),
+        "PASSWORD": env("MYSQL_PASSWORD"),
+        "HOST": env("MYSQL_HOST"),
+        "PORT": env("MYSQL_PORT"),
     }
 }
 
@@ -152,7 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",  # 確保這裡指向包含 styles 的目錄
@@ -235,10 +233,10 @@ EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"
 DEFAULT_FROM_EMAIL = "吱吱 CHICHI <CHICHI@mg.chichii.com>"
 
 AWS_STORAGE_BUCKET_NAME = env("AWS_STORAGE_BUCKET_NAME")
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://chichii.com',
+    "https://chichii.com",
 ]
 GOOGLE_MAPS_API_KEY = os.getenv("GOOGLE_MAPS_API_KEY")
 GOOGLE_MAPS_MAP_ID = os.getenv("GOOGLE_MAPS_MAP_ID")
