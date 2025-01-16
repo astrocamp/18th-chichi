@@ -82,7 +82,6 @@
         <div>
           <p class="text-sm text-gray-500">專案地點</p>
           <p class="text-sm font-medium text-gray-900">{{ project.location }}</p>
-          <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
         </div>
       </div>
     </div>
@@ -160,13 +159,6 @@
     </div>
   </div>
 </div>
-<script type="module">
-  import { showMap } from "{% static 'scripts/showMap.js' %}";
-
-  document.addEventListener("DOMContentLoaded", () => {
-    showMap("{{ GOOGLE_MAPS_API_KEY }}", "{{ GOOGLE_MAPS_MAP_ID }}", "{{ project.location }}");
-  });
-</script>
 {% endblock %} {% block "extra_js" %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
