@@ -11,9 +11,6 @@ function initializeCalendar() {
     const calendarEl = document.getElementById('calendar');
     if (!calendarEl) return;
 
-    const pathSegments = window.location.pathname.split('/').filter(Boolean);
-    const projectSlug = pathSegments[1];
-
     const calendar = new Calendar(calendarEl, {
         plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
         initialView: 'dayGridMonth',
@@ -30,7 +27,7 @@ function initializeCalendar() {
         height: 'auto',
 
         events: {
-            url: `/projects/${projectSlug}/calendar-events/`,
+            url: '/projects/api/calendar-events/',
             method: 'GET',
         },
 
@@ -43,16 +40,16 @@ function initializeCalendar() {
         },
 
         eventDrop: function(info) {
-            updateEvent(info.event, projectSlug);
+            updateEvent(info.event);
         },
 
         eventResize: function(info) {
-            updateEvent(info.event, projectSlug);
+            updateEvent(info.event);
         }
     });
 
     calendar.render();
-    setupEventHandlers(calendar, projectSlug);
+    setupEventHandlers(calendar);
 }
 
 function openEventDialog(mode, event, start = null, end = null) {
@@ -79,15 +76,15 @@ function openEventDialog(mode, event, start = null, end = null) {
     dialog.showModal();
 }
 
-async function updateEvent(event, projectSlug) {
+async function updateEvent(event) {
     const eventData = {
         title: event.title,
         start_at: formatDateTime(event.start),
-        end_at: formatDateTime(event.end || event.start)
+        end_at: formatDateTime(event.end || event.start),
     };
 
     try {
-        const response = await fetch(`/projects/${projectSlug}/calendar-events/${event.id}/update/`, {
+        const response = await fetch(`/projects/api/calendar-events/${event.id}/update/`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -107,7 +104,7 @@ async function updateEvent(event, projectSlug) {
     }
 }
 
-function setupEventHandlers(calendar, projectSlug) {
+function setupEventHandlers(calendar) {
     const saveButton = document.getElementById('saveEvent');
     const closeButton = document.getElementById('closeDialog');
     const deleteButton = document.getElementById('deleteEvent');
@@ -120,7 +117,7 @@ function setupEventHandlers(calendar, projectSlug) {
             const start_at = document.getElementById('eventStart')?.value;
             const end_at = document.getElementById('eventEnd')?.value;
 
-            if (!title || !start_at || !end_at) {
+            if (!title || !end_at) {
                 alert('請填寫所有必填欄位');
                 return;
             }
@@ -133,8 +130,8 @@ function setupEventHandlers(calendar, projectSlug) {
 
             try {
                 const url = eventId
-                    ? `/projects/${projectSlug}/calendar-events/${eventId}/update/`
-                    : `/projects/${projectSlug}/calendar-events/add/`;
+                    ? `/projects/api/calendar-events/${eventId}/update/`
+                    : '/projects/api/calendar-events/add/';
                 const method = eventId ? 'PUT' : 'POST';
 
                 const response = await fetch(url, {
@@ -160,7 +157,7 @@ function setupEventHandlers(calendar, projectSlug) {
                             id: eventData.id,
                             title: eventData.title,
                             start: eventData.start,
-                            end: eventData.end
+                            end: eventData.end,
                         });
                     }
                     dialog?.close();
@@ -181,7 +178,7 @@ function setupEventHandlers(calendar, projectSlug) {
 
             if (confirm('確定要刪除這個事件嗎？')) {
                 try {
-                    const response = await fetch(`/projects/${projectSlug}/calendar-events/${eventId}/delete/`, {
+                    const response = await fetch(`/projects/api/calendar-events/${eventId}/delete/`, {
                         method: 'DELETE',
                         headers: {
                             'X-CSRFToken': getCookie('csrftoken')
@@ -239,4 +236,4 @@ function getCookie(name) {
         }
     }
     return cookieValue;
-}   
+}

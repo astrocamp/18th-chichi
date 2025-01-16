@@ -1087,29 +1087,24 @@ def search_projects(request):
 
 
 @api_view(["GET"])
-def project_calendar_events(request, slug):
+def project_calendar_events(request):
     account = request.user
-
-    project = get_object_or_404(Project, slug=slug)
     events = ProjectCalendar.objects.filter(account=account)
     serializer = ProjectCalendarSerializer(events, many=True)
     return Response(serializer.data)
 
 
 @api_view(["POST"])
-def add_calendar_event(request, slug):
-    project = get_object_or_404(Project, slug=slug, account=request.user)
+def add_calendar_event(request):
     serializer = ProjectCalendarSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(project=project, account=request.user)
+        serializer.save(account=request.user)
         return Response(serializer.data, status=201)
     return Response(serializer.errors, status=400)
 
 
 @api_view(["PUT"])
-def update_calendar_event(request, slug, event_id):
-
-    project = get_object_or_404(Project, slug=slug, account=request.user)
+def update_calendar_event(request, event_id):
     event = get_object_or_404(ProjectCalendar, id=event_id, account=request.user)
 
     serializer = ProjectCalendarSerializer(event, data=request.data)
@@ -1120,10 +1115,7 @@ def update_calendar_event(request, slug, event_id):
 
 
 @api_view(["DELETE"])
-def delete_calendar_event(request, slug, event_id):
-
-    project = get_object_or_404(Project, slug=slug, account=request.user)
+def delete_calendar_event(request, event_id):
     event = get_object_or_404(ProjectCalendar, id=event_id, account=request.user)
-
     event.delete()
     return Response(status=204)

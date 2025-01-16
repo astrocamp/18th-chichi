@@ -1,22 +1,13 @@
 from rest_framework import serializers
-from .models import Project, ProjectCalendar
-
-
-class ProjectSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Project
-        fields = ["id", "title", "slug"]
+from .models import ProjectCalendar
 
 
 class ProjectCalendarSerializer(serializers.ModelSerializer):
-    project = ProjectSerializer(read_only=True)
-
     class Meta:
         model = ProjectCalendar
-        fields = ["id", "title", "start_at", "end_at", "project"]
+        fields = ["id", "title", "start_at", "end_at"]
 
     def to_representation(self, instance):
-
         return {
             "id": instance.id,
             "title": instance.title,

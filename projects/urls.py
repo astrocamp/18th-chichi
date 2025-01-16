@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     index,
     new,
@@ -151,4 +151,5 @@ urlpatterns = [
         delete_calendar_event,
         name="delete_calendar_event",
     ),
+    path("api/", include("projects.api_urls")), 
 ]

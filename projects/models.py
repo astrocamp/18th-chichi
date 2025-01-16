@@ -162,9 +162,6 @@ class FavoritePrject(models.Model):
 
 
 class ProjectCalendar(models.Model):
-    project = models.ForeignKey(
-        "Project", on_delete=models.CASCADE, related_name="calendar_events"
-    )
     account = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="calendar_events"
     )
