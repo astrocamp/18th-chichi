@@ -14,7 +14,7 @@
   <div class="py-16">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <form method="POST" enctype="multipart/form-data" action="{% url 'projects:index' %}" class="space-y-6">
+        <form id="project-form" method="POST" enctype="multipart/form-data" action="{% url 'projects:index' %}" class="space-y-6">
           {% csrf_token %}
 
           <!-- 基本資訊 -->
