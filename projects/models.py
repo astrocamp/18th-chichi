@@ -178,6 +178,12 @@ class Sponsor(models.Model):
         default="pending",
     )
 
+    def __str__(self):
+        return f"{self.account.username} - {self.project.title} - {self.amount}"
+
+    class Meta:
+        ordering = ["-created_at"]
+
 
 class ProjectCategory(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE)

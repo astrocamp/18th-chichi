@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from rewards.models import Reward
 from django.contrib.auth.models import User
 from decimal import Decimal
@@ -22,34 +22,43 @@ class Order(models.Model):
         return f"Order {self.order_id} - 自由贊助"
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if self.paid:
-            # 更新專案的 raised_amount
-            project = self.reward.project if self.reward else None
-            if not project and self.reward is None:
-                # 如果是自由贊助，從 description 中取得專案標題
-                from projects.models import Project
+        with transaction.atomic():
+            # 檢查訂單狀態是否改變
+            if self.pk:
+                old_order = Order.objects.get(pk=self.pk)
+                status_changed = old_order.paid != self.paid
+            else:
+                status_changed = self.paid
 
-                project_title = self.description.split(" - ")[0]
-                project = Project.objects.filter(title=project_title).first()
+            # 保存訂單
+            super().save(*args, **kwargs)
 
-            if project:
-                # 建立或更新 Sponsor 記錄
-                from projects.models import Sponsor
+            # 只在支付狀態改變且為已支付時更新
+            if status_changed and self.paid:
+                # 確定專案
+                project = self.reward.project if self.reward else None
+                if not project and self.reward is None:
+                    # 如果是自由贊助，從 description 中取得專案標題
+                    from projects.models import Project
 
-                sponsor, created = Sponsor.objects.get_or_create(
-                    account=self.user,
-                    project=project,
-                    reward=self.reward,
-                    defaults={"amount": self.amount, "status": "paid"},
-                )
-                if not created:
-                    sponsor.amount += self.amount
-                    sponsor.status = "paid"
-                    sponsor.save()
+                    project_title = self.description.split(" - ")[0]
+                    project = Project.objects.filter(title=project_title).first()
 
-                # 更新專案的已籌金額
-                project.update_raised_amount()
+                if project:
+                    # 更新 Sponsor 記錄的狀態
+                    from projects.models import Sponsor
+
+                    # 找到所有符合條件的待付款記錄並更新
+                    Sponsor.objects.filter(
+                        account=self.user,
+                        project=project,
+                        reward=self.reward,
+                        amount=self.amount,
+                        status="pending",
+                    ).update(status="paid")
+
+                    # 更新專案的已籌金額
+                    project.update_raised_amount()
 
     class Meta:
         ordering = ["-created_at"]
