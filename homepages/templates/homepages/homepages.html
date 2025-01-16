@@ -27,65 +27,106 @@
   </div>
 
 
-  <!-- 分類和卡片區域 -->
-  <div class="py-4 sm:py-6 lg:py-8 bg-white" x-data="{
-    activeTab: '全部',
-    filterProjects(category) {
-        this.activeTab = category;
-        const projects = document.querySelectorAll('[data-project]');
-        projects.forEach(project => {
-            const categories = project.dataset.categories.split(', ');
-            if (category === '全部' || categories.includes(category)) {
-                project.style.display = '';
-            } else {
-                project.style.display = 'none';
-            }
-        });
-    }
-  }">
-  <div class="py-6 sm:py-8 lg:py-12 bg-white" x-data="{
-    activeTab: '全部',
-    filterProjects(category) {
-        this.activeTab = category;
-        const projects = document.querySelectorAll('[data-project]');
-        projects.forEach(project => {
-            const categories = project.dataset.categories.split(', ');
-            if (category === '全部' || categories.includes(category)) {
-                project.style.display = '';
-            } else {
-                project.style.display = 'none';
-            }
-        });
-    }
-  }">
-    <!-- 分類按鈕導航 -->
-    <div class="mb- sm:mb-6 lg:mb-8">
-        <nav class="flex flex-wrap justify-center gap-3 sm:gap-4">
-            <!-- 全部按鈕 -->
-            <button @click="filterProjects('全部')" 
-                    :class="{ 
-                        'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
-                        'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
-                    }"
-                    class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px]"
-                    style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
-                全部
-            </button>
+<!-- 分類和專案區域 -->
+<div class="py-6 sm:py-8 lg:py-12 bg-white"
+     x-data="{ 
+       activeTab: '{% if current_category %}{{ current_category }}{% else %}全部{% endif %}',
+       filterProjects(category) {
+           this.activeTab = category;
+           const url = new URL(window.location.href);
+           url.search = '';
+           if (category !== '全部') {
+               url.searchParams.set('category', category);
+           }
+           window.location.href = url.toString();  // 重新載入整頁
+       }
+     }">
 
-          <!-- 動態分類按鈕 -->
-            {% for category in categories %}
-            <button @click="filterProjects('{{ category.title }}')"
-                    :class="{ 
-                        'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
-                        'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
-                    }"
-                    class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px]"
-                    style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
-                {{ category.title }}
+    <!-- 分類按鈕導航 -->
+    <div class="mb-6 sm:mb-8"
+         x-data="{ 
+            showLeftArrow: false,
+            showRightArrow: false,
+            scrollContainer: null,
+            init() {
+                this.scrollContainer = this.$refs.categoryNav;
+                this.checkArrows();
+                this.scrollContainer.addEventListener('scroll', () => this.checkArrows());
+
+                // 頁面載入後, 自動捲動到當前 activeTab 按鈕
+                this.$nextTick(() => {
+                    const activeBtn = this.scrollContainer.querySelector(`[data-category='${activeTab}']`);
+                    if (activeBtn) {
+                        activeBtn.scrollIntoView({
+                            behavior: 'smooth',
+                            inline: 'center'
+                        });
+                    }
+                });
+            },
+            checkArrows() {
+                this.showLeftArrow = this.scrollContainer.scrollLeft > 0;
+                this.showRightArrow = 
+                    this.scrollContainer.scrollLeft < 
+                    (this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth);
+            },
+            scrollLeft() {
+                this.scrollContainer.scrollBy({ left: -400, behavior: 'smooth' });
+            },
+            scrollRight() {
+                this.scrollContainer.scrollBy({ left: 400, behavior: 'smooth' });
+            }
+         }"
+         x-init="init()">
+        <div class="relative max-w-6xl mx-auto">
+            <!-- 左箭頭 -->
+            <button 
+                @click="scrollLeft"
+                x-show="showLeftArrow"
+                class="absolute left-0 top-1/2 -translate-y-1/2 z-10  w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
+                <i class="fas fa-chevron-left"></i>
             </button>
-            {% endfor %}
-      </nav>
-  </div>
+    
+            <!-- 分類導航 -->
+            <nav x-ref="categoryNav" 
+                 class="flex gap-3 sm:gap-4 overflow-x-auto mx-8 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <!-- 全部按鈕 -->
+                <button data-category="全部" 
+                @click="filterProjects('全部')"
+                        :class="{ 
+                            'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
+                            'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
+                        }"
+                        class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
+                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
+                    全部
+                </button>
+    
+                <!-- 動態分類按鈕 -->
+                {% for category in categories %}
+                <button data-category="{{category.title}}"
+                 @click="filterProjects('{{ category.title }}')"
+                        :class="{ 
+                            'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
+                            'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
+                        }"
+                        class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
+                        style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
+                    {{ category.title }}
+                </button>
+                {% endfor %}
+            </nav>
+    
+            <!-- 右箭頭 -->
+            <button 
+                @click="scrollRight"
+                x-show="showRightArrow"
+                class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center  bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div> 
+
 
   <!-- 卡片網格 -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 p-4 sm:p-6 lg:p-8">
