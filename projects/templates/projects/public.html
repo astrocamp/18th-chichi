@@ -226,34 +226,53 @@
               </div>
 
               <div
-                x-data="{
-                copyText: 'https://chichii.com/projects/{{ project.slug }}',
+              x-data="{ 
+                copyText: 'https://chichii.com/projects/{{ project.slug }}/public',
+                showToast: false,
+                toastMessage: '',
                 copyToClipboard() {
                   navigator.clipboard.writeText(this.copyText)
                     .then(() => {
-                      alert(`複製成功 :${this.copyText}`)
+                      this.toastMessage = `複製成功: ${this.copyText}`
+                      this.showToast = true
+                      setTimeout(() => { this.showToast = false }, 2000)
                     })
                     .catch((error) => {
-                      alert('複製失敗:', error);
+                      this.toastMessage = '複製失敗'
+                      this.showToast = true
+                      setTimeout(() => { this.showToast = false }, 2000)
                     });
                 }
               }"
-              >
-                <h1>一鍵複製專案</h1>
-                <div class="pt-2">
-                  <input type="text" x-model="copyText" class="border border-gray-300 rounded px-4 py-2 w-full sm:w-[350px] md:w-[350px] lg:w-[350px] text-gray-700" readonly />
-                  <button
-                    @click="copyToClipboard"
-                    type="button"
-                    class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 mt-2"
-                    style="background-color: #1ea29e; color: white; transition: all 0.3s ease"
-                    onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
-                    onmouseout="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
-                  >
-                    複製到剪貼板
-                  </button>
-                </div>
+              class="relative"
+            >
+              <!-- 標題 -->
+              <h1 class="text-lg font-medium mb-4">一鍵複製專案</h1>
+
+              <!-- 複製區塊 -->
+              <div class="pt-2">
+                <input type="text" x-model="copyText" class="border border-gray-300 rounded px-4 py-2 w-full sm:w-[350px] md:w-[350px] lg:w-[350px] text-gray-700" readonly />                <button
+                  @click="copyToClipboard"
+                  type="button"
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 mt-2"
+                  style="background-color: #1ea29e; color: white; transition: all 0.3s ease"
+                  onmouseover="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
+                  onmouseout="this.style.backgroundColor='#1EA29E'; this.style.color='white';"
+                >
+                  複製到剪貼板
+                </button>
               </div>
+
+                  <!-- Toast 訊息：置中 & 標準色 -->
+                  <div 
+                  x-show="showToast"
+                  x-transition
+                  class="fixed left-0 top-0 w-full flex justify-center z-50"
+                  style="display: none;"
+                >
+                <div class="mt-4 bg-[#85cacc] text-white py-2 px-4 rounded shadow text-sm">
+                  <span x-text="toastMessage"></span>
+            </div>
             </div>
           </div>
         </div>

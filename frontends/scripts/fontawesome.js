@@ -43,6 +43,8 @@ import {
   faBars,
   faArrowUp,
   faFileExcel,
+  faChevronLeft,
+  faChevronRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 
@@ -90,7 +92,9 @@ library.add(
   faSearch,
   faGoogle,
   faArrowUp,
-  faFileExcel
+  faFileExcel,
+  faChevronLeft,
+  faChevronRight,
 );
 
 // 自動掃描 DOM 並渲染圖標
