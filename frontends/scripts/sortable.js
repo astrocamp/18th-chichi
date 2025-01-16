@@ -16,12 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
           body: JSON.stringify({ position: order }),
         })
           .then((response) => response.json())
-          .then((data) => {
-            console.log("Success:", data);
-          })
-          .catch((error) => {
-            console.error("Error:", error);
-          });
+          .then((data) => {})
+          .catch((error) => {});
       },
     });
   }
