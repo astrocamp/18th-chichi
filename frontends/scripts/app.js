@@ -5,12 +5,14 @@ import "./sortable.js";
 import "./fontawesome.js";
 import "./navbar.js";
 import "./register.js";
-import "./calendar.js"
-window.htmx = htmx;
+import "./calendar.js";
+import { initCategoryNav, initCategoryScroll, categoryManagerall } from "./categoryNav.js";
 
+window.htmx = htmx;
+window.initCategoryNav = initCategoryNav;
+window.initCategoryScroll = initCategoryScroll;
+window.categoryManagerall = categoryManagerall;
 
 window.Alpine = Alpine;
-window.htmx = htmx;
-
 
 Alpine.start();

@@ -3,7 +3,6 @@
 {% load static %}
 {% block "content" %}
 
-
 <div class="min-h-screen bg-white relative z-0">
     <div class="relative group">
       <img src="{% static 'media/網頁圖3.png' %}" 
@@ -25,55 +24,60 @@
     </div>
   
   <!-- 分類和專案區域 -->
-  <div class="py-6 sm:py-8 lg:py-12 bg-white" x-data="categoryManager()" x-init="init()">
-    <!-- 分類按鈕導航 -->
-    <div class="mb-6 sm:mb-8 relative max-w-6xl mx-auto">
-      <!-- 左箭頭 -->
-      <button 
-        @click="scrollLeft"
-        data-left-arrow
-        class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
-        <i class="fas fa-chevron-left"></i>
-      </button>
+  <div class="py-6 sm:py-8 lg:py-12 bg-white"
+       x-data="initCategoryNav('{% if current_category %}{{ current_category }}{% else %}全部{% endif %}')">
   
-      <!-- 分類導航 -->
-      <nav data-category-nav
-           class="flex gap-3 sm:gap-4 overflow-x-auto mx-8 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-        <!-- 全部按鈕 -->
-        <button data-category="全部"
-                @click="filterProjects('全部')"
-                :class="{ 
-                    'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
-                    'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
-                }"
-                class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
-                style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
-          全部
-        </button>
-  
-        <!-- 動態分類按鈕 -->
-        {% for category in categories %}
-        <button data-category="{{ category.title }}"
-                @click="filterProjects('{{ category.title }}')"
-                :class="{ 
-                    'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
-                    'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
-                }"
-                class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
-                style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
-          {{ category.title }}
-        </button>
-        {% endfor %}
-      </nav>
-  
-      <!-- 右箭頭 -->
-      <button 
-        @click="scrollRight"
-        data-right-arrow
-        class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
-        <i class="fas fa-chevron-right"></i>
-      </button>
-    </div>
+      <!-- 分類按鈕導航 -->
+      <div class="mb-6 sm:mb-8"
+           x-data="initCategoryScroll()">
+          <div class="relative max-w-6xl mx-auto">
+              <!-- 左箭頭 -->
+              <button 
+                  @click="scrollLeft"
+                  x-show="showLeftArrow"
+                  class="absolute left-0 top-1/2 -translate-y-1/2 z-10  w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
+                  <i class="fas fa-chevron-left"></i>
+              </button>
+      
+              <!-- 分類導航 -->
+              <nav x-ref="categoryNav" 
+                   class="flex gap-3 sm:gap-4 overflow-x-auto mx-8 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                  <!-- 全部按鈕 -->
+                  <button data-category="全部" 
+                  @click="filterProjects('全部')"
+                          :class="{ 
+                              'bg-[#1EA29E] text-white -translate-y-1': activeTab === '全部',
+                              'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '全部'
+                          }"
+                          class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
+                          style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
+                      全部
+                  </button>
+      
+                  <!-- 動態分類按鈕 -->
+                  {% for category in categories %}
+                  <button data-category="{{category.title}}"
+                   @click="filterProjects('{{ category.title }}')"
+                          :class="{ 
+                              'bg-[#1EA29E] text-white -translate-y-1': activeTab === '{{ category.title }}',
+                              'bg-white text-[#1EA29E] hover:bg-[#1EA29E] hover:text-white translate-y-0': activeTab !== '{{ category.title }}'
+                          }"
+                          class="px-4 sm:px-5 lg:px-6 py-2 text-base sm:text-lg lg:text-[20px] font-normal rounded-t-lg shadow-md transition-all duration-200 relative border-2 border-[#1EA29E] min-w-[100px] flex-shrink-0"
+                          style="clip-path: polygon(0 0, 100% 0, 90% 100%, 10% 100%)">
+                      {{ category.title }}
+                  </button>
+                  {% endfor %}
+              </nav>
+      
+              <!-- 右箭頭 -->
+              <button 
+                  @click="scrollRight"
+                  x-show="showRightArrow"
+                  class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center  bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200">
+                  <i class="fas fa-chevron-right"></i>
+              </button>
+          </div>
+      </div>
   
     <!-- 專案卡片網格 -->
     {% if page_obj and page_obj|length > 0 %}
