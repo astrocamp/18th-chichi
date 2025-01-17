@@ -1,3 +1,126 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.fc {
+    @apply text-gray-700 font-sans w-full;
+  }
+  
+  /* 工具列樣式 */
+  .fc .fc-toolbar {
+    @apply flex flex-col sm:flex-row flex-wrap gap-2 items-center mb-2 sm:mb-4;
+  }
+  
+  .fc .fc-toolbar-title {
+    @apply text-lg sm:text-xl md:text-2xl font-semibold text-gray-800 my-1 sm:my-2;
+    @apply w-full text-center sm:w-auto;
+  }
+  
+  /* 按鈕樣式 */
+  .fc .fc-button-group {
+    @apply flex justify-center gap-1 w-full sm:w-auto;
+  }
+  
+  .fc .fc-button-primary {
+    @apply bg-[#1EA29E] border-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-xs sm:text-sm font-medium transition-colors !important;
+  }
+  
+  /* 表格樣式 */
+  .fc .fc-scrollgrid {
+    @apply border-gray-200 text-xs sm:text-sm !important;
+  }
+  
+  .fc th {
+    @apply border-gray-200 !important;
+    @apply p-1 sm:p-2;
+  }
+  
+  .fc .fc-daygrid-day {
+    @apply border-gray-200 !important;
+    @apply min-h-[80px] sm:min-h-[100px] md:min-h-[120px];
+  }
+  
+  /* 日期格子樣式 */
+  .fc .fc-daygrid-day-frame {
+    @apply hover:bg-gray-50 transition-colors p-1 sm:p-2;
+  }
+  
+  .fc .fc-day-today {
+    @apply bg-teal-50 !important;
+  }
+  
+  /* 標頭列樣式 */
+  .fc .fc-col-header-cell {
+    @apply bg-gray-50 py-2 sm:py-3;
+  }
+  
+  .fc .fc-col-header-cell-cushion {
+    @apply text-xs sm:text-sm font-medium text-gray-700;
+  }
+  
+  /* 事件樣式 */
+  .fc-event {
+    @apply border-0 rounded cursor-pointer shadow-sm !important;
+    @apply bg-[#1EA29E] text-white text-xs sm:text-sm !important;
+    @apply p-1 sm:p-1.5;
+  }
+  
+  .fc .fc-daygrid-day-number {
+    @apply text-xs sm:text-sm text-gray-600 p-1 sm:p-2;
+  }
+  
+  .fc .fc-more-link {
+    @apply text-xs sm:text-sm text-[#1EA29E] hover:text-[#198784];
+  }
+  
+  .fc .fc-toolbar-chunk {
+    @apply w-full sm:w-auto flex justify-center sm:justify-start gap-1;
+  }
+  
+  .fc .fc-timegrid-slot {
+    @apply h-8 sm:h-12 md:h-16;
+  }
+  
+  .fc-event-title {
+    @apply truncate text-xs sm:text-sm px-1;
+  }
+  
+  .fc .fc-day-sat,
+  .fc .fc-day-sun {
+    @apply bg-gray-50/50;
+  }
+  
+  /* 手機版特定優化 */
+  @media (max-width: 640px) {
+    .fc .fc-toolbar {
+      @apply gap-3;
+    }
+    
+    .fc .fc-toolbar-title {
+      @apply order-1;
+    }
+    
+    .fc .fc-toolbar-chunk:first-child {
+      @apply order-2;
+    }
+    
+    .fc .fc-toolbar-chunk:last-child {
+      @apply order-3;
+    }
+    
+    .fc .fc-timeGridWeek-button,
+    .fc .fc-timeGridDay-button {
+      @apply hidden;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .fc .fc-daygrid-event {
+      @apply mb-1;
+    }
+    
+    .fc .fc-button-primary {
+      @apply min-w-[80px];
+    }
+  }

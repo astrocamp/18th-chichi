@@ -21,13 +21,12 @@
 <div x-data="{ isCalendarVisible: true }" class="relative">
   
   <!-- 切換按鈕 -->
-  <button 
-    @click="isCalendarVisible = !isCalendarVisible" 
-    class="bg-[#1EA29E] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#198784] transition-colors duration-200"
-    >
-    <span x-show="isCalendarVisible">收起日曆</span>
-    <span x-show="!isCalendarVisible">展開日曆</span>
-  </button>
+  <div class="flex justify-center">
+    <button @click="isCalendarVisible = !isCalendarVisible" class="bg-[#1EA29E] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#198784] transition-colors duration-200">
+      <span x-show="isCalendarVisible">收起日曆</span>
+      <span x-show="!isCalendarVisible">展開日曆</span>
+    </button>
+  </div>
   
   <!-- 日曆容器 -->
   <div class="container mx-auto max-w-7xl px-4 py-8" x-show="isCalendarVisible" x-transition>
