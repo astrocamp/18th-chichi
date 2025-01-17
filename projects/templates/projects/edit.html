@@ -1,9 +1,8 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-
-  <div class="relative flex items-center justify-center py-8"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
         <h1 class="text-3xl font-bold mb-3 text-gray-800">編輯專案</h1>
@@ -16,8 +15,13 @@
   <div class="py-16">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <form id="project-form" method="POST" action="{% url 'projects:show' project.slug %}" class="space-y-6"
-          enctype="multipart/form-data">
+        <form
+          id="project-form"
+          method="POST"
+          action="{% url 'projects:show' project.slug %}"
+          class="space-y-6"
+          enctype="multipart/form-data"
+        >
           {% csrf_token %}
 
           <!-- 基本資訊 -->
@@ -25,19 +29,39 @@
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">基本資訊</h2>
 
             <div>
-              <label for="title" class="block text-sm font-medium text-gray-700 mb-1">專案標題
+              <label
+                for="title"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >專案標題
                 <span class="text-red-500">*</span>
-              </label>
-              <input type="text" id="title" name="title" required class="input input-bordered w-full"
-                value="{{ project.title }}" />
+                </label
+              >
+              <input
+                type="text"
+                id="title"
+                name="title"
+                required
+                class="input input-bordered w-full"
+                value="{{ project.title }}"
+              />
             </div>
 
             <div>
-              <label for="subtitle" class="block text-sm font-medium text-gray-700 mb-1">副標題
+              <label
+                for="subtitle"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >副標題
                 <span class="text-red-500">*</span>
-              </label>
-              <input required type="text" id="subtitle" name="subtitle" class="input input-bordered w-full"
-                value="{{ project.subtitle }}" />
+                </label
+              >
+              <input
+                required
+                type="text"
+                id="subtitle"
+                name="subtitle"
+                class="input input-bordered w-full"
+                value="{{ project.subtitle }}"
+              />
             </div>
 
             <div x-data="goalAmountHandler({{ project.goal_amount|default_if_none:0 }})" class="mt-4">
@@ -45,102 +69,159 @@
                 目標金額
                 <span class="text-red-500">* 注意：最高為10位數，最低不可為0，並且只能填寫數字</span>
               </label>
-              <input type="text" id="goal_amount" name="goal_amount" x-model="goalAmountRaw" @input="validateInput"
-                class="input input-bordered w-full" placeholder="設定你的募資目標金額" required />
+              <input
+                type="text"
+                id="goal_amount"
+                name="goal_amount"
+                x-model="goalAmountRaw"
+                @input="validateInput"
+                class="input input-bordered w-full"
+                placeholder="設定你的募資目標金額"
+                required
+              />
             </div>
 
             <div class="max-w-xl" x-data="fileUploadHandler()">
               <label for="cover_image" class="block text-sm font-medium text-gray-700 mb-1">封面圖片</label>
               <div class="relative">
-                <input type="file" id="cover_image" name="cover_image" accept="image/*" class="sr-only"
-                  @change="handleFile($event)" />
-                <label for="cover_image"
+                <input
+                  type="file"
+                  id="cover_image"
+                  name="cover_image"
+                  accept="image/*"
+                  class="sr-only"
+                  @change="handleFile($event)"
+                />
+                <label
+                  for="cover_image"
                   class="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-lg shadow-sm cursor-pointer hover:opacity-90"
-                  style="background-color: #1ea29e">
+                  style="background-color: #1ea29e"
+                >
                   選擇檔案
                 </label>
                 <span class="ml-4 text-gray-600 text-sm" x-text="fileName"></span>
-
+            
                 <!-- 預覽圖片區域 -->
                 <div class="mt-4 flex justify-center items-center" x-show="previewUrl" x-transition>
                   <div class="relative bg-gray-100 rounded-lg overflow-hidden" style="width: 300px; height: 300px">
                     <img :src="previewUrl" alt="預覽圖片" class="absolute inset-0 w-full h-full object-contain" />
                   </div>
                 </div>
-
+            
                 <!-- 原有的媒體顯示區域 -->
                 <div class="mt-4" x-show="!previewUrl">
                   {% if project.cover_image %}
-                  <img src="{{ project.cover_image.url }}" alt="Profile Picture"
-                    class="w-40 h-40 rounded-full object-cover" />
+                  <img
+                    src="{{ project.cover_image.url }}"
+                    alt="Profile Picture"
+                    class="w-40 h-40 rounded-full object-cover"
+                  />
                   {% else %}
                   <p class="text-gray-600">目前沒有封面圖片。</p>
                   {% endif %}
                 </div>
               </div>
             </div>
-            <!-- 時間設定 -->
-            募款時間:
-            <div class="flex gap-2">
-              <input type="text" id="start-date" name="start_at" value="{{ project.start_at|date:" Y-m-d" }}"
-                class="p-2 border rounded-lg" placeholder="開始日期">
-              <input type="text" id="end-date" name="end_at" value="{{ project.end_at|date:" Y-m-d" }}"
-                class="p-2 border rounded-lg" placeholder="結束日期">
+          <!-- 時間設定 -->
+          募款時間:                <span class="text-red-500">*</span>
+
+          <div class="flex gap-2">
+            <input type="text" id="start-date" name="start_at" value="{{ project.start_at|date:"Y-m-d" }}" class="p-2 border rounded-lg"  placeholder="開始日期">
+            <input type="text" id="end-date"  name="end_at" value="{{ project.end_at|date:"Y-m-d" }}"  class="p-2 border rounded-lg" placeholder="結束日期">
+          </div>
+          <p id="date-error" class="text-red-500 text-sm mt-2 hidden">請選擇開始和結束日期</p>
+
+
+        
+
+          <!-- 專案內容 -->
+          <div class="space-y-4 pt-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">專案內容</h2>
+
+            <div>
+              <label
+                for="story"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >專案說明
+                <span class="text-red-500">*</span>
+                </label
+              >
+              <textarea
+                id="story"
+                name="story"
+                rows="6"
+                required
+                class="textarea textarea-bordered w-full"
+              >
+{{ project.story }}</textarea
+              >
+            </div>
+            <div class="mb-4">
+              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類
+                <span class="text-red-500">*</span>
+
+              </label>
+              <select required name="category" id="category" class="input input-bordered w-full" onchange="updateSubCategories()">
+                <option value="">選擇</option>
+                {% for category in all_parent_categories %}
+                <option value="{{ category.id }}" {% if selected_category and category.id == selected_category.id %}selected{% endif %}>
+                  {{ category.title }}
+                </option>
+                {% endfor %}
+              </select>
             </div>
 
+            <div class="mb-4">
+              <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類
+                <span class="text-red-500">*</span>
 
-
-            <!-- 專案內容 -->
-            <div class="space-y-4 pt-6">
-              <h2 class="text-2xl font-semibold text-gray-800 mb-6">專案內容</h2>
-
-              <div>
-                <label for="story" class="block text-sm font-medium text-gray-700 mb-1">專案說明</label>
-                <textarea id="story" name="story" rows="6" required class="textarea textarea-bordered w-full">
-{{ project.story }}</textarea>
-              </div>
-              <div class="mb-4">
-                <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類</label>
-                <select name="category" id="category" class="input input-bordered w-full"
-                  onchange="updateSubCategories()">
-                  <option value="" selected>選擇</option>
-                  {% for category in categories %}
-                  <option value="{{ category.id }}">{{ category.title }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="mb-4">
-                <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類</label>
-                <select name="categories" id="sub_category" class="input input-bordered w-full">
-                  <option value="" selected>選擇</option>
-                </select>
-              </div>
+              </label>
+              <select name="categories" id="sub_category" class="input input-bordered w-full">
+                <option value="">選擇</option>
+                {% if selected_category %}
+                {% for sub_category in selected_category.children.all %}
+                <option required value="{{ sub_category.id }}" {% if selected_sub_category and sub_category.id == selected_sub_category.id %}selected{% endif %}>
+                  {{ sub_category.title }}
+                </option>
+                {% endfor %}
+                {% endif %}
+              </select>
             </div>
 
             <div>
               <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點<span
                   class="text-red-500">*</span></label>
-              <input id="searchBox" name="location" type="text" placeholder="請輸入地址"
+              <input id="searchBox" name="location" type="text" placeholder="請輸入地址" value="{{ selected_location }}"
                 class="border border-gray-300 rounded px-4 py-2 w-full" />
               <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
             </div>
+          </div>
 
-            <!-- 按鈕區 -->
-            <div class="flex justify-between pt-8">
-              <a href="{% url 'projects:delete' project.slug %}" class="btn btn-error text-white">
-                刪除專案
+          <!-- 按鈕區 -->
+          <div class="flex justify-between pt-8">
+            <a
+              href="{% url 'projects:delete' project.slug %}"
+              class="btn btn-error text-white"
+            >
+              刪除專案
+            </a>
+            <div class="space-x-4">
+              <a
+                href="{% url 'projects:show' project.slug %}"
+                class="btn"
+                style="background-color: #85cacc20; color: #1EA29E"
+              >
+                取消
               </a>
-              <div class="space-x-4">
-                <a href="{% url 'projects:show' project.slug %}" class="btn"
-                  style="background-color: #85cacc20; color: #1EA29E">
-                  取消
-                </a>
-                <button type="submit" class="btn text-white" style="background-color: #1EA29E; border: none">
-                  儲存變更
-                </button>
-              </div>
+              <button
+                type="submit"
+                class="btn text-white"
+                style="background-color: #1EA29E; border: none"
+              >
+                儲存變更
+              </button>
             </div>
+          </div>
         </form>
       </div>
     </div>

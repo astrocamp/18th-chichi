@@ -11,7 +11,7 @@ export function initAutocomplete(apiKey, mapId) {
       };
 
       const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places,marker&callback=initializeMap`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places&callback=initializeMap`;
       script.async = true;
       script.defer = true;
 
@@ -27,57 +27,76 @@ export function initAutocomplete(apiKey, mapId) {
     try {
       await loadGoogleMapsAPI();
 
-      const map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 25.033964, lng: 121.564468 },
-        zoom: 14,
+      const input = document.getElementById("searchBox");
+      const mapContainer = document.getElementById("map");
+
+      // 初始化地圖和標記
+      const defaultLocation = { lat: 25.033964, lng: 121.564468 }; // 預設台北
+      const map = new google.maps.Map(mapContainer, {
+        center: defaultLocation,
+        zoom: 13,
         mapId: mapId,
       });
+      const marker = new google.maps.Marker({
+        map: map,
+        position: defaultLocation,
+        draggable: true,
+      });
 
-      const input = document.getElementById("searchBox");
+      // 初始化自動完成
       const autocomplete = new google.maps.places.Autocomplete(input);
-
       autocomplete.bindTo("bounds", map);
 
+      const geocoder = new google.maps.Geocoder();
       const infoWindow = new google.maps.InfoWindow();
 
-      // 創建標記但先不設置在地圖上
-      let marker = null;
+      // 如果有預設值，更新地圖位置
+      if (input.value) {
+        geocoder.geocode({ address: input.value }, (results, status) => {
+          if (status === "OK" && results[0].geometry) {
+            const location = results[0].geometry.location;
+            map.setCenter(location);
+            map.setZoom(17);
+            marker.setPosition(location);
+          }
+        });
+      }
 
+      // 當選擇新地址時更新地圖和標記
       autocomplete.addListener("place_changed", () => {
         infoWindow.close();
 
-        // 如果標記存在，先從地圖上移除
-        if (marker) {
-          marker.map = null;
-        }
-
         const place = autocomplete.getPlace();
         if (!place.geometry) {
-          console.error("No details available for input: '" + place.name + "'");
+          console.error("無法獲取地點幾何信息：" + place.name);
           return;
         }
 
         map.setCenter(place.geometry.location);
-        map.setZoom(14);
-
-        // 建立新的標記
-        marker = new google.maps.marker.AdvancedMarkerElement({
-          map: map,
-          position: place.geometry.location,
-        });
+        map.setZoom(17);
+        marker.setPosition(place.geometry.location);
 
         infoWindow.setContent(`
-                  <div>
-                      <strong>${place.name}</strong><br>
-                      ${place.formatted_address || ""}
-                  </div>
-              `);
+          <div>
+            <strong>${place.name}</strong><br>
+            ${place.formatted_address || ""}
+          </div>
+        `);
+        infoWindow.open(map, marker);
+      });
 
-        infoWindow.setPosition(place.geometry.location);
-        infoWindow.open(map);
+      // 當標記被拖動時，更新輸入框地址
+      marker.addListener("dragend", () => {
+        const position = marker.getPosition();
+
+        geocoder.geocode({ location: position }, (results, status) => {
+          if (status === "OK" && results[0]) {
+            input.value = results[0].formatted_address;
+          }
+        });
       });
     } catch (error) {
-      console.error("初始化地圖時發生錯誤:", error);
+      console.error("地圖初始化錯誤：", error);
     }
   }
 

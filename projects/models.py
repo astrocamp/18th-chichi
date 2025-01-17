@@ -35,6 +35,8 @@ class Project(models.Model):
         Category, through="ProjectCategory", through_fields=("project", "category")
     )
     location = models.CharField(null=True, max_length=100)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     account = models.ForeignKey(User, on_delete=models.CASCADE)

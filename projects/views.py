@@ -242,6 +242,9 @@ def edit(request, slug):
             "selected_sub_category": selected_sub_category,  # 預設選中的子分類
             "GOOGLE_MAPS_API_KEY": settings.GOOGLE_MAPS_API_KEY,
             "GOOGLE_MAPS_MAP_ID": settings.GOOGLE_MAPS_MAP_ID,
+            "selected_location": project.location,  # 預設原地址
+            "selected_latitude": project.latitude,  # 預設原緯度
+            "selected_longitude": project.longitude,  # 預設原經度
         },
     )
 
