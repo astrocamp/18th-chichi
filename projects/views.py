@@ -1029,6 +1029,8 @@ def search_projects(request):
         if location:
             projects = projects.filter(location__icontains=location)
 
+    projects = projects.order_by('id') 
+
     paginator = Paginator(projects, 12)
     page_number = request.GET.get("page", 1)
 
