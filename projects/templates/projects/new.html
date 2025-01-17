@@ -1,15 +1,7 @@
 {% extends "shared/layout.html" %} {% load static %} {% block "content" %}
-<script type="module">
-  import { initAutocomplete } from '/static/scripts/google_maps.js';
-
-  document.addEventListener('DOMContentLoaded', () => {
-    initAutocomplete('{{ GOOGLE_MAPS_API_KEY }}', '{{ GOOGLE_MAPS_MAP_ID }}');
-  });
-</script>
 <div class="min-h-screen bg-white">
   <!-- Hero Section -->
-  <div class="relative flex items-center justify-center py-8"
-    style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
+  <div class="relative flex items-center justify-center py-8" style="background: linear-gradient(to right, #85cacc20, #85cacc40)">
     <div class="container mx-auto px-4">
       <div class="text-center">
         <h1 class="text-3xl font-bold mb-3 text-gray-800">建立新專案</h1>
@@ -22,8 +14,7 @@
   <div class="py-16">
     <div class="container mx-auto px-4">
       <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-8">
-        <form id="project-form" method="POST" enctype="multipart/form-data" action="{% url 'projects:index' %}"
-          class="space-y-6">
+        <form id="project-form" method="POST" enctype="multipart/form-data" action="{% url 'projects:index' %}" class="space-y-6">
           {% csrf_token %}
 
           <!-- 基本資訊 -->
@@ -35,8 +26,7 @@
                 專案標題
                 <span class="text-red-500">*</span>
               </label>
-              <input type="text" id="title" name="title" required class="input input-bordered w-full"
-                placeholder="為你的專案取個好標題" />
+              <input type="text" id="title" name="title" required class="input input-bordered w-full" placeholder="為你的專案取個好標題" />
             </div>
 
             <div>
@@ -44,8 +34,7 @@
                 專案副標題
                 <span class="text-red-500">*</span>
               </label>
-              <input type="text" id="subtitle" name="subtitle" required class="input input-bordered w-full"
-                placeholder="為你的專案取個好副標題" />
+              <input type="text" id="subtitle" name="subtitle" required class="input input-bordered w-full" placeholder="為你的專案取個好副標題" />
             </div>
 
             <div class="max-w-xl" x-data="fileUploadHandler()">
@@ -54,11 +43,12 @@
                 <span class="text-red-500">*</span>
               </label>
               <div class="relative">
-                <input type="file" id="cover_image" name="cover_image" accept="image/*" required class="sr-only"
-                  @change="handleFile($event)" />
-                <label for="cover_image"
+                <input type="file" id="cover_image" name="cover_image" accept="image/*" required class="sr-only" @change="handleFile($event)" />
+                <label
+                  for="cover_image"
                   class="inline-flex items-center px-4 py-2 text-white text-sm font-medium rounded-lg shadow-sm cursor-pointer hover:opacity-90"
-                  style="background-color: #1ea29e">
+                  style="background-color: #1ea29e"
+                >
                   選擇檔案
                 </label>
                 <span class="ml-4 text-gray-600 text-sm" x-text="fileName"></span>
@@ -77,73 +67,92 @@
                 目標金額
                 <span class="text-red-500">* 注意：最高為10位數，最低不可為0，並且只能填寫數字</span>
               </label>
-              <input type="text" id="goal_amount" name="goal_amount" x-model="goalAmountRaw" @input="validateInput"
-                class="input input-bordered w-full" placeholder="設定你的募資目標金額" required />
+              <input
+                type="text"
+                id="goal_amount"
+                name="goal_amount"
+                x-model="goalAmountRaw"
+                @input="validateInput"
+                class="input input-bordered w-full"
+                placeholder="設定你的募資目標金額"
+                required
+              />
             </div>
-            <br />
-            <!-- 時間設定 -->
-            <label for="amount_time">時間設定
-              <span class="text-red-500">*</span>
+          <br />
+          <!-- 時間設定 -->
+          <label for="amount_time">時間設定
+            <span class="text-red-500">*</span>
 
-            </label>
-            <div class="flex gap-2">
-              <input required type="text" id="start-date" name="start_at" class="p-2 border rounded-lg" readonly
-                placeholder="開始日期" />
-              <input required type="text" id="end-date" name="end_at" class="p-2 border rounded-lg" readonly
-                placeholder="結束日期" />
+          </label>
+          <div class="flex gap-2">
+            <input
+              required
+              type="text"
+              id="start-date"
+              name="start_at"
+              class="p-2 border rounded-lg"
+              readonly
+              placeholder="開始日期"
+            />
+            <input
+              required
+              type="text"
+              id="end-date"
+              name="end_at"
+              class="p-2 border rounded-lg"
+              readonly
+              placeholder="結束日期"
+            />
+          </div>
+          <p id="date-error" class="text-red-500 text-sm mt-2 hidden">請選擇開始和結束日期</p>
+
+          <!-- 專案內容 -->
+          <div class="space-y-4 pt-6">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">專案內容</h2>
+
+            <div>
+              <label for="story" class="block text-sm font-medium text-gray-700 mb-1">專案說明
+                <span class="text-red-500">*</span>
+
+              </label>
+              <textarea required id="story" name="story" rows="6" required class="textarea textarea-bordered w-full" placeholder="詳細描述你的專案內容、特色和計畫"></textarea>
             </div>
-            <p id="date-error" class="text-red-500 text-sm mt-2 hidden">請選擇開始和結束日期</p>
+            <div class="mb-4">
+              <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類
+                <span class="text-red-500">*</span>
 
-            <!-- 專案內容 -->
-            <div class="space-y-4 pt-6">
-              <h2 class="text-2xl font-semibold text-gray-800 mb-6">專案內容</h2>
+              </label>
+              <select required name="category" id="category" class="input input-bordered w-full" onchange="updateSubCategories()">
+                <option value="" selected>選擇</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}">{{ category.title }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="mb-4">
+              <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類
+                <span class="text-red-500">*</span>
 
-              <div>
-                <label for="story" class="block text-sm font-medium text-gray-700 mb-1">專案說明
-                  <span class="text-red-500">*</span>
+              </label>
+              <select required name="categories" id="sub_category" class="input input-bordered w-full">
+                <option value="" selected>選擇</option>
+              </select>
+            </div>
 
-                </label>
-                <textarea required id="story" name="story" rows="6" required class="textarea textarea-bordered w-full"
-                  placeholder="詳細描述你的專案內容、特色和計畫"></textarea>
-              </div>
-              <div class="mb-4">
-                <label for="category" class="block text-sm font-medium text-gray-700 mb-1">分類
-                  <span class="text-red-500">*</span>
+            <div>
+              <label for="location" class="block text-sm font-medium text-gray-700 mb-1">募資地點<span
+                  class="text-red-500">*</span></label>
+              <input id="searchBox" name="location" type="text" placeholder="請輸入地址"
+                class="border border-gray-300 rounded px-4 py-2 w-full" />
+              <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
+            </div>
+          </div>
 
-                </label>
-                <select required name="category" id="category" class="input input-bordered w-full"
-                  onchange="updateSubCategories()">
-                  <option value="" selected>選擇</option>
-                  {% for category in categories %}
-                  <option value="{{ category.id }}">{{ category.title }}</option>
-                  {% endfor %}
-                </select>
-              </div>
-              <div class="mb-4">
-                <label for="sub_category" class="block text-sm font-medium text-gray-700 mb-1">子分類
-                  <span class="text-red-500">*</span>
-
-                </label>
-                <select required name="categories" id="sub_category" class="input input-bordered w-full">
-                  <option value="" selected>選擇</option>
-                </select>
-              </div>
-
-              <div>
-                <label for="location" class="block text-sm font-medium text-gray-700 mb-1">專案地點<span
-                    class="text-red-500">*</span></label>
-                <input id="searchBox" name="location" type="text" placeholder="請輸入地址"
-                  class="border border-gray-300 rounded px-4 py-2 w-full" />
-                <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
-              </div>
-
-              <!-- 按鈕區 -->
-              <div class="flex justify-end space-x-4 pt-8">
-                <a href="{% url 'projects:index' %}" class="btn"
-                  style="background-color: #85cacc20; color: #85cacc">取消</a>
-                <button type="submit" class="btn text-white"
-                  style="background-color: #1ea29e; border: none">建立專案</button>
-              </div>
+          <!-- 按鈕區 -->
+          <div class="flex justify-end space-x-4 pt-8">
+            <a href="{% url 'projects:index' %}" class="btn" style="background-color: #85cacc20; color: #85cacc">取消</a>
+            <button type="submit" class="btn text-white" style="background-color: #1ea29e; border: none">建立專案</button>
+          </div>
         </form>
       </div>
     </div>
@@ -172,5 +181,12 @@
       });
     }
   }
+</script>
+<script type="module">
+  import { initAutocomplete } from '/static/scripts/google_maps.js';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    initAutocomplete('{{ GOOGLE_MAPS_API_KEY }}', '{{ GOOGLE_MAPS_MAP_ID }}');
+  });
 </script>
 {% endblock %}

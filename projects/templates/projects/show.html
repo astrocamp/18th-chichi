@@ -13,11 +13,9 @@
     <!-- 封面區 -->
     <div>
       <h2 class="text-lg font-semibold text-gray-600 mb-4">封面圖片</h2>
-      <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center"
-        style="max-height: 400px">
+      <div class="relative bg-white rounded-lg overflow-hidden w-full flex items-center justify-center" style="max-height: 400px">
         {% if project.cover_image %}
-        <img src="{{ project.cover_image.url }}" alt="cover_image"
-          class="w-auto h-auto max-w-full max-h-full object-contain" />
+        <img src="{{ project.cover_image.url }}" alt="cover_image" class="w-auto h-auto max-w-full max-h-full object-contain" />
         {% else %}
         <p class="text-gray-600">目前沒有封面圖片。</p>
         {% endif %}
@@ -54,67 +52,60 @@
             <div class="flex gap-2">
               <span class="bg-teal-100 text-teal-800 px-3 py-1 rounded">
                 {% if total_days > 0 %}
-                {{ total_days }} 天
+                  {{ total_days }} 天
                 {% else %}
-                已結束
+                  已結束
                 {% endif %}
               </span>
             </div>
           </div>
         </div>
 
-
-        <!-- 分類區塊 -->
-        <div class="mt-4">
-          <h3 class="text-lg font-semibold mb-2">分類</h3>
-          {% if categories %}
-          <ul class="list-none">
-            {% for category in categories %}
-            <li class="text-gray-600">{% if category.parent %} {{ category.parent.title }} > {{ category.title }} {%
-              else %} {{ category.title }} {% endif %}</li>
-            {% endfor %}
-          </ul>
-          {% else %}
-          <p class="text-gray-600">無分類</p>
-          {% endif %}
-        </div>
         <!-- 募資地點 -->
         <div>
-          <p class="text-sm text-gray-500">專案地點</p>
-          <p class="text-sm font-medium text-gray-900">{{ project.location }}</p>
+          <p class="text-lg mb-1">募資地點</p>
+          <p class="text-gray-600">{{ project.location }}</p>
+
+          <!-- 分類區塊 -->
+          <div class="mt-4">
+            <h3 class="text-lg font-semibold mb-2">分類</h3>
+            {% if categories %}
+            <ul class="list-none">
+              {% for category in categories %}
+              <li class="text-gray-600">{% if category.parent %} {{ category.parent.title }} > {{ category.title }} {% else %} {{ category.title }} {% endif %}</li>
+              {% endfor %}
+            </ul>
+            {% else %}
+            <p class="text-gray-600">無分類</p>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 功能按鈕 -->
     <div class="flex flex-wrap gap-4">
-      <a href="{% url 'projects:edit' project.slug %}" class="btn min-w-[120px] text-center"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:edit' project.slug %}" class="btn min-w-[120px] text-center" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-edit mr-2"></i>
         編輯專案
       </a>
-      <a href="{% url 'projects:comment' project.slug %}" class="btn min-w-[120px] text-center"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:comment' project.slug %}" class="btn min-w-[120px] text-center" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-comments mr-2"></i>
         留言板
       </a>
-      <a href="{% url 'projects:faq_index' project.slug %}" class="btn min-w-[120px] text-center"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:faq_index' project.slug %}" class="btn min-w-[120px] text-center" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-question-circle mr-2"></i>
         常見問題
       </a>
-      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:update_records_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-newspaper mr-2"></i>
         更新記錄
       </a>
-      <a href="{% url 'projects:chart_page' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:chart_page' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-chart-bar mr-2"></i>
         數據分析
       </a>
-      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:rewards_index' project.slug %}" class="btn" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-gift mr-2"></i>
         回饋方案
       </a>
@@ -131,8 +122,7 @@
       {% if user == project.account %} {% if project.status == 'pending' %}
       <form action="" method="post" class="inline-block">
         {% csrf_token %}
-        <button type="submit" name="publish" class="btn"
-          style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
+        <button type="submit" name="publish" class="btn" style="background-color: #1ea29e; color: white; padding: 0.75rem 2rem">
           <i class="fas fa-rocket mr-2"></i>
           上架專案
         </button>
@@ -140,8 +130,7 @@
       {% elif project.status == 'live' %}
       <form action="" method="post" class="inline-block">
         {% csrf_token %}
-        <button type="submit" name="unpublish" class="btn"
-          style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
+        <button type="submit" name="unpublish" class="btn" style="background-color: #ff6b6b; color: white; padding: 0.75rem 2rem">
           <i class="fas fa-stop-circle mr-2"></i>
           下架專案
         </button>
@@ -151,8 +140,7 @@
         <i class="fas fa-arrow-left mr-2"></i>
         返回列表
       </a>
-      <a href="{% url 'projects:public' slug=project.slug %}" class="btn ml-4"
-        style="background-color: #85cacc20; color: #1ea29e">
+      <a href="{% url 'projects:public' slug=project.slug %}" class="btn ml-4" style="background-color: #85cacc20; color: #1ea29e">
         <i class="fas fa-arrow-right mr-2"></i>
         前往商品頁面
       </a>

@@ -6,18 +6,19 @@
       <!-- 左側專案內容 -->
       <div class="lg:col-span-8">
         <!-- 專案圖片輪播 -->
-        <div x-data="{ currentSlide: 0, images: [
+        <div
+          x-data="{ currentSlide: 0, images: [
           '{{ project.cover_image.url }}'
-        ] }" class="relative mb-8 rounded-lg overflow-hidden bg-gray-100">
+        ] }"
+          class="relative mb-8 rounded-lg overflow-hidden bg-gray-100"
+        >
           <div class="h-[480px]">
             <img :src="images[currentSlide]" class="w-full h-full object-contain" alt="Project image" />
           </div>
           <!-- 輪播控制按鈕 -->
           <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
             <template x-for="(image, index) in images" :key="index">
-              <button @click="currentSlide = index"
-                :class="{'bg-white': currentSlide === index, 'bg-white/50': currentSlide !== index}"
-                class="w-2 h-2 rounded-full"></button>
+              <button @click="currentSlide = index" :class="{'bg-white': currentSlide === index, 'bg-white/50': currentSlide !== index}" class="w-2 h-2 rounded-full"></button>
             </template>
           </div>
         </div>
@@ -30,19 +31,11 @@
         <div x-data="{ activeTab: 'story' }" class="mb-8">
           <div class="border-b border-gray-200">
             <nav class="-mb-px flex space-x-8">
-              <button @click="activeTab = 'story'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'story'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">專案內容</button>
-              <button @click="activeTab = 'rewards'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'rewards'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">贊助方案</button>
-              <button @click="activeTab = 'faq'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'faq'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">常見問題</button>
-              <button @click="activeTab = 'updates'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'updates'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">更新記錄</button>
-              <button @click="activeTab = 'comments'"
-                :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'comments'}"
-                class="border-b-2 py-4 px-1 text-sm font-medium">留言討論</button>
+              <button @click="activeTab = 'story'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'story'}" class="border-b-2 py-4 px-1 text-sm font-medium">專案內容</button>
+              <button @click="activeTab = 'rewards'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'rewards'}" class="border-b-2 py-4 px-1 text-sm font-medium">贊助方案</button>
+              <button @click="activeTab = 'faq'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'faq'}" class="border-b-2 py-4 px-1 text-sm font-medium">常見問題</button>
+              <button @click="activeTab = 'updates'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'updates'}" class="border-b-2 py-4 px-1 text-sm font-medium">更新記錄</button>
+              <button @click="activeTab = 'comments'" :class="{'border-[#1EA29E] text-[#1EA29E]': activeTab === 'comments'}" class="border-b-2 py-4 px-1 text-sm font-medium">留言討論</button>
             </nav>
           </div>
 
@@ -108,8 +101,7 @@
                 </div>
                 <div class="flex flex-col items-end">
                   <p class="text-sm text-gray-500 mb-1">達成率</p>
-                  <p class="text-2xl font-bold text-gray-900 leading-none">{% if progress_percentage > 999 %}999+{% else
-                    %}{{ progress_percentage }}{% endif %}%</p>
+                  <p class="text-2xl font-bold text-gray-900 leading-none">{% if progress_percentage > 999 %}999+{% else %}{{ progress_percentage }}{% endif %}%</p>
                 </div>
               </div>
               <p class="text-3xl font-bold text-gray-900">NT$ {{ project.raised_amount|default:"0"|intcomma }}</p>
@@ -121,17 +113,19 @@
               {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
               <div class="overflow-hidden h-4 mb-4 text-xs flex rounded bg-gray-200">
                 <div class="bg-[#1EA29E] h-4 rounded transition-all duration-700"
-                  style="width: {% if progress_percentage > 100 %}100{% else %}{{ progress_percentage }}{% endif %}%">
+                     style="width: {% if progress_percentage > 100 %}100{% else %}{{ progress_percentage }}{% endif %}%">
                 </div>
               </div>
             </div>
 
-            <div x-data="{ 
+            <div
+              x-data="{ 
               collected: {{ collected|yesno:'true,false' }},
               favorited: {{ favorited|yesno:'true,false' }},
               collectCount: {{ project.get_collect_count }},
               likeCount: {{ project.get_like_count }}
-          }">
+          }"
+            >
               <!-- 數據顯示 -->
               <div class="grid grid-cols-3 gap-4">
                 <div class="text-center">
@@ -169,7 +163,8 @@
                     collectCount = data.collect_count;
                   });
                 "
-                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300">
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300"
+                >
                   <i class="fas fa-bookmark mr-2"></i>
                   <span x-text="collected ? '已收藏' : '收藏'"></span>
                 </button>
@@ -192,7 +187,8 @@
                     likeCount = data.like_count;
                   });
                 "
-                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300">
+                  class="btn inline-flex items-center justify-center whitespace-nowrap h-12 px-8 transition-all duration-300"
+                >
                   <i class="fas fa-heart mr-2"></i>
                   <span x-text="favorited ? '已按讚' : '按讚'"></span>
                 </button>
@@ -211,16 +207,14 @@
               </div>
               <div>
                 <p class="text-sm text-gray-500">募資時間</p>
-                <p class="text-sm font-medium text-gray-900">{{ project.start_at|date:"Y/m/d" }} - {{
-                  project.end_at|date:"Y/m/d" }}</p>
+                <p class="text-sm font-medium text-gray-900">{{ project.start_at|date:"Y/m/d" }} - {{ project.end_at|date:"Y/m/d" }}</p>
               </div>
               <div>
                 <p class="text-sm text-gray-500">專案分類</p>
                 {% if categories %}
                 <ul class="list-none">
                   {% for category in categories %}
-                  <li class="text-sm font-medium text-gray-900">{% if category.parent %} {{ category.parent.title }} >
-                    {{ category.title }} {% else %} {{ category.title }} {% endif %}</li>
+                  <li class="text-sm font-medium text-gray-900">{% if category.parent %} {{ category.parent.title }} > {{ category.title }} {% else %} {{ category.title }} {% endif %}</li>
                   {% endfor %}
                 </ul>
                 {% else %}
@@ -228,7 +222,7 @@
                 {% endif %}
               </div>
               <div>
-                <p class="text-sm text-gray-500">專案地點</p>
+                <p class="text-sm text-gray-500">募資地點</p>
                 <p class="text-sm font-medium text-gray-900">{{ project.location }}</p>
                 <div id="map" style="height: 400px; width: 100%; margin-top: 20px;"></div>
               </div>
@@ -286,14 +280,13 @@
         </div>
       </div>
     </div>
-
-
+    <script type="module">
+      import { showMap } from "{% static 'scripts/showMap.js' %}";
+  
+      document.addEventListener("DOMContentLoaded", () => {
+        showMap("{{ GOOGLE_MAPS_API_KEY }}", "{{ GOOGLE_MAPS_MAP_ID }}", "{{ project.location }}");
+      });
+    </script>
+    {% endblock %}
   </div>
-  <script type="module">
-    import { showMap } from "{% static 'scripts/showMap.js' %}";
-
-    document.addEventListener("DOMContentLoaded", () => {
-      showMap("{{ GOOGLE_MAPS_API_KEY }}", "{{ GOOGLE_MAPS_MAP_ID }}", "{{ project.location }}");
-    });
-  </script>
-  {% endblock %}
+</div>
