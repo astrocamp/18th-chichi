@@ -312,7 +312,6 @@ def gender_proportion(request, slug):
     gender_data = (
         Sponsor.objects.filter(project=project)
         .values("account__profile__gender")
-        .distinct()
         .annotate(count=Count("account", distinct=True))
     )
 
@@ -818,7 +817,6 @@ def gender_proportion_excel(request, slug):
     gender_data = (
         Sponsor.objects.filter(project=project)
         .values("account__profile__gender")
-        .distinct()
         .annotate(count=Count("account", distinct=True))
     )
 
