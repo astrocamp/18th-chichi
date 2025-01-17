@@ -281,10 +281,10 @@
       </div>
     </div>
     <script type="module">
-      import { showMap } from "{% static 'scripts/showMap.js' %}";
+      import { showmap } from "{% static 'scripts/showmap.js' %}";
   
       document.addEventListener("DOMContentLoaded", () => {
-        showMap("{{ GOOGLE_MAPS_API_KEY }}", "{{ GOOGLE_MAPS_MAP_ID }}", "{{ project.location }}");
+        showmap("{{ GOOGLE_MAPS_API_KEY }}", "{{ GOOGLE_MAPS_MAP_ID }}", "{{ project.location }}");
       });
     </script>
     {% endblock %}

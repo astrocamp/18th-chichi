@@ -1,4 +1,4 @@
-export function showMap(apiKey, mapId, address) {
+export function showmap(apiKey, mapId, address) {
   function loadGoogleMapsAPI() {
     return new Promise((resolve, reject) => {
       if (window.google && window.google.maps) {
