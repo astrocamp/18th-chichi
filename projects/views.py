@@ -1021,6 +1021,7 @@ def search_projects(request):
                 | Q(status__icontains=query)
                 | Q(location__icontains=query)
                 | Q(categories__title__icontains=query)
+                | Q(categories__parent__title__icontains=query)
             ).distinct()
 
         if status:
