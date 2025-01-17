@@ -131,25 +131,5 @@ urlpatterns = [
     ),
     path("search/", search_projects, name="search_projects"),
     path("projects_all/", projects_all, name="projects_all"),
-    path(
-        "<slug:slug>/calendar-events/",
-        project_calendar_events,
-        name="project_calendar_events",
-    ),
-    path(
-        "<slug:slug>/calendar-events/add/",
-        add_calendar_event,
-        name="add_calendar_event",
-    ),
-    path(
-        "<slug:slug>/calendar-events/<int:event_id>/update/",
-        update_calendar_event,
-        name="update_calendar_event",
-    ),
-    path(
-        "<slug:slug>/calendar-events/<int:event_id>/delete/",
-        delete_calendar_event,
-        name="delete_calendar_event",
-    ),
-    path("api/", include("projects.api_urls")), 
+    path("api/", include("projects.api_urls")),
 ]
