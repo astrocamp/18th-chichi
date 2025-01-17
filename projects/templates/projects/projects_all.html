@@ -2,21 +2,23 @@
 <div class="flex items-center justify-center h-[200px]">
   <h1 class="text-[50px] font-bold text-[#006F6B]">查看全部專案</h1>
 </div>
+
 <!-- 分類和專案區域 -->
-<div class="py-6 sm:py-8 lg:py-12 bg-white" x-data="categoryManager()" x-init="init()">
+<div class="py-6 sm:py-8 lg:py-12 bg-white" x-data="categoryManagerall()" x-init="init()">
   <!-- 分類按鈕導航 -->
   <div class="mb-6 sm:mb-8 relative max-w-6xl mx-auto">
     <!-- 左箭頭 -->
     <button
       @click="scrollLeft"
       x-show="showLeftArrow"
+      data-left-arrow
       class="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200"
     >
       <i class="fas fa-chevron-left"></i>
     </button>
 
     <!-- 分類導航 -->
-    <nav x-ref="categoryNav" class="flex gap-3 sm:gap-4 overflow-x-auto mx-8 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+    <nav data-category-nav x-ref="categoryNav" class="flex gap-3 sm:gap-4 overflow-x-auto mx-8 scroll-smooth [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       <!-- 全部按鈕 -->
       <button
         data-category="全部"
@@ -52,6 +54,7 @@
     <button
       @click="scrollRight"
       x-show="showRightArrow"
+      data-right-arrow
       class="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 flex items-center justify-center bg-[#1EA29E] hover:bg-[#1EA29E] text-white rounded-full shadow-md transition-all duration-200"
     >
       <i class="fas fa-chevron-right"></i>
@@ -144,4 +147,4 @@
   </div>
   {% endif %}
 </div>
-{%endblock%}
+{% endblock %}

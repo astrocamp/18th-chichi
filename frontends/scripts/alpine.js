@@ -180,7 +180,6 @@ function categoryManager() {
         console.error("Scroll container not found!");
         return;
       }
-      console.log("Category manager initialized!");
 
       this.checkArrows();
       this.scrollContainer.addEventListener("scroll", () => this.checkArrows());
@@ -203,7 +202,6 @@ function categoryManager() {
       this.showLeftArrow = this.scrollContainer.scrollLeft > 0;
       this.showRightArrow = this.scrollContainer.scrollLeft < this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth;
 
-      console.log(`Arrows visibility updated: Left=${this.showLeftArrow}, Right=${this.showRightArrow}`);
       this.updateArrowsVisibility();
     },
     updateArrowsVisibility() {
@@ -225,10 +223,67 @@ function categoryManager() {
       if (category !== "全部") {
         url.searchParams.set("category", category);
       }
-      console.log(`Filtering projects by category: ${category}`);
       window.location.href = url.toString();
     },
   };
 }
 
 window.categoryManager = categoryManager;
+
+function categoryManagerall() {
+  return {
+    activeTab: document.querySelector("[data-current-category]")?.dataset?.currentCategory || "全部",
+    scrollContainer: null,
+    showLeftArrow: false,
+    showRightArrow: false,
+    init() {
+      this.scrollContainer = document.querySelector("[data-category-nav]");
+      if (!this.scrollContainer) {
+        console.error("Scroll container not found!");
+        return;
+      }
+
+      this.checkArrows();
+      this.scrollContainer.addEventListener("scroll", () => this.checkArrows());
+
+      const activeBtn = this.scrollContainer.querySelector(`[data-category='${this.activeTab}']`);
+      if (activeBtn) {
+        activeBtn.scrollIntoView({
+          behavior: "smooth",
+          inline: "center",
+        });
+      }
+    },
+    checkArrows() {
+      if (!this.scrollContainer) return;
+      this.showLeftArrow = this.scrollContainer.scrollLeft > 0;
+      this.showRightArrow = this.scrollContainer.scrollLeft < this.scrollContainer.scrollWidth - this.scrollContainer.clientWidth;
+
+      this.updateArrowsVisibility();
+    },
+    updateArrowsVisibility() {
+      const leftArrow = document.querySelector("[data-left-arrow]");
+      const rightArrow = document.querySelector("[data-right-arrow]");
+
+      if (leftArrow) leftArrow.style.display = this.showLeftArrow ? "flex" : "none";
+      if (rightArrow) rightArrow.style.display = this.showRightArrow ? "flex" : "none";
+    },
+    scrollLeft() {
+      if (this.scrollContainer) this.scrollContainer.scrollBy({ left: -400, behavior: "smooth" });
+    },
+    scrollRight() {
+      if (this.scrollContainer) this.scrollContainer.scrollBy({ left: 400, behavior: "smooth" });
+    },
+    filterProjects(category) {
+      this.activeTab = category;
+      const url = new URL(window.location.href);
+      url.search = "";
+      if (category !== "全部") {
+        url.searchParams.set("category", category);
+      }
+      window.location.href = url.toString();
+    },
+  };
+}
+
+window.categoryManagerall = categoryManagerall;
