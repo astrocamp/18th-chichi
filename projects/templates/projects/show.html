@@ -32,8 +32,8 @@
           <div class="bg-teal-500 h-4 rounded-full" style="width: {% if progress_percentage > 100 %}100{% else %}{{ progress_percentage }}{% endif %}%"></div>
         </div>
         <div class="flex justify-between text-sm text-gray-600 mt-1">
-          <p>目標金額：NT$ {{ project.goal_amount|default:"0"|intcomma }}</p>
-          <p>達成率：{% if percentage > 999 %}999+{% else %}{{ percentage }}{% endif %}%
+          <p>目標$ {{ project.goal_amount|default:"0"|intcomma }}</p>
+          <p>達成率：{% if progress_percentage > 999 %}999+{% else %}{{ progress_percentage|floatformat:"0" }}{% endif %}%
           </p>
         </div>
       </div>

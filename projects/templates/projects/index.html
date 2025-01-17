@@ -44,8 +44,8 @@
             {% endif %}
             <div class="space-y-3">
               {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
-              <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="h-2 rounded-full" style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%"></div>
+              <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div class="h-2 rounded-full" style=style="width: {% if progress_percentage > 100 %}100{% else %}{{ progress_percentage }}{% endif %}%"></div>
               </div>
               <div class="flex justify-between text-sm">
                 <span class="font-bold" style="color: #1ea29e">NT$ {{ project.raised_amount|floatformat:0|intcomma }}</span>
