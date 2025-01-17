@@ -170,7 +170,7 @@
                       <!-- 進度條和資訊部分 -->
                       <div class="mt-4 sm:mt-5 lg:mt-6 space-y-3">
                           {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
-                          <div class="w-full bg-gray-100 rounded-full h-2.5">
+                          <div class="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
                               <div class="h-2.5 rounded-full transition-all duration-700 bg-[#1EA29E]"
                                    style="width: {% if percentage > 100 %}100{% else %}{{ percentage }}{% endif %}%">
                               </div>
@@ -188,8 +188,12 @@
                                   目標 $ {{ project.goal_amount|floatformat:0|intcomma }}
                               </span>
                               <div class="text-base sm:text-lg lg:text-xl text-[#1EA29E]">
-                                  剩餘 {% if project.remaining_days >= 0 %}{{ project.remaining_days|add:"1" }}{% else %}0{% endif %} 天
-                              </div>
+                                {% if project.remaining_days > 0 %}
+                                剩餘 {{ project.remaining_days }} 天
+                            {% else %}
+                                已結束
+                            {% endif %}
+                               </div>
                           </div>
                       </div>
                   </div>
