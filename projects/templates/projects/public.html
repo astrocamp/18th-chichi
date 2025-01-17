@@ -110,6 +110,7 @@
 
             <!-- 進度條 -->
             <div class="relative pt-1">
+              {% widthratio project.raised_amount project.goal_amount 100 as percentage %}
               <div class="overflow-hidden h-4 mb-4 text-xs flex rounded bg-gray-200">
                 <div class="bg-[#1EA29E] h-4 rounded transition-all duration-700"
                      style="width: {% if progress_percentage > 100 %}100{% else %}{{ progress_percentage }}{% endif %}%">
