@@ -40,14 +40,22 @@ CHICHI 是一個專為創作者和支持者打造的募資平台,致力於提供
 
 ## 功能簡介
 
-1.  ![會員系統](static/media/login.png)
-2.  ![後台管理](static/media/index.png)
-3.  ![後台管理](static/media/back.png)
-4.  ![數據分析](static/media/data.png)
-5.  ![回饋方案](static/media/reward.png)
-6.  ![日曆管理](static/media/calender.png)
-7.  ![郵件通知](static/media/sponsor.png)
-8.  ![地圖](static/media/map.png)
+1.  **會員系統-Google 第三方登入:**
+    ![會員系統](static/media/login.png)
+2.  **募資管理系統-專案瀏覽管理:**
+    ![後台管理](static/media/index.png)
+3.  **募資管理系統-後台管理介面:**
+    ![後台管理](static/media/back.png)
+4.  **募資管理系統-數據分析結合 Excel 輸出:**
+    ![數據分析](static/media/data.png)
+5.  **募資管理系統-多元回饋方案:**
+    ![回饋方案](static/media/reward.png)
+6.  **募資管理系統-日曆管理:**
+    ![日曆管理](static/media/calender.png)
+7.  **募資管理系統-系統郵件通知:**
+    ![郵件通知](static/media/sponsor.png)
+8.  **募資管理-Google Map:**
+    ![地圖](static/media/map.png)
 
 ## 使用技術
 
