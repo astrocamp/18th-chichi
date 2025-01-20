@@ -23,7 +23,7 @@ CHICHI 是一個專為創作者和支持者打造的募資平台，致力於提�
   <a href="https://www.youtube.com/watch?v=GJHacNmD708" target="_blank">Demo 影片</a>
 </p>
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=GJHacNmD708" target="_blank">簡報介紹</a>
+  <a href="https://drive.google.com/file/d/1mFL1mOFWAts6juY5ZxsEUHxZUynDfd0v/view?usp=drive_link" target="_blank">簡報介紹</a>
 </p>
 
 ## 網站大綱
