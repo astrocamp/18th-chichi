@@ -65,12 +65,13 @@ CHICHI 是一個專為創作者和支持者打造的募資平台,致力於提供
 - **後端技術:** Python、Django
 - **網站部署:** Zeabur
 - **其他技術:**
+  - **網域：** Cloudflare
   - **版本控管：** Git、GitHub
   - **郵件服務：** Mailgun
   - **資料庫：** MySQL
   - **文件儲存與管理：** AWS S3
   - **第三方登入：** Google
-  - **第三方支付：** 綠界
+  - **第三方支付：** 綠界支付
   - **圖表分析：** Chart.js
   - **地圖：** Google Map
   - **日曆：** FullCalendar
@@ -95,15 +96,16 @@ CHICHI 是一個專為創作者和支持者打造的募資平台,致力於提供
   - 金流系統
   - 環境建置
   - 會員系統
+  - 頁面切版
 
 - 劉奕伶[GitHub](https://github.com/lioouzzz)
   - 第三方登入
   - 按讚功能
   - 留言回覆功能
   - 日曆系統
+  - UI 設計
 - 張維心[GitHub](https://github.com/viviennehsin)
   - 分類系統
-  - 權限功能
   - 搜尋功能
   - 建立 Command Line
   - Google map
