@@ -45,6 +45,9 @@ CHICHI 是一個專為創作者和支持者打造的募資平台,致力於提供
 3.  ![後台管理](static/media/back.png)
 4.  ![數據分析](static/media/data.png)
 5.  ![回饋方案](static/media/reward.png)
+6.  ![日曆管理](static/media/calender.png)
+7.  ![郵件通知](static/media/sponsor.png)
+8.  ![地圖](static/media/map.png)
 
 ## 使用技術
 
@@ -59,6 +62,9 @@ CHICHI 是一個專為創作者和支持者打造的募資平台,致力於提供
   - **第三方登入：** Google
   - **第三方支付：** 綠界
   - **圖表分析：** Chart.js
+  - **地圖：** Google Map
+  - **日曆：** FullCalendar
+  - **拖拉選單：** Sortable.js
 
 ## 安裝環境
 
