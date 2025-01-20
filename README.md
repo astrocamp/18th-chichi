@@ -1,6 +1,8 @@
 # 吱吱 CHICHI
 
-![image](static/media/chichi_logo.png)
+<div align="center">
+    <img src="static/media/chichi_logo.png" alt="logo">
+</div>
 
 ## 簡介
 
